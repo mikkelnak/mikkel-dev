@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grillaften – prisberegner</title>
+<style>
+  :root {
+    --bg: #fff7ed;
+    --card: #ffffff;
+    --ink: #2d2a26;
+    --muted: #8a8275;
+    --line: #ecdfce;
+    --accent: #d2691e;
+    --accent-dark: #a8521a;
+    --good: #2f7d4f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  header h1 { margin: 0 0 4px; font-size: 1.7rem; }
+  header p { margin: 0 0 24px; color: var(--muted); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .people-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .people-row label { font-weight: 600; }
+  input[type="number"], input[type="text"] {
+    font: inherit;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+  }
+  input[type="number"] { width: 84px; text-align: right; }
+  input[type="text"] { width: 100%; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 8px 6px; text-align: left; border-bottom: 1px solid var(--line); }
+  th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  td.num, th.num { text-align: right; }
+  td.line-total { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .qty { width: 64px; }
+  .price { width: 96px; }
+  .del {
+    border: none; background: none; cursor: pointer;
+    color: var(--muted); font-size: 1.1rem; line-height: 1;
+  }
+  .del:hover { color: #c0392b; }
+  .actions { margin-top: 12px; }
+  button.add {
+    font: inherit; cursor: pointer;
+    background: #fff; color: var(--accent-dark);
+    border: 1px dashed var(--accent);
+    border-radius: 8px; padding: 8px 14px;
+  }
+  button.add:hover { background: #fff3e6; }
+  .summary { display: grid; gap: 8px; }
+  .summary .row { display: flex; justify-content: space-between; }
+  .summary .row.big {
+    font-size: 1.3rem; font-weight: 700;
+    border-top: 2px solid var(--line); padding-top: 10px; margin-top: 4px;
+  }
+  .summary .row.perperson {
+    font-size: 1.5rem; font-weight: 800; color: var(--good);
+  }
+  .muted { color: var(--muted); }
+  footer { color: var(--muted); font-size: 0.85rem; text-align: center; }
+  .note { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🔥 Grillaften – prisberegner</h1>
+    <p>Indkøb til Dagrofa Hillerød · pris pr. person inkl. moms</p>
+  </header>
+
+  <div class="card">
+    <div class="people-row">
+      <label for="people">Antal personer</label>
+      <input type="number" id="people" min="1" value="7">
+      <span class="muted">drenge på grillaften</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Vare</th>
+          <th class="num">Antal</th>
+          <th class="num">Stk-pris (kr.)</th>
+          <th class="num">I alt</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="items"></tbody>
+    </table>
+    <div class="actions">
+      <button class="add" id="addBtn">+ Tilføj vare</button>
+    </div>
+    <p class="note">Priserne er vejledende danske detailpriser og inkluderer 25 % moms.</p>
+  </div>
+
+  <div class="card summary">
+    <div class="row"><span>Pris ekskl. moms</span><span id="exVat">–</span></div>
+    <div class="row"><span>Moms (25 %)</span><span id="vat">–</span></div>
+    <div class="row big"><span>Total inkl. moms</span><span id="total">–</span></div>
+    <div class="row perperson"><span>Pr. person inkl. moms</span><span id="perPerson">–</span></div>
+  </div>
+
+  <footer>Justér antal, priser og varer – beregningen opdateres automatisk.</footer>
+</div>
+
+<script>
+  const VAT_RATE = 0.25;
+
+  // Vejledende indkøbsliste til grillaften for 7 personer (Dagrofa/Rofa-niveau).
+  const defaultItems = [
+    { name: "Nakkekoteletter (bakke ~1 kg)", qty: 2, price: 65.00 },
+    { name: "Grillpølser (pk.)",             qty: 2, price: 30.00 },
+    { name: "Burgerbøffer (pk. 4 stk.)",     qty: 2, price: 45.00 },
+    { name: "Burgerboller (pk.)",            qty: 2, price: 15.00 },
+    { name: "Bacon (pk.)",                   qty: 1, price: 25.00 },
+    { name: "Blandet salat (pose)",          qty: 2, price: 15.00 },
+    { name: "Tomat / agurk / løg",           qty: 1, price: 35.00 },
+    { name: "Flutes / brød",                 qty: 2, price: 12.00 },
+    { name: "Kartoffelsalat (bøtte)",        qty: 2, price: 25.00 },
+    { name: "Ketchup / sennep / remoulade",  qty: 1, price: 45.00 },
+    { name: "Bearnaise / grilldressing",     qty: 1, price: 22.00 },
+    { name: "Chips (pose)",                  qty: 2, price: 22.00 },
+    { name: "Øl (kasse/ramme)",              qty: 1, price: 90.00 },
+    { name: "Sodavand (1,5 l)",              qty: 3, price: 18.00 },
+    { name: "Grillkul (pose)",               qty: 1, price: 40.00 },
+    { name: "Optændningsblokke",             qty: 1, price: 20.00 },
+    { name: "Engangsservice + grilltilbehør",qty: 1, price: 35.00 }
+  ];
+
+  const itemsBody = document.getElementById('items');
+  const peopleInput = document.getElementById('people');
+
+  function fmt(n) {
+    return n.toLocaleString('da-DK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kr.';
+  }
+
+  function addRow(item = { name: "", qty: 1, price: 0 }) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" class="name" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Vare"></td>
+      <td class="num"><input type="number" class="qty" min="0" step="1" value="${item.qty}"></td>
+      <td class="num"><input type="number" class="price" min="0" step="0.01" value="${item.price}"></td>
+      <td class="num line-total">–</td>
+      <td><button class="del" title="Fjern">✕</button></td>
+    `;
+    tr.querySelector('.del').addEventListener('click', () => { tr.remove(); recalc(); });
+    tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalc));
+    itemsBody.appendChild(tr);
+  }
+
+  function recalc() {
+    let total = 0;
+    itemsBody.querySelectorAll('tr').forEach(tr => {
+      const qty = parseFloat(tr.querySelector('.qty').value) || 0;
+      const price = parseFloat(tr.querySelector('.price').value) || 0;
+      const line = qty * price;
+      tr.querySelector('.line-total').textContent = fmt(line);
+      total += line;
+    });
+    const people = Math.max(1, parseInt(peopleInput.value) || 1);
+    const exVat = total / (1 + VAT_RATE);
+    const vat = total - exVat;
+    document.getElementById('exVat').textContent = fmt(exVat);
+    document.getElementById('vat').textContent = fmt(vat);
+    document.getElementById('total').textContent = fmt(total);
+    document.getElementById('perPerson').textContent = fmt(total / people);
+  }
+
+  document.getElementById('addBtn').addEventListener('click', () => { addRow(); recalc(); });
+  peopleInput.addEventListener('input', recalc);
+
+  defaultItems.forEach(addRow);
+  recalc();
+</script>
+</body>
+</html>
