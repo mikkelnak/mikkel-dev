@@ -1,4 +1,15 @@
-# Video-generations-prompter — "OpenClaw" / "Boss Visuals" Mission Control
+# Video-generations-prompter
+
+Samling af prompter til at genskabe to forskellige tech-videoer:
+
+1. **OpenClaw / Boss Visuals Mission Control** (TikTok `@viral7275`) — cyberpunk AI-agent kontrolpanel.
+2. **"Can you believe Claude did this?"** — Claude bygger en luksus-arkitekt-landingpage (Atelier Lacroix).
+
+Spring til [Atelier Lacroix-prompten](#atelier-lacroix--claude-frontend-demo) for den anden video.
+
+---
+
+## OpenClaw / Boss Visuals Mission Control
 
 Prompter til at genskabe TikTok-videoen fra `@viral7275`, hvor et selvbygget
 AI-agent kontrolpanel ("OpenClaw" + "Boss Visuals" Mission Control) startes
@@ -271,3 +282,111 @@ visualiserings-laget — ikke selve AI-systemet.
 6. **Hvis du genskaber agent-portrætterne (især Boss-pitbullen)** — generér
    stillbillederne separat i Midjourney/Imagen og indsæt dem som assets
    i compositingen frem for at lade videomodellen tegne dem fra bunden.
+
+---
+
+## Atelier Lacroix — Claude frontend demo
+
+Prompt til at genskabe "Can you believe Claude did this?"-videoen, hvor
+Anthropics Claude har bygget en luksus-arkitekt-landingpage for det fiktive
+firma **Atelier Lacroix** under temaet *"Chalets Cut From Light"* — og
+videoen ruller gennem den live på `localhost`.
+
+### Engelsk prompt (anbefalet)
+
+> Screen-recording style video: a Chromium browser window in light mode is
+> centered on screen. The URL bar shows `localhost:3000` (or `localhost:5173`).
+> The page is an ultra-minimalist luxury landing page for an architecture
+> studio called **Atelier Lacroix**, themed **"Chalets Cut From Light"** —
+> exclusive mountain chalets. A slow, smooth, hands-off scroll glides down
+> the page over ~20 seconds, with butter-smooth scroll-linked animations.
+>
+> Visual style: off-white / ivory background, generous negative space,
+> serif display typography (think Söhne / GT Sectra / Editorial New) for
+> headlines, small uppercase sans-serif (Inter / Söhne Mono) for labels.
+> Editorial fashion-magazine layout. Large hero photograph of a sculptural
+> wooden alpine chalet at golden hour, slightly off-grid composition, with
+> the wordmark "ATELIER LACROIX" small in the top-left and a thin nav
+> ("Projects · Studio · Journal · Contact") in the top-right.
+>
+> As the scroll progresses: a full-bleed hero image fades to reveal the
+> headline **"Chalets Cut From Light"** set in a 120pt serif, kerned wide.
+> Below it a kicker line: "Bespoke alpine architecture · Engadin, CH".
+> Scroll continues — a 2-column editorial section shows a chalet exterior
+> shot on the left and on the right a vertically-set paragraph titled
+> **"Detail Holds Weather"** about hand-joined larch facades and weathering
+> over decades. Continue scrolling to a horizontal scrub of three project
+> thumbnails, each labelled with a year and location. Then a section
+> **"Rooms Tuned To Altitude"** with a parallax interior photo of a
+> floor-to-ceiling glazed living room, snow outside. Text slides in from
+> below as images cross-fade above them. The footer fades up in last,
+> small caps, "© Atelier Lacroix MMXXVI — Engadin · Zürich".
+>
+> Animation feel: scroll-linked (not autoplay), GSAP/Framer-Motion-style
+> easing, no bounces, no parallax jitter. Everything feels expensive,
+> calm, magazine-quality. Cursor not visible. Browser chrome (tabs, URL
+> bar) is visible at the top — confirming this is a real local site,
+> not a Figma mockup.
+>
+> Tech aesthetic suggestion (for terminal cut-in if used): a Mac terminal
+> running `next dev` showing "Local: http://localhost:3000 · Ready in 1.8s".
+>
+> Aspect ratio: 16:9 desktop screen recording (or 9:16 if framed as a
+> phone clip of someone's monitor).
+
+### Dansk prompt
+
+> Skærmoptagelse: et Chromium-browservindue i lyst tema, centreret. URL
+> viser `localhost:3000`. Siden er en ultra-minimalistisk luksus-landingpage
+> for arkitektfirmaet **Atelier Lacroix** under temaet **"Chalets Cut From
+> Light"** — eksklusive bjerghytter. En langsom, smooth scroll glider ned
+> ad siden i ~20 sekunder med flydende scroll-bundne animationer.
+>
+> Stil: råhvid/ivory baggrund, masser af luft, serif display-typografi
+> (GT Sectra / Editorial New) til overskrifter, små versaler i sans-serif
+> til labels. Editorial mode-magasin-layout. Hero-foto af en skulpturel
+> træhytte i alperne ved gylden time, "ATELIER LACROIX"-wordmark øverst
+> til venstre, tynd nav ("Projects · Studio · Journal · Contact") til
+> højre.
+>
+> Under scroll: hero-billede fader, overskriften **"Chalets Cut From
+> Light"** dukker frem i 120pt serif. Kicker: "Bespoke alpine architecture
+> · Engadin, CH". Videre til en 2-kolonne-sektion med eksteriør-foto
+> venstre, vertikal tekstblok højre med titlen **"Detail Holds Weather"**.
+> Derefter et vandret scrub af tre projekt-thumbnails. Så sektionen
+> **"Rooms Tuned To Altitude"** med parallax-interiør af en højloftet
+> stue med sne udenfor. Tekst glider op nedefra, billeder krydsfader.
+> Footer ender med "© Atelier Lacroix MMXXVI — Engadin · Zürich".
+>
+> Animation: scroll-bunden (ikke autoplay), GSAP/Framer-easing, ingen
+> bounces. Hele oplevelsen virker dyr, rolig, magasinkvalitet. Browserens
+> tabs og URL er synlige — det er en ægte lokal side, ikke en mockup.
+>
+> 16:9 desktop screen recording (eller 9:16 hvis det er en telefon-clip
+> af nogens skærm).
+
+### Faktuelle elementer fra videoen
+
+| Element | Detalje |
+|---|---|
+| Spørgsmål i caption | "Can you believe Claude did this?" |
+| Brand | Atelier Lacroix (fiktivt arkitektfirma) |
+| Tema/tagline | "Chalets Cut From Light" |
+| Sektionsoverskrifter | "Detail Holds Weather", "Rooms Tuned To Altitude" |
+| Browser URL | `localhost` (ægte lokal Next/Vite-server) |
+| Sandsynlig stack | Next.js eller Vite + React, Tailwind CSS, Framer Motion / GSAP |
+| Modtager | Designet, kodet og animeret af Claude (Anthropic) i én session |
+
+### Hvorfor det er imponerende
+
+Et stilrent, animeret luksus-landingpage har historisk taget et hold
+designere + frontend-udviklere uger og koster sekscifret. Hele pointen
+med videoen er at vise, at en moderne kodnings-LLM kan levere det
+færdige resultat fra én prompt — og at det kører som reel kode på
+`localhost`, ikke som en Figma-attrap.
+
+### Prototype i dette repo
+
+Der ligger en HTML/CSS-prototype af landingpagen i `atelier-lacroix.html`
+i repo-roden. Åbn den direkte i en browser, eller server den med fx
+`python3 -m http.server` for at få en `localhost`-URL.
