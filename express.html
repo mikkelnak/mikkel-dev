@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express — Hjemmeside klar i morgen | mikkel.dev</title>
+    <meta name="description" content="Express hjemmeside-fix: 2.000 kr, klar i morgen aften. 1-sides side med kontakt, ydelser og åbningstider. Kun én plads ad gangen.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <style>
+        .express-hero { padding:100px 0 40px; text-align:center; }
+        .express-badge { display:inline-block; padding:6px 14px; background:#fef3c7; color:#92400e; border-radius:999px; font-size:13px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:18px; }
+        .express-hero h1 { font-size:clamp(2rem,5vw,3.2rem); font-weight:800; letter-spacing:-0.03em; margin-bottom:14px; line-height:1.1; }
+        .express-hero .sub { font-size:clamp(1rem,2vw,1.2rem); color:var(--text-muted, #64748b); margin-bottom:8px; }
+        .express-price { font-size:clamp(2.4rem,6vw,3.6rem); font-weight:900; margin:20px 0 4px; }
+        .express-price span { font-size:0.4em; color:var(--text-muted, #64748b); font-weight:600; }
+        .express-meta { color:var(--text-muted, #64748b); font-size:14px; margin-bottom:30px; }
+        .express-card { padding:36px 28px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin:24px 0; }
+        .express-card h2 { font-size:1.3rem; font-weight:700; margin-bottom:18px; }
+        .express-included { list-style:none; padding:0; margin:0; text-align:left; }
+        .express-included li { padding:10px 0; border-bottom:1px solid var(--border); display:flex; gap:12px; align-items:flex-start; }
+        .express-included li:last-child { border-bottom:none; }
+        .express-included li::before { content:"✓"; color:#10b981; font-weight:900; flex-shrink:0; }
+        .express-notincluded { list-style:none; padding:0; margin:0; text-align:left; color:var(--text-muted, #64748b); }
+        .express-notincluded li { padding:8px 0; display:flex; gap:12px; align-items:flex-start; }
+        .express-notincluded li::before { content:"✗"; color:#ef4444; font-weight:900; flex-shrink:0; }
+        .express-process { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:20px; }
+        .express-step { padding:18px; background:var(--bg); border:1px solid var(--border); border-radius:12px; text-align:center; }
+        .express-step-num { display:inline-block; width:32px; height:32px; line-height:32px; border-radius:50%; background:#3b82f6; color:white; font-weight:700; margin-bottom:10px; }
+        .express-cta-box { padding:32px 24px; background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color:white; border-radius:var(--radius); text-align:center; margin:30px 0; }
+        .express-cta-box h2 { color:white; font-size:1.4rem; margin-bottom:8px; }
+        .express-cta-box p { opacity:0.95; margin-bottom:20px; }
+        .express-cta-buttons { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+        .express-cta-buttons .btn { background:white; color:#1d4ed8; border:none; }
+        .express-cta-buttons .btn:hover { background:#f1f5f9; }
+        .express-faq { margin-top:30px; }
+        .express-faq-item { padding:16px 0; border-bottom:1px solid var(--border); }
+        .express-faq-item:last-child { border-bottom:none; }
+        .express-faq-item strong { display:block; margin-bottom:6px; }
+        .express-faq-item p { margin:0; color:var(--text-muted, #64748b); font-size:0.95rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <a href="/" class="logo">mikkel<span class="logo-dot">.</span>dev</a>
+            <div class="nav-right">
+                <a href="#bestil" class="btn btn-primary btn-sm">Bestil nu</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="express-hero">
+            <div class="container small-container">
+                <span class="express-badge">⚡ Express · Kun én plads i aften</span>
+                <h1>Hjemmeside klar i morgen aften</h1>
+                <p class="sub">Du bestiller i aften — jeg bygger i morgen — du er online før i går i seng.</p>
+                <div class="express-price">2.000 <span>kr</span></div>
+                <p class="express-meta">Faste pris · Ingen overraskelser · Betaling efter levering</p>
+            </div>
+        </section>
+
+        <div class="container small-container">
+
+            <div class="express-card">
+                <h2>Hvad du får</h2>
+                <ul class="express-included">
+                    <li>1-sides hjemmeside med jeres ydelser, åbningstider og kontakt</li>
+                    <li>Mobiltilpasset — virker på telefon, tablet og computer</li>
+                    <li>Kontakt-knap der ringer dig direkte op (tel:-link)</li>
+                    <li>Email-knap der åbner kundens mail-app</li>
+                    <li>Live på et *.netlify.app subdomæne i morgen aften</li>
+                    <li>Google Maps-pin hvis I har en fysisk adresse</li>
+                    <li>SEO-grundopsætning (titel, beskrivelse, sitemap)</li>
+                </ul>
+            </div>
+
+            <div class="express-card">
+                <h2>Hvad der ikke er med (bestil normal pakke i stedet)</h2>
+                <ul class="express-notincluded">
+                    <li>Eget domæne (.dk) — det kan tilføjes bagefter for ~70 kr/år</li>
+                    <li>Booking-system, prisberegner, webshop</li>
+                    <li>Flere undersider</li>
+                    <li>Rettelsesrunder (du får siden som den er — pakke er fast pris/fast scope)</li>
+                </ul>
+            </div>
+
+            <div class="express-card">
+                <h2>Sådan foregår det</h2>
+                <div class="express-process">
+                    <div class="express-step">
+                        <div class="express-step-num">1</div>
+                        <strong>I aften</strong>
+                        <p style="margin:6px 0 0; font-size:0.9rem; color:var(--text-muted, #64748b);">Du sender besked med firmanavn, kontakt-info, åbningstider og evt. logo/billeder</p>
+                    </div>
+                    <div class="express-step">
+                        <div class="express-step-num">2</div>
+                        <strong>I morgen</strong>
+                        <p style="margin:6px 0 0; font-size:0.9rem; color:var(--text-muted, #64748b);">Jeg bygger siden og sender link inden kl 21</p>
+                    </div>
+                    <div class="express-step">
+                        <div class="express-step-num">3</div>
+                        <strong>Du godkender</strong>
+                        <p style="margin:6px 0 0; font-size:0.9rem; color:var(--text-muted, #64748b);">Mobilepay 2.000 kr når du er tilfreds — ellers betaler du intet</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="express-cta-box" id="bestil">
+                <h2>Skriv til mig nu</h2>
+                <p>Kun én Express-plads ad gangen. Først til mølle.</p>
+                <div class="express-cta-buttons">
+                    <a href="mailto:mikkel.webdesign@outlook.dk?subject=Express%20hjemmeside&body=Hej%20Mikkel%2C%0A%0AJeg%20vil%20gerne%20bestille%20Express-pakken%202.000%20kr.%0A%0AFirmanavn%3A%0ATelefon%3A%0AEmail%3A%0A%C3%85bningstider%3A%0AYdelser%20I%20tilbyder%3A%0A%0AVenlig%20hilsen" class="btn btn-lg">📧 Email mig</a>
+                    <a href="sms:+4525788978?body=Hej%20Mikkel%2C%20jeg%20vil%20gerne%20bestille%20Express-pakken%202.000%20kr." class="btn btn-lg">💬 SMS</a>
+                </div>
+            </div>
+
+            <div class="express-card express-faq">
+                <h2>FAQ</h2>
+                <div class="express-faq-item">
+                    <strong>Hvad hvis jeg ikke kan lide siden?</strong>
+                    <p>Så betaler du ikke. Du Mobilepay'er først når siden er online og du har godkendt den.</p>
+                </div>
+                <div class="express-faq-item">
+                    <strong>Kan jeg få et .dk-domæne?</strong>
+                    <p>Ja, men ikke som del af Express-pakken. Du kan købe domænet på dk-hostmaster.dk for ~70 kr/år, og jeg sætter det op for dig bagefter (typisk 30 min arbejde).</p>
+                </div>
+                <div class="express-faq-item">
+                    <strong>Hvad hvis jeg vil have rettelser?</strong>
+                    <p>Express er fast pris/fast scope — du får siden som jeg bygger den. Vil du have rettelser eller mere kompleks side, så vælg normal pakke fra 3.000 kr (med gratis udkast og 3 rettelsesrunder).</p>
+                </div>
+                <div class="express-faq-item">
+                    <strong>Hvor mange Express-opgaver tager du?</strong>
+                    <p>Kun én ad gangen. Hvis siden her er live, er der plads. Hvis ikke, skriv alligevel — jeg svarer hurtigt.</p>
+                </div>
+            </div>
+
+            <p style="text-align:center; margin:40px 0; color:var(--text-muted, #64748b); font-size:0.9rem;">
+                <a href="/" style="color:inherit;">← Tilbage til mikkel.dev</a>
+            </p>
+
+        </div>
+    </main>
+
+</body>
+</html>

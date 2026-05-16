@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mikkel.dev — Moderne hjemmesider til små virksomheder</title>
+    <meta name="description" content="Moderne hjemmesider fra 3.000 kr. Klar på 5-7 dage. Gratis udkast først. Ingen binding.">
+    <link rel="canonical" href="https://mikkeldev.dk/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="da_DK">
+    <meta property="og:title" content="mikkel.dev — Moderne hjemmesider til små virksomheder">
+    <meta property="og:description" content="Fra 3.000 kr. Klar på 5-7 dage. Gratis udkast først.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=630&fit=crop&q=80">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+    <!-- Cookie Banner (GDPR) -->
+    <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie-samtykke">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <strong>🍪 Vi bruger cookies</strong>
+                <p>Kun nødvendige. Læs <a href="/privatlivspolitik.html">privatlivspolitik</a>.</p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="btn btn-primary btn-sm" onclick="dismissCookies(true)">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-flex">
+            <a href="#" class="logo">mikkel<span class="logo-dot">.</span>dev</a>
+            <div class="nav-right" id="navRight">
+                <a href="#demos" class="nav-link">Se mit arbejde</a>
+                <a href="#priser" class="nav-link">Priser</a>
+                <a href="#kontakt" class="btn btn-primary btn-sm">Få gratis udkast</a>
+            </div>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Åbn menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO — Klar værdiproposition, 2 knapper, simpel bevis -->
+    <header class="hero" id="hero">
+        <div class="hero-mesh"></div>
+        <div class="hero-grid-bg"></div>
+        <div class="hero-noise"></div>
+        <div class="hero-cursor-glow" id="heroCursorGlow"></div>
+        <div class="hero-floats" aria-hidden="true">
+            <div class="float-mock float-mock-1"><div class="fm-bar"><span></span><span></span><span></span></div><div class="fm-body"><div class="fm-title" style="color:#c9a961">HANSEN</div><div class="fm-line"></div><div class="fm-line short"></div></div></div>
+            <div class="float-mock float-mock-2"><div class="fm-bar"><span></span><span></span><span></span></div><div class="fm-body" style="background:linear-gradient(135deg,#0f0a08,#1f1611)"><div class="fm-title" style="color:#c59b76">Salon Mona</div><div class="fm-line"></div><div class="fm-line short"></div></div></div>
+            <div class="float-mock float-mock-3"><div class="fm-bar"><span></span><span></span><span></span></div><div class="fm-body" style="background:#f5f0e8"><div class="fm-title" style="color:#2c2418">Brød &amp; Kaffe</div><div class="fm-line light"></div><div class="fm-line light short"></div></div></div>
+            <div class="float-mock float-mock-4"><div class="fm-bar"><span></span><span></span><span></span></div><div class="fm-body" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)"><div class="fm-title" style="color:#22c55e">KRAFT</div><div class="fm-line"></div><div class="fm-line short"></div></div></div>
+        </div>
+        <div class="container">
+            <div class="hero-label">
+                <span class="status-dot"></span>
+                Tager imod nye projekter
+            </div>
+            <h1 class="hero-title">
+                <span class="hero-line">Moderne hjemmeside</span>
+                <span class="hero-line"><span class="highlight">på 5-7 dage.</span></span>
+            </h1>
+            <p class="hero-sub">
+                Jeg laver hjemmesider til små virksomheder. <strong>Fra 3.000 kr.</strong>
+                Gratis udkast først. <em>Betal først når I er tilfredse.</em>
+            </p>
+            <div class="hero-actions">
+                <a href="#kontakt" class="btn btn-primary btn-lg btn-magnetic">Få gratis udkast <span class="btn-arrow">→</span></a>
+                <a href="#demos" class="btn btn-ghost btn-lg">Se eksempler</a>
+            </div>
+            <div class="hero-proof">
+                <div class="proof-item"><strong>5-7</strong><span>dages levering</span></div>
+                <div class="proof-divider"></div>
+                <div class="proof-item"><strong>fra 3.000</strong><span>kr pr. side</span></div>
+                <div class="proof-divider"></div>
+                <div class="proof-item"><strong>0 kr</strong><span>udkast først</span></div>
+            </div>
+        </div>
+        <a href="#demos" class="hero-scroll" aria-label="Scroll ned">
+            <span class="hero-scroll-text">Rul ned</span>
+            <span class="hero-scroll-line"><span class="hero-scroll-dot"></span></span>
+        </a>
+    </header>
+
+    <!-- DEMOS — Vis arbejdet direkte -->
+    <section class="work" id="demos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Eksempel-designs</span>
+                <h2>14 hjemmesider jeg har designet <span class="heading-accent">— en stil til hver smag</span></h2>
+                <p>Demoer der viser stil og kvalitet — komplette sider med booking, galleri, formularer, priser. Hver kan tilpasses jeres virksomhed.</p>
+            </div>
+            <div class="work-filter" role="tablist">
+                <button class="filter-pill active" data-filter="all" role="tab">Alle <span class="filter-count">14</span></button>
+                <button class="filter-pill" data-filter="retail" role="tab">Retail &amp; Mad</button>
+                <button class="filter-pill" data-filter="services" role="tab">Services</button>
+                <button class="filter-pill" data-filter="creative" role="tab">Kreative</button>
+                <button class="filter-pill" data-filter="professional" role="tab">Professionelle</button>
+            </div>
+            <div class="work-grid">
+                <a href="https://advokat-mikkel.netlify.app" target="_blank" class="work-card" data-category="professional">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">hansenpartnere.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://advokat-mikkel.netlify.app" loading="lazy" alt="Advokat-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>🏛️ Advokat</h3>
+                        <p>Premium navy + guld, klassisk serif</p>
+                    </div>
+                </a>
+
+                <a href="https://salonmona-mikkel.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">salonmona.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://salonmona-mikkel.netlify.app" loading="lazy" alt="Frisørsalon-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>✂️ Frisørsalon</h3>
+                        <p>Luksus rosaguld &amp; pink</p>
+                    </div>
+                </a>
+
+                <a href="https://bellaitalia-mikkel.netlify.app" target="_blank" class="work-card" data-category="retail">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">bellaitalia.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://bellaitalia-mikkel.netlify.app" loading="lazy" alt="Restaurant-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>🍕 Restaurant</h3>
+                        <p>Elegant mørk &amp; guld</p>
+                    </div>
+                </a>
+
+                <a href="https://fotograf-mikkel.netlify.app" target="_blank" class="work-card" data-category="creative">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">annalund.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://fotograf-mikkel.netlify.app" loading="lazy" alt="Fotograf-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>📸 Fotograf</h3>
+                        <p>Minimalistisk b&amp;w, editorial</p>
+                    </div>
+                </a>
+
+                <a href="https://brodogkaffe-mikkel.netlify.app" target="_blank" class="work-card" data-category="retail">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">brodogkaffe.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://brodogkaffe-mikkel.netlify.app" loading="lazy" alt="Cafe-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>☕ Café / Bageri</h3>
+                        <p>Varm brun hygge-vibe</p>
+                    </div>
+                </a>
+
+                <a href="https://oeko-mikkel.netlify.app" target="_blank" class="work-card" data-category="retail">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">groentogaerligt.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://oeko-mikkel.netlify.app" loading="lazy" alt="Øko-butik hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>🌿 Øko-butik</h3>
+                        <p>Natur sage green &amp; terracotta</p>
+                    </div>
+                </a>
+
+                <a href="https://smilklinikken-mikkel.netlify.app" target="_blank" class="work-card" data-category="professional">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">smilklinikken.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://smilklinikken-mikkel.netlify.app" loading="lazy" alt="Tandklinik-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>🦷 Tandklinik</h3>
+                        <p>Lys klinisk, beroligende blå</p>
+                    </div>
+                </a>
+
+                <a href="https://kraftgym-mikkel.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">kraftgym.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://kraftgym-mikkel.netlify.app" loading="lazy" alt="Fitness-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>💪 Fitness / Gym</h3>
+                        <p>Neon grøn energisk</p>
+                    </div>
+                </a>
+
+                <a href="https://bornehave-mikkel.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">solsikken.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://bornehave-mikkel.netlify.app" loading="lazy" alt="Børnehave-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>🌻 Børnehave</h3>
+                        <p>Farverig gul/koral/blå legende</p>
+                    </div>
+                </a>
+
+                <a href="https://bygogfix-mikkel.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">bygogfix.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://bygogfix-mikkel.netlify.app" loading="lazy" alt="Håndværker-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>🔨 Håndværker</h3>
+                        <p>Industriel amber, robust</p>
+                    </div>
+                </a>
+
+                <a href="https://renthjem-enkel.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">renthjem-enkel.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://renthjem-enkel.netlify.app" loading="lazy" alt="Rengøring enkel pakke"></div>
+                    <div class="work-info">
+                        <h3>🧹 Rengøring (Enkel)</h3>
+                        <p>3.000 kr pakken — 1-sides side</p>
+                    </div>
+                </a>
+
+                <a href="https://renthjem-pro.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">renthjem-pro.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://renthjem-pro.netlify.app" loading="lazy" alt="Rengøring pro pakke"></div>
+                    <div class="work-info">
+                        <h3>✦ Rengøring (Pro)</h3>
+                        <p>5.000 kr — flere sider, animationer</p>
+                    </div>
+                </a>
+
+                <a href="https://renthjem-komplet.netlify.app" target="_blank" class="work-card" data-category="services">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">renthjem-komplet.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://renthjem-komplet.netlify.app" loading="lazy" alt="Rengøring komplet pakke"></div>
+                    <div class="work-info">
+                        <h3>◆ Rengøring (Komplet)</h3>
+                        <p>8.000 kr — booking, prisberegner, alt</p>
+                    </div>
+                </a>
+
+                <a href="https://blomsterdemo-mikkeldev.netlify.app" target="_blank" class="work-card" data-category="retail">
+                    <div class="work-browser">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <span class="browser-url">blomsterhuset.dk</span>
+                        <span class="live-dot" title="Live site"></span>
+                        <span class="browser-external">↗</span>
+                    </div>
+                    <div class="work-preview"><img class="work-screenshot" src="https://image.thum.io/get/width/800/viewportWidth/1280/https://blomsterdemo-mikkeldev.netlify.app" loading="lazy" alt="Blomsterbutik-hjemmeside"></div>
+                    <div class="work-info">
+                        <h3>✿ Blomsterbutik</h3>
+                        <p>Koncept-butik med online bestilling</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI BEREGNER — Vis værdien før prisen -->
+    <section class="roi" id="roi">
+        <div class="container small-container">
+            <div class="section-header">
+                <span class="section-tag">Værdi for jer</span>
+                <h2>Hvad er en hjemmeside værd <span class="heading-accent">— for jeres virksomhed?</span></h2>
+                <p>I bestemmer tallene. Beregneren bruger jeres egne estimater.</p>
+            </div>
+            <div class="roi-card">
+                <div class="roi-row">
+                    <label for="roiCustomers">Nye kunder pr. måned fra hjemmesiden</label>
+                    <select id="roiCustomers" class="roi-select">
+                        <option value="1">1 ny kunde / måned</option>
+                        <option value="2" selected>2 nye kunder / måned</option>
+                        <option value="3">3 nye kunder / måned</option>
+                        <option value="5">5 nye kunder / måned</option>
+                        <option value="10">10 nye kunder / måned</option>
+                    </select>
+                </div>
+                <div class="roi-row">
+                    <label for="roiValue">Gennemsnitlig værdi pr. kunde <span class="roi-val" id="roiValueOut">500 kr</span></label>
+                    <input type="range" id="roiValue" class="roi-slider" min="200" max="5000" step="100" value="500">
+                    <div class="roi-slider-labels">
+                        <span>200 kr</span>
+                        <span>5.000 kr</span>
+                    </div>
+                </div>
+                <div class="roi-output">
+                    <div class="roi-out-row">Det giver jer estimeret</div>
+                    <div class="roi-out-row roi-out-row--big">
+                        <strong id="roiMonthly">1.000 kr</strong>
+                    </div>
+                    <div class="roi-out-row">i ny omsætning pr. måned — eller <strong id="roiYearly">12.000 kr</strong> om året</div>
+                    <div class="roi-payback">
+                        En Professionel-pakke til 5.000 kr er tjent hjem på <strong id="roiDays">5 måneder</strong>
+                    </div>
+                </div>
+                <p class="form-note" style="text-align:center;">Tallene er jeres egne estimater — jeg lover hverken kunder eller omsætning, kun en god side I kan bygge på.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRISER — Simpel, klar valg -->
+    <section class="pricing" id="priser">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Priser</span>
+                <h2>Vælg den pakke der passer jer</h2>
+                <p>Klik på "Se eksempel" og se præcis hvad I får.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Enkel</h3>
+                    <p class="price-desc">Bare online og fundet på Google</p>
+                    <div class="price">3.000 <span>kr</span></div>
+                    <ul>
+                        <li>✓ 1-sides hjemmeside</li>
+                        <li>✓ Mobil-optimeret</li>
+                        <li>✓ Kontaktformular</li>
+                        <li>✓ Google-klar (SEO)</li>
+                        <li>✓ Klar på 5 dage</li>
+                    </ul>
+                    <a href="https://renthjem-enkel.netlify.app" target="_blank" class="btn btn-outline btn-block">Se eksempel →</a>
+                </div>
+                <div class="price-card featured">
+                    <div class="featured-glow" aria-hidden="true"></div>
+                    <div class="featured-badge">★ Mest valgt</div>
+                    <h3>Professionel</h3>
+                    <p class="price-desc">For virksomheder der vil skille sig ud</p>
+                    <div class="price">5.000 <span>kr</span></div>
+                    <ul>
+                        <li>✓ Alt i Enkel</li>
+                        <li>✓ Op til 5 undersider</li>
+                        <li>✓ Animationer &amp; effekter</li>
+                        <li>✓ Google Maps + galleri</li>
+                        <li>✓ Klar på 7 dage</li>
+                    </ul>
+                    <a href="https://renthjem-pro.netlify.app" target="_blank" class="btn btn-primary btn-block">Se eksempel →</a>
+                </div>
+                <div class="price-card">
+                    <h3>Komplet</h3>
+                    <p class="price-desc">Alt I har brug for</p>
+                    <div class="price">8.000 <span>kr</span></div>
+                    <ul>
+                        <li>✓ Alt i Professionel</li>
+                        <li>✓ Ubegrænset undersider</li>
+                        <li>✓ Booking &amp; prisberegner</li>
+                        <li>✓ Galleri + testimonials</li>
+                        <li>✓ 1 måneds gratis support</li>
+                        <li>✓ Klar på 7 dage</li>
+                    </ul>
+                    <a href="https://renthjem-komplet.netlify.app" target="_blank" class="btn btn-outline btn-block">Se eksempel →</a>
+                </div>
+            </div>
+            <p class="pricing-note"><strong>Ingen binding.</strong> Betaling først når I er tilfredse.</p>
+
+            <div class="guarantee">
+                <div class="guarantee-icon">🛡️</div>
+                <div class="guarantee-content">
+                    <h3>Risikofrit udkast</h3>
+                    <p>Jeg laver udkastet <strong>helt gratis</strong>. Hvis I ikke kan lide det — <strong>ingen regning</strong>, intet at betale. Først når I godkender udkastet starter vi det rigtige arbejde, og I får <strong>3 rettelsesrunder</strong> inkluderet i prisen for at sikre at I bliver tilfredse.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SÅDAN FOREGÅR DET — Simpel 3-trins proces -->
+    <section class="process">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Sådan foregår det</span>
+                <h2>3 simple trin <span class="heading-accent">— fra idé til live</span></h2>
+                <p>Ingen lange kontrakter. Ingen overraskelser. Bare en hjemmeside, klar til at bruge.</p>
+            </div>
+            <div class="process-steps">
+                <div class="process-line" aria-hidden="true"></div>
+                <div class="process-step">
+                    <div class="step-badge">Dag 1</div>
+                    <div class="step-num">1</div>
+                    <h3>I skriver til mig</h3>
+                    <p>Fortæl mig om jeres virksomhed og hvad I ønsker. Vi snakker 10 min.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-badge">Dag 2-3</div>
+                    <div class="step-num">2</div>
+                    <h3>Jeg laver gratis udkast</h3>
+                    <p>Inden 2-3 dage sender jeg et færdigt udkast. I ser det og bestemmer om I kan lide det.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-badge">Dag 4-7</div>
+                    <div class="step-num">3</div>
+                    <h3>Live på 7 dage</h3>
+                    <p>Hvis I er tilfredse, bygger jeg færdigt og sætter det live på jeres domæne.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ — De vigtigste spørgsmål -->
+    <section class="faq" id="faq">
+        <div class="container small-container">
+            <div class="section-header">
+                <span class="section-tag">FAQ</span>
+                <h2>Almindelige spørgsmål</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-q"><span>Hvad hvis jeg ikke kan lide udkastet?</span><span class="faq-arrow">↓</span></button>
+                    <div class="faq-a"><p>Så betaler I ingenting. Jeg laver altid et gratis udkast først — netop så I kan se om det passer. Hvis I siger nej tak, går vi bare hver til sit.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q"><span>Hvor hurtigt kan I levere?</span><span class="faq-arrow">↓</span></button>
+                    <div class="faq-a"><p>5-7 dage efter I har godkendt udkastet. Enkel pakke 5 dage. Professionel/Komplet 7 dage.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q"><span>Skal jeg selv stå for hosting og domæne?</span><span class="faq-arrow">↓</span></button>
+                    <div class="faq-a"><p>Jeg hjælper med det hele. Hosting kan være gratis (Netlify). Domæne koster ~100 kr/år. Jeg guider jer igennem.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q"><span>Hvorfor er du så billig?</span><span class="faq-arrow">↓</span></button>
+                    <div class="faq-a"><p>Jeg arbejder effektivt med moderne værktøjer og har ikke kontorplads. I får bureau-kvalitet til en brøkdel af prisen.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q"><span>Kan vi selv rette bagefter?</span><span class="faq-arrow">↓</span></button>
+                    <div class="faq-a"><p>Ja. I får koden og vejledning til små rettelser. Større ændringer klarer jeg til fair pris.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q"><span>Er der binding?</span><span class="faq-arrow">↓</span></button>
+                    <div class="faq-a"><p>Nej. Ingen binding, ingen løbende udgifter fra mig. I ejer hjemmesiden 100% når den er betalt.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KONTAKT — Tydelig CTA, simpel formular -->
+    <section class="contact" id="kontakt">
+        <div class="container small-container">
+            <div class="section-header">
+                <span class="section-tag">Kontakt</span>
+                <h2>Lad os bygge jer en hjemmeside</h2>
+                <p>Jeg svarer inden 24 timer. Helt uforpligtende.</p>
+            </div>
+            <div class="contact-direct">
+                <a href="mailto:mikkel.webdesign@outlook.dk?subject=Hjemmeside-projekt&body=Hej%20Mikkel%2C%0A%0AJeg%20kunne%20godt%20t%C3%A6nke%20mig%20at%20h%C3%B8re%20mere%20om%20en%20hjemmeside%20til%20min%20virksomhed.%0A%0AOm%20virksomheden%3A%0A%0AHvilken%20pakke%3A%20%5BEnkel%20%2F%20Professionel%20%2F%20Komplet%5D%0A%0AMvh" class="contact-card contact-card-primary">
+                    <div class="contact-card-icon">✉</div>
+                    <div class="contact-card-body">
+                        <p class="contact-card-label">Skriv til mig</p>
+                        <p class="contact-card-value">mikkel.webdesign@outlook.dk</p>
+                        <p class="contact-card-hint">Svar inden 24 timer</p>
+                    </div>
+                    <span class="btn-arrow">→</span>
+                </a>
+                <a href="tel:+4525788978" class="contact-card">
+                    <div class="contact-card-icon">📞</div>
+                    <div class="contact-card-body">
+                        <p class="contact-card-label">Ring direkte</p>
+                        <p class="contact-card-value">25 78 89 78</p>
+                        <p class="contact-card-hint">Hverdage 9-17</p>
+                    </div>
+                    <span class="btn-arrow">→</span>
+                </a>
+                <p class="form-note">Helt uforpligtende. Ingen spam. Du får et gratis udkast inden du beslutter dig.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER — Simpel -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-flex">
+                <div>
+                    <a href="#" class="logo">mikkel<span class="logo-dot">.</span>dev</a>
+                    <p>Moderne hjemmesider til små virksomheder. København.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="mailto:mikkel.webdesign@outlook.dk">E-mail</a>
+                    <a href="tel:+4525788978">Telefon</a>
+                    <a href="/privatlivspolitik.html">Privatlivspolitik</a>
+                    <a href="/vilkaar.html">Vilkår</a>
+                </div>
+            </div>
+            <p class="footer-copy">&copy; <span id="year"></span> mikkel.dev</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

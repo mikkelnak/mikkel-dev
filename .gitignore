@@ -1,0 +1,10 @@
+node_modules/
+.netlify/
+netlify/
+_redirects
+netlify.toml
+admin.html
+LEADS-OG-OUTREACH.md
+*.log
+.env
+.DS_Store
