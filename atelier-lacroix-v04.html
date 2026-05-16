@@ -1,0 +1,620 @@
+<!-- Atelier Lacroix · v04 · Dark Cinematic -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Lacroix — Chalets Cut From Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Tenor+Sans&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg-deep: #070605;
+    --ink: #ece6da;
+    --muted: #8a8278;
+    --line: rgba(236, 230, 218, 0.10);
+    --accent: #c8a368;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background: var(--bg); }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Film grain overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.93  0 0 0 0 0.90  0 0 0 0 0.85  0 0 0 0.65 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* Global vignette */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 150;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  }
+
+  .serif {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .sans-display {
+    font-family: 'Tenor Sans', serif;
+    letter-spacing: 0.04em;
+  }
+  .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+  }
+  .accent { color: var(--accent); }
+
+  /* Nav */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    color: var(--ink);
+    background: linear-gradient(180deg, rgba(12,10,8,0.85) 0%, rgba(12,10,8,0.0) 100%);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  .nav .wordmark {
+    font-family: 'Tenor Sans', serif;
+    font-size: 15px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .nav ul {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .nav a {
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity .4s, color .4s;
+  }
+  .nav a:hover { opacity: 1; color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    height: 100vh;
+    min-height: 720px;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-deep);
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    background:
+      url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=2400&q=85&auto=format&fit=crop')
+      center/cover no-repeat;
+    will-change: transform;
+    transform: translate3d(0,0,0);
+    filter: brightness(0.55) contrast(1.05) saturate(0.85);
+  }
+  .hero-img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(12,10,8,0.55) 0%, rgba(12,10,8,0.15) 35%, rgba(12,10,8,0.85) 100%),
+      radial-gradient(ellipse at 50% 35%, rgba(0,0,0,0) 30%, rgba(12,10,8,0.6) 100%);
+  }
+  .hero-meta {
+    position: absolute;
+    bottom: 56px;
+    left: 48px;
+    right: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: var(--ink);
+    z-index: 5;
+  }
+  .hero-meta .lhs { max-width: 720px; }
+  .hero-meta .kicker {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 26px;
+  }
+  .hero-meta h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(56px, 9vw, 132px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .hero-meta .scrollhint {
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .hero-frame-meta {
+    position: absolute;
+    top: 110px;
+    left: 48px;
+    right: 48px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    z-index: 5;
+    opacity: 0.55;
+  }
+
+  /* Intro */
+  .intro {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 160px 48px 120px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+  }
+  .intro .label-col { padding-top: 12px; }
+  .intro .body-col {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.2vw, 44px);
+    line-height: 1.28;
+    font-weight: 300;
+    color: var(--ink);
+  }
+  .intro .body-col em { color: var(--accent); font-style: italic; }
+
+  /* Editorial sections */
+  .editorial {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 96px;
+    align-items: center;
+  }
+  .editorial.reverse { grid-template-columns: 1fr 1.1fr; }
+  .editorial.reverse .img { order: 2; }
+  .editorial .img {
+    aspect-ratio: 4/5;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    filter: brightness(0.78) contrast(1.04) saturate(0.9);
+  }
+  .editorial .img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.45) 100%);
+    pointer-events: none;
+  }
+  .editorial .section-no {
+    font-family: 'Tenor Sans', serif;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: var(--accent);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .editorial h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 5vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    margin: 14px 0 32px;
+    color: var(--ink);
+  }
+  .editorial p {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--muted);
+    max-width: 460px;
+  }
+  .editorial .rule {
+    width: 48px;
+    height: 1px;
+    background: var(--accent);
+    margin: 32px 0 0;
+    opacity: 0.7;
+  }
+
+  /* Projects */
+  .projects {
+    padding: 140px 48px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 50%, var(--bg) 100%);
+  }
+  .projects .head {
+    max-width: 1280px;
+    margin: 0 auto 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .projects h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4.4vw, 64px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .projects-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .project {
+    cursor: pointer;
+  }
+  .project .thumb {
+    aspect-ratio: 3/4;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 20px;
+    transition: transform 1s cubic-bezier(.2,.7,.2,1), filter .8s;
+    filter: brightness(0.72) contrast(1.05) saturate(0.85);
+    position: relative;
+    overflow: hidden;
+  }
+  .project .thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(12,10,8,0.55) 100%);
+  }
+  .project:hover .thumb {
+    transform: scale(1.025);
+    filter: brightness(0.88) contrast(1.05) saturate(0.95);
+  }
+  .project .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .project .meta .yr { color: var(--accent); opacity: 0.85; }
+  .project .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--ink);
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  /* Altitude wide cinematic band */
+  .altitude {
+    position: relative;
+    padding: 200px 48px;
+    background:
+      linear-gradient(180deg, rgba(12,10,8,0.78), rgba(12,10,8,0.85)),
+      url('https://images.unsplash.com/photo-1551524559-8af4e6624178?w=2400&q=85&auto=format&fit=crop')
+      center/cover fixed no-repeat;
+    color: var(--ink);
+    text-align: center;
+    overflow: hidden;
+  }
+  .altitude::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(7,6,5,0.7) 100%);
+    pointer-events: none;
+  }
+  .altitude .inner { max-width: 820px; margin: 0 auto; position: relative; z-index: 2; }
+  .altitude .label { color: var(--accent); margin-bottom: 32px; }
+  .altitude h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6.5vw, 96px);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    margin-bottom: 36px;
+    color: var(--ink);
+  }
+  .altitude p {
+    font-size: 17px;
+    line-height: 1.85;
+    color: rgba(236, 230, 218, 0.78);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Studio */
+  .studio {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 160px 48px 100px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 96px;
+  }
+  .studio .label { margin-bottom: 28px; color: var(--accent); }
+  .studio h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 3.8vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 32px;
+    color: var(--ink);
+  }
+  .studio p {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+  .studio p em { color: var(--accent); font-style: normal; border-bottom: 1px solid rgba(200, 163, 104, 0.35); padding-bottom: 1px; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    margin-top: 80px;
+    padding: 64px 48px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+    background: var(--bg-deep);
+  }
+  footer .mark {
+    font-family: 'Tenor Sans', serif;
+    font-size: 13px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  footer .meta {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .accent-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 10px 2px;
+    vertical-align: middle;
+  }
+
+  /* Reveal animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 1.3s cubic-bezier(.2,.7,.2,1), transform 1.3s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal.delay-1 { transition-delay: 0.14s; }
+  .reveal.delay-2 { transition-delay: 0.28s; }
+  .reveal.delay-3 { transition-delay: 0.42s; }
+
+  @media (max-width: 860px) {
+    .nav { padding: 20px 24px; }
+    .nav ul { display: none; }
+    .hero-meta { left: 24px; right: 24px; bottom: 36px; flex-direction: column; align-items: flex-start; gap: 20px; }
+    .hero-frame-meta { left: 24px; right: 24px; top: 80px; font-size: 9px; }
+    .hero-meta .scrollhint { writing-mode: horizontal-tb; transform: none; }
+    .intro, .editorial, .editorial.reverse, .studio { grid-template-columns: 1fr; gap: 40px; padding: 100px 24px; }
+    .editorial.reverse .img { order: initial; }
+    .projects { padding: 100px 24px; }
+    .projects-grid { grid-template-columns: 1fr; gap: 56px; }
+    .projects .head { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .altitude { padding: 120px 24px; background-attachment: scroll; }
+    footer { padding: 48px 24px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wordmark">Atelier Lacroix</div>
+  <ul>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#">Journal</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-img" id="heroImg"></div>
+  <div class="hero-frame-meta">
+    <span>N 46° 25&prime; · E 9° 50&prime;</span>
+    <span>Engadin · CH</span>
+  </div>
+  <div class="hero-meta">
+    <div class="lhs">
+      <div class="kicker reveal">Bespoke Alpine Architecture &middot; Engadin, CH</div>
+      <h1 class="serif reveal delay-1">Chalets Cut<br>From Light</h1>
+    </div>
+    <div class="scrollhint reveal delay-2">Scroll</div>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="label-col">
+    <div class="label reveal"><span class="accent">·</span> &nbsp;Practice — Est. 2014</div>
+  </div>
+  <div class="body-col reveal delay-1">
+    A small studio shaping <em>permanent</em> houses for impermanent light — every chalet
+    drawn to the line of a particular ridge, a particular winter, a particular family.
+  </div>
+</section>
+
+<section class="editorial">
+  <div class="img reveal" style="background-image: url('https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1600&q=85&auto=format&fit=crop');"></div>
+  <div>
+    <div class="section-no reveal">I · Material</div>
+    <h2 class="reveal delay-1">Detail Holds<br>Weather</h2>
+    <p class="reveal delay-2">
+      Hand-joined larch facades are scribed to the slope and left to silver over a decade.
+      Each lap, each shadow gap is dimensioned for the season it must survive — snow load
+      computed against the angle of the prevailing wind, drip lines hidden inside a
+      one-millimetre rebate. The chalet ages in public; the joinery does not.
+    </p>
+    <div class="rule reveal delay-3"></div>
+  </div>
+</section>
+
+<section class="editorial reverse">
+  <div class="img reveal" style="background-image: url('https://images.unsplash.com/photo-1551634979-2b11f8c218da?w=1600&q=85&auto=format&fit=crop');"></div>
+  <div>
+    <div class="section-no reveal">II · Interior</div>
+    <h2 class="reveal delay-1">Rooms Tuned<br>To Altitude</h2>
+    <p class="reveal delay-2">
+      Air at 1,800 metres reads differently against plaster. We work the geometry of each
+      room to the angle of December sun, then build the windows last — frameless, set
+      deep, sized to a single view. Stone underfoot stays cool through August and warm
+      through February; the house, in either season, is simply still.
+    </p>
+    <div class="rule reveal delay-3"></div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="head">
+    <h3 class="serif reveal">Selected Work</h3>
+    <div class="label reveal">MMXIX &nbsp;—&nbsp; MMXXVI</div>
+  </div>
+  <div class="projects-grid">
+    <article class="project reveal">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1610529171140-a14e25be3a2f?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="meta"><span>Chalet S&egrave;ve</span><span class="yr">MMXXIV · Sils</span></div>
+      <div class="title serif">A single roofline, three winters.</div>
+    </article>
+    <article class="project reveal delay-1">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="meta"><span>Maison Arve</span><span class="yr">MMXXII · Verbier</span></div>
+      <div class="title serif">Granite plinth, cedar volume.</div>
+    </article>
+    <article class="project reveal delay-2">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="meta"><span>Refuge Pl&eacute;iades</span><span class="yr">MMXX · Champ&eacute;ry</span></div>
+      <div class="title serif">Two pavilions, one fire.</div>
+    </article>
+  </div>
+</section>
+
+<section class="altitude">
+  <div class="inner">
+    <div class="label reveal">Atmosphere</div>
+    <h2 class="serif reveal delay-1">Built for the hour<br>the storm passes.</h2>
+    <p class="reveal delay-2">
+      Every project begins on the site, in weather. We move the line until the building
+      stands inside the landscape rather than upon it — until the chalet, seen from
+      the next ridge, is something one might have imagined was already there.
+    </p>
+  </div>
+</section>
+
+<section class="studio" id="studio">
+  <div>
+    <div class="label reveal">Studio</div>
+    <h3 class="reveal delay-1">A practice of twelve, working slowly.</h3>
+  </div>
+  <div>
+    <p class="reveal">
+      Atelier Lacroix was founded in Z&uuml;rich in 2014 and now keeps a winter office in
+      Sils-Maria. We accept four private commissions a year and a small number of
+      cultural projects. Every drawing leaves the studio by hand before it is built.
+    </p>
+    <p class="reveal delay-1">
+      For commissions, write to <em>commissions@atelier-lacroix.ch</em>. For press,
+      write to <em>press@atelier-lacroix.ch</em>. We do not list a telephone number.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="mark">Atelier Lacroix</div>
+  <div class="meta">&copy; MMXXVI <span class="accent-dot"></span> Engadin <span class="accent-dot"></span> Z&uuml;rich</div>
+</footer>
+
+<script>
+  // IntersectionObserver reveals
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Subtle parallax on hero image
+  const heroImg = document.getElementById('heroImg');
+  let lastY = 0, ticking = false;
+  function onScroll() {
+    lastY = window.scrollY;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (heroImg && lastY < window.innerHeight) {
+          const offset = lastY * 0.28;
+          const scale = 1 + Math.min(lastY / 4000, 0.06);
+          heroImg.style.transform = `translate3d(0, ${offset}px, 0) scale(${scale})`;
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+</body>
+</html>

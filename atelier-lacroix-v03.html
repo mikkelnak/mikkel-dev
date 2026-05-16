@@ -1,0 +1,684 @@
+<!-- Atelier Lacroix · v03 · Brutalist Swiss -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATELIER LACROIX — CHALETS CUT FROM LIGHT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f2efe9;
+    --ink: #0a0a0a;
+    --accent: #e30613; /* Swiss red */
+    --rule: #0a0a0a;
+    --mute: #6a6a6a;
+    --gutter: 24px;
+    --pad: 32px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    line-height: 1.35;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .mono { font-family: 'Space Mono', 'IBM Plex Mono', monospace; }
+
+  /* 12-col grid */
+  .grid12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+  }
+
+  .rule { border-bottom: 1px solid var(--rule); }
+  .rule-top { border-top: 1px solid var(--rule); }
+
+  /* NAV */
+  nav.nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 16px var(--pad);
+  }
+  nav .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+  nav .wordmark {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  nav .wordmark .dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    margin-right: 10px;
+    transform: translateY(-1px);
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+  }
+  nav ul a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+  }
+  nav ul a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+  nav .stamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  nav .stamp b { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    padding: 56px var(--pad) 0;
+    position: relative;
+  }
+  .hero-top {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-top .kicker {
+    grid-column: 1 / span 5;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero-top .index {
+    grid-column: 11 / span 2;
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .hero-title {
+    padding: 8px 0 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(72px, 18vw, 280px);
+    line-height: 0.84;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    /* push outside container */
+    margin-left: -0.04em;
+    margin-right: -8vw;
+    color: var(--ink);
+  }
+  .hero-title .red { color: var(--accent); }
+  .hero-title em {
+    font-style: normal;
+    display: inline-block;
+    border-bottom: 6px solid var(--accent);
+    padding-bottom: 0.04em;
+  }
+
+  .hero-bottom {
+    margin-top: 24px;
+    padding: 20px 0 32px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    align-items: end;
+  }
+  .hero-bottom .meta {
+    grid-column: 1 / span 4;
+    font-size: 13px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .hero-bottom .meta b { display: block; color: var(--mute); font-weight: 500; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.16em; }
+  .hero-bottom .scroll {
+    grid-column: 12 / span 1;
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .hero-img {
+    grid-column: 6 / span 6;
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%) contrast(1.05);
+  }
+
+  /* SECTIONS */
+  section.block {
+    padding: 0 var(--pad);
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    padding: 28px 0 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .section-head .num {
+    grid-column: 1 / span 2;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(80px, 12vw, 180px);
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .section-head .num .slash {
+    color: var(--accent);
+  }
+  .section-head .label {
+    grid-column: 4 / span 3;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    align-self: start;
+    padding-top: 6px;
+  }
+  .section-head .lede {
+    grid-column: 7 / span 6;
+    font-size: clamp(18px, 1.8vw, 22px);
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
+  /* INTRO */
+  .intro {
+    padding: 48px var(--pad) 96px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    border-top: 1px solid var(--rule);
+  }
+  .intro .tag {
+    grid-column: 1 / span 3;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .intro .statement {
+    grid-column: 4 / span 9;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4.2vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    text-transform: none;
+  }
+  .intro .statement mark {
+    background: var(--accent);
+    color: #fff;
+    padding: 0 0.12em;
+  }
+
+  /* EDITORIAL */
+  .editorial {
+    padding: 0 var(--pad) 0;
+    border-top: 1px solid var(--rule);
+  }
+  .ed-row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    padding: 48px 0 64px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ed-num {
+    grid-column: 1 / span 2;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(96px, 14vw, 220px);
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+  }
+  .ed-num .slash { color: var(--accent); }
+  .ed-headline {
+    grid-column: 3 / span 7;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(48px, 8.8vw, 156px);
+    line-height: 0.84;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    margin-left: -0.04em;
+  }
+  .ed-meta {
+    grid-column: 10 / span 3;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    align-self: start;
+  }
+  .ed-meta b { display: block; color: var(--ink); margin-top: 4px; font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 0.08em; }
+  .ed-img {
+    grid-column: 3 / span 6;
+    aspect-ratio: 16/9;
+    background-size: cover;
+    background-position: center;
+    margin-top: 24px;
+    filter: grayscale(100%) contrast(1.08);
+  }
+  .ed-body {
+    grid-column: 9 / span 4;
+    margin-top: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .ed-row.red-block .ed-headline { color: #fff; }
+  .ed-row.red-block {
+    background: var(--accent);
+    color: #fff;
+    margin: 0 calc(-1 * var(--pad)) 0;
+    padding-left: var(--pad);
+    padding-right: var(--pad);
+  }
+  .ed-row.red-block .ed-num { color: #fff; }
+  .ed-row.red-block .ed-num .slash { color: #fff; opacity: .55; }
+  .ed-row.red-block .ed-meta { border-top-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.85); }
+  .ed-row.red-block .ed-meta b { color: #fff; }
+  .ed-row.red-block .ed-body { color: rgba(255,255,255,0.95); }
+  .ed-row.red-block .ed-img { filter: grayscale(100%) contrast(1.1) brightness(0.95); }
+
+  /* PROJECTS */
+  .work {
+    padding: 0 var(--pad);
+    border-top: 1px solid var(--rule);
+  }
+  .work-head {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    padding: 48px 0 32px;
+  }
+  .work-head .label {
+    grid-column: 1 / span 3;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-top: 12px;
+  }
+  .work-head h2 {
+    grid-column: 4 / span 9;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(48px, 8vw, 132px);
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    margin-left: -0.04em;
+  }
+  .work-head h2 .red { color: var(--accent); }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    row-gap: 0;
+    padding-bottom: 48px;
+    border-top: 1px solid var(--rule);
+  }
+  .project {
+    grid-column: span 4;
+    padding: 24px 0 28px;
+    border-right: 1px solid var(--rule);
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+  .project:first-child { padding-left: 0; }
+  .project:last-child { border-right: none; padding-right: 0; }
+  .project .pnum {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 48px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .project .pnum .slash { color: var(--accent); }
+  .project .thumb {
+    aspect-ratio: 4/5;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%) contrast(1.08);
+    margin-bottom: 16px;
+  }
+  .project:hover .thumb { filter: none; }
+  .project .ptitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+  .project .pmeta {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .project .pmeta .yr { color: var(--accent); font-weight: 700; }
+
+  /* STUDIO */
+  .studio {
+    padding: 0 var(--pad);
+    border-top: 1px solid var(--rule);
+  }
+  .studio-row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    padding: 56px 0 80px;
+  }
+  .studio-row .snum {
+    grid-column: 1 / span 2;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(80px, 12vw, 180px);
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+  }
+  .studio-row .snum .slash { color: var(--accent); }
+  .studio-row h3 {
+    grid-column: 3 / span 6;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5.4vw, 88px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+  .studio-row .scol {
+    grid-column: 9 / span 4;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  .studio-row .scol p + p { margin-top: 14px; }
+  .studio-row .scol .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 8px;
+    margin-bottom: 14px;
+  }
+  .studio-row .scol a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+
+  /* FOOTER */
+  footer {
+    border-top: 2px solid var(--rule);
+    padding: 28px var(--pad);
+    background: var(--ink);
+    color: var(--paper);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    align-items: center;
+  }
+  footer .fmark {
+    grid-column: 1 / span 4;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  footer .fmark .dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    margin-right: 10px;
+    transform: translateY(-1px);
+  }
+  footer .fcopy {
+    grid-column: 5 / span 8;
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(242,239,233,0.7);
+  }
+  footer .fcopy b { color: var(--paper); }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal.d1 { transition-delay: .08s; }
+  .reveal.d2 { transition-delay: .16s; }
+  .reveal.d3 { transition-delay: .24s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    :root { --pad: 18px; --gutter: 12px; }
+    nav ul { display: none; }
+    nav .stamp { display: none; }
+    .hero-top .index { grid-column: 9 / span 4; }
+    .hero-top .kicker { grid-column: 1 / span 8; }
+    .hero-title { font-size: 22vw; margin-right: -4vw; }
+    .hero-bottom .meta { grid-column: 1 / span 8; }
+    .hero-bottom .scroll { grid-column: 9 / span 4; }
+    .hero-img { grid-column: 1 / span 12; height: 180px; margin-top: 24px; }
+    .section-head .num { grid-column: 1 / span 4; font-size: 22vw; }
+    .section-head .label { grid-column: 1 / span 12; padding-top: 12px; }
+    .section-head .lede { grid-column: 1 / span 12; padding-top: 12px; }
+    .intro .tag { grid-column: 1 / span 12; margin-bottom: 16px; }
+    .intro .statement { grid-column: 1 / span 12; font-size: 32px; }
+    .ed-num { grid-column: 1 / span 4; font-size: 26vw; }
+    .ed-headline { grid-column: 1 / span 12; font-size: 13vw; }
+    .ed-meta { grid-column: 1 / span 12; margin-top: 12px; }
+    .ed-img { grid-column: 1 / span 12; }
+    .ed-body { grid-column: 1 / span 12; }
+    .work-head .label { grid-column: 1 / span 12; margin-bottom: 8px; }
+    .work-head h2 { grid-column: 1 / span 12; font-size: 13vw; }
+    .work-grid { grid-template-columns: 1fr; }
+    .project { grid-column: 1 / span 1; border-right: none; border-bottom: 1px solid var(--rule); padding: 24px 0; }
+    .project:last-child { border-bottom: none; }
+    .studio-row .snum { grid-column: 1 / span 4; font-size: 22vw; }
+    .studio-row h3 { grid-column: 1 / span 12; font-size: 10vw; }
+    .studio-row .scol { grid-column: 1 / span 12; margin-top: 24px; }
+    footer { padding: 24px var(--pad); }
+    footer .fmark, footer .fcopy { grid-column: 1 / span 12; text-align: left; }
+    footer .fcopy { margin-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="row">
+    <div class="wordmark"><span class="dot"></span>ATELIER LACROIX / A—L</div>
+    <ul>
+      <li><a href="#work">01 Projects</a></li>
+      <li><a href="#studio">02 Studio</a></li>
+      <li><a href="#">03 Journal</a></li>
+      <li><a href="#">04 Contact</a></li>
+    </ul>
+    <div class="stamp">46.4°N · 9.8°E · <b>ENGADIN</b></div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-top">
+    <div class="kicker reveal">↳ Bespoke Alpine Architecture · Engadin, CH · Est. MMXIV</div>
+    <div class="index reveal">№ 00 / Index</div>
+  </div>
+
+  <h1 class="hero-title reveal d1">
+    CHALETS<br>
+    CUT<br>
+    <em>FROM</em> <span class="red">LIGHT.</span>
+  </h1>
+
+  <div class="hero-bottom">
+    <div class="meta reveal d2">
+      <b>Issue</b>
+      Volume 03 — Brutalist Edition / 2026
+    </div>
+    <div class="hero-img reveal d2" style="background-image: url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=1800&q=85&auto=format&fit=crop');"></div>
+    <div class="scroll reveal d3">↓ Scroll</div>
+  </div>
+</section>
+
+<section class="intro block">
+  <div class="section-head">
+    <div class="num reveal">00<span class="slash">/</span></div>
+    <div class="label reveal d1">Statement —<br>Practice</div>
+    <div class="lede reveal d2">
+      A small studio shaping permanent houses for impermanent light. Every chalet drawn to the line of a particular ridge, a particular winter, a particular family.
+    </div>
+  </div>
+  <div class="intro">
+    <div class="tag reveal">§ Manifesto</div>
+    <div class="statement reveal d1">
+      We build <mark>slowly</mark>, in weather, against the angle of the prevailing wind — until the house, seen from the next ridge, is simply already there.
+    </div>
+  </div>
+</section>
+
+<section class="editorial block" id="material">
+  <div class="ed-row">
+    <div class="ed-num reveal">01<span class="slash">/</span></div>
+    <h2 class="ed-headline reveal d1">DETAIL<br>HOLDS<br>WEATHER.</h2>
+    <div class="ed-meta reveal d2">
+      Chapter 01<br>
+      <b>Material · Larch · Snow load</b>
+    </div>
+    <div class="ed-img reveal" style="background-image: url('https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1800&q=85&auto=format&fit=crop');"></div>
+    <div class="ed-body reveal d1">
+      Hand-joined larch facades are scribed to the slope and left to silver over a decade. Each lap, each shadow gap is dimensioned for the season it must survive — snow load computed against the angle of the prevailing wind, drip lines hidden inside a one-millimetre rebate. The chalet ages in public; the joinery does not.
+    </div>
+  </div>
+
+  <div class="ed-row red-block" id="interior">
+    <div class="ed-num reveal">02<span class="slash">/</span></div>
+    <h2 class="ed-headline reveal d1">ROOMS<br>TUNED TO<br>ALTITUDE.</h2>
+    <div class="ed-meta reveal d2">
+      Chapter 02<br>
+      <b>Interior · 1,800 M · December</b>
+    </div>
+    <div class="ed-img reveal" style="background-image: url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1800&q=85&auto=format&fit=crop');"></div>
+    <div class="ed-body reveal d1">
+      Air at 1,800 metres reads differently against plaster. We work the geometry of each room to the angle of December sun, then build the windows last — frameless, set deep, sized to a single view. Stone underfoot stays cool through August and warm through February; the house, in either season, is simply still.
+    </div>
+  </div>
+</section>
+
+<section class="work block" id="work">
+  <div class="work-head">
+    <div class="label reveal">Index · 2019 — 2026</div>
+    <h2 class="reveal d1">SELECTED<br>WORK <span class="red">/03</span></h2>
+  </div>
+
+  <div class="work-grid">
+    <article class="project reveal">
+      <div class="pnum">01<span class="slash">/</span></div>
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1610529171140-a14e25be3a2f?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="ptitle">Chalet Sève —<br>A Single Roofline.</div>
+      <div class="pmeta"><span>Sils-Maria</span><span class="yr">2024</span></div>
+    </article>
+    <article class="project reveal d1">
+      <div class="pnum">02<span class="slash">/</span></div>
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="ptitle">Maison Arve —<br>Granite & Cedar.</div>
+      <div class="pmeta"><span>Verbier</span><span class="yr">2022</span></div>
+    </article>
+    <article class="project reveal d2">
+      <div class="pnum">03<span class="slash">/</span></div>
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="ptitle">Refuge Pléiades —<br>Two Pavilions, One Fire.</div>
+      <div class="pmeta"><span>Champéry</span><span class="yr">2020</span></div>
+    </article>
+  </div>
+</section>
+
+<section class="studio block" id="studio">
+  <div class="studio-row">
+    <div class="snum reveal">04<span class="slash">/</span></div>
+    <h3 class="reveal d1">A PRACTICE<br>OF TWELVE,<br>WORKING<br><span style="color:var(--accent)">SLOWLY.</span></h3>
+    <div class="scol reveal d2">
+      <span class="tag">Studio · Note</span>
+      <p>Atelier Lacroix was founded in Zürich in 2014 and now keeps a winter office in Sils-Maria. We accept four private commissions a year and a small number of cultural projects. Every drawing leaves the studio by hand before it is built.</p>
+      <p>Commissions — <a href="#">commissions@atelier-lacroix.ch</a></p>
+      <p>Press — <a href="#">press@atelier-lacroix.ch</a></p>
+      <p style="color:var(--mute); font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin-top:18px;">No telephone listed.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fmark"><span class="dot"></span>ATELIER LACROIX</div>
+  <div class="fcopy">© Atelier Lacroix MMXXVI — <b>Engadin · Zürich</b> · Set in Inter &amp; Space Mono · v03 / Brutalist Swiss</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

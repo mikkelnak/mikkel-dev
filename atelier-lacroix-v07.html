@@ -1,0 +1,649 @@
+<!-- Atelier Lacroix · v07 · Horizontal Scroll Gallery -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Lacroix — Chalets Cut From Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f1ea;
+    --ink: #1a1815;
+    --muted: #6b665c;
+    --line: #d8d2c5;
+    --accent: #8a6f3a;
+    --paper: #ece6da;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { overflow: hidden; }
+  .serif {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+
+  /* Fixed UI: brand + nav + progress */
+  .ui-top {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    pointer-events: none;
+  }
+  .ui-top .wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink);
+    mix-blend-mode: difference;
+    color: #fff;
+    pointer-events: auto;
+  }
+  .ui-top .counter {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #fff;
+    mix-blend-mode: difference;
+    pointer-events: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Progress: dots + bar */
+  .progress-wrap {
+    position: fixed;
+    bottom: 36px;
+    left: 48px;
+    right: 48px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    pointer-events: none;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 1px;
+    background: rgba(120,115,105,0.25);
+    position: relative;
+    mix-blend-mode: difference;
+  }
+  .progress-bar::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: var(--p, 0%);
+    background: #fff;
+    transition: width .35s cubic-bezier(.22,.61,.36,1);
+  }
+  .dots {
+    display: flex;
+    gap: 10px;
+    pointer-events: auto;
+    mix-blend-mode: difference;
+  }
+  .dots button {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: background .3s, transform .3s;
+  }
+  .dots button.active {
+    background: #fff;
+    transform: scale(1.4);
+  }
+  .scrollhint {
+    position: fixed;
+    bottom: 36px;
+    right: 48px;
+    z-index: 101;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #fff;
+    mix-blend-mode: difference;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* Horizontal track */
+  .track {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar { display: none; }
+
+  .panel {
+    flex: 0 0 100vw;
+    height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* --- Panel 1: HERO --- */
+  .panel-hero {
+    background:
+      linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.55) 100%),
+      url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=2400&q=85&auto=format&fit=crop')
+      center/cover no-repeat;
+    color: #fff;
+  }
+  .panel-hero .inner {
+    position: absolute;
+    bottom: 96px;
+    left: 96px;
+    right: 96px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .panel-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(56px, 8vw, 128px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    max-width: 11ch;
+  }
+  .panel-hero .kicker {
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 24px;
+  }
+  .panel-hero .meta-right {
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    max-width: 220px;
+    line-height: 1.8;
+  }
+
+  /* --- Panel 2: INTRO --- */
+  .panel-intro {
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 96px;
+  }
+  .panel-intro .grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 80px;
+    max-width: 1200px;
+    width: 100%;
+  }
+  .panel-intro .label-col { padding-top: 14px; }
+  .panel-intro .body {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(28px, 2.6vw, 44px);
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .panel-intro .body em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* --- Editorial panels (Detail, Rooms) --- */
+  .panel-editorial {
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+  .panel-editorial .img {
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+  }
+  .panel-editorial .copy {
+    padding: 120px 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+  }
+  .panel-editorial h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+  }
+  .panel-editorial p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 46ch;
+  }
+  .panel-editorial .index {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .panel-editorial.reverse { grid-template-columns: 1fr 1fr; }
+  .panel-editorial.reverse .img { order: 2; }
+
+  /* --- Project panels --- */
+  .panel-project {
+    color: #fff;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  .panel-project::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%);
+  }
+  .panel-project .pcontent {
+    position: absolute;
+    inset: 0;
+    padding: 120px 96px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .panel-project .pnum {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 32px;
+  }
+  .panel-project h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(48px, 6vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    margin-bottom: 28px;
+    max-width: 14ch;
+  }
+  .panel-project .pmeta {
+    display: flex;
+    gap: 56px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .panel-project .pmeta span { display: block; opacity: 0.6; margin-bottom: 6px; font-size: 10px; }
+
+  /* --- Panel 8: STUDIO + FOOTER --- */
+  .panel-studio {
+    background: var(--paper);
+    padding: 120px 96px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .panel-studio .lhs h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 4.5vw, 64px);
+    line-height: 1.08;
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+  }
+  .panel-studio .lhs p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 50ch;
+    margin-bottom: 18px;
+  }
+  .panel-studio .rhs {
+    border-left: 1px solid var(--line);
+    padding-left: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 64px;
+  }
+  .panel-studio .rhs h5 {
+    font-size: 10px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .panel-studio .rhs p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    line-height: 1.4;
+  }
+  .panel-studio .footer {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* --- Mobile fallback: vertical --- */
+  @media (max-width: 860px) {
+    body { overflow-y: auto; overflow-x: hidden; }
+    .track {
+      height: auto;
+      width: 100%;
+      display: block;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .panel {
+      flex: none;
+      width: 100%;
+      height: auto;
+      min-height: 100vh;
+    }
+    .panel-editorial,
+    .panel-studio {
+      grid-template-columns: 1fr;
+    }
+    .panel-editorial .img { height: 70vh; }
+    .panel-editorial .copy,
+    .panel-intro,
+    .panel-studio,
+    .panel-project .pcontent {
+      padding: 80px 28px;
+    }
+    .panel-intro .grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .panel-hero .inner {
+      left: 28px; right: 28px; bottom: 80px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+    .panel-studio .rhs {
+      border-left: none;
+      border-top: 1px solid var(--line);
+      padding-left: 0;
+      padding-top: 40px;
+      grid-template-columns: 1fr;
+    }
+    .panel-editorial.reverse .img { order: 0; }
+    .progress-wrap { display: none; }
+    .scrollhint { display: none; }
+    .ui-top { padding: 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="ui-top">
+  <div class="wordmark">Atelier Lacroix</div>
+  <div class="counter"><span id="cur">01</span> &nbsp;/&nbsp; 08</div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar" id="pbar" style="--p: 0%;"></div>
+  <div class="dots" id="dots"></div>
+</div>
+<div class="scrollhint">Scroll &nbsp;→</div>
+
+<main class="track" id="track">
+
+  <!-- 1. HERO -->
+  <section class="panel panel-hero">
+    <div class="inner">
+      <div class="lhs">
+        <div class="kicker">Atelier Lacroix · Engadin · MMXXVI</div>
+        <h1>Chalets Cut From Light</h1>
+      </div>
+      <div class="meta-right">
+        A Swiss studio for residential architecture above the treeline
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. INTRO -->
+  <section class="panel panel-intro">
+    <div class="grid">
+      <div class="label-col"><span class="label">— Manifest 001</span></div>
+      <div class="body">
+        We design houses that <em>hold the alpine year</em> — buildings tuned to slow snow, long shadow, and the particular hush of valleys at 1,800 metres. Each chalet begins as a quiet response to its slope, its weather, and the family who will return to it across decades.
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. DETAIL HOLDS WEATHER -->
+  <section class="panel panel-editorial">
+    <div class="img" style="background-image: url('https://images.unsplash.com/photo-1551524559-8af4e6624178?w=1800&q=85&auto=format&fit=crop');"></div>
+    <div class="copy">
+      <div class="index">— 02 / Practice</div>
+      <h2>Detail Holds Weather</h2>
+      <p>Larch boards laid with a 3mm drip. Copper flashings folded by hand in Samedan. We design the seams a building will live by — the line where rain runs, where ice rests, where the south sun finds the stone on a February morning.</p>
+      <p>Every junction is drawn three times: in summer, in storm, and in twenty years of patina.</p>
+    </div>
+  </section>
+
+  <!-- 4. ROOMS TUNED TO ALTITUDE -->
+  <section class="panel panel-editorial reverse">
+    <div class="img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=85&auto=format&fit=crop');"></div>
+    <div class="copy">
+      <div class="index">— 03 / Interior</div>
+      <h2>Rooms Tuned To Altitude</h2>
+      <p>At elevation, daylight is harder and the air is thinner. We work with lower ceilings near the hearth, taller volumes at the glass, and a palette of grey-warm oak, lime plaster, and wool that reads gently against snow-light.</p>
+      <p>The result is a house that breathes slower than the valley below.</p>
+    </div>
+  </section>
+
+  <!-- 5. PROJECT 1 -->
+  <section class="panel panel-project" style="background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=2000&q=85&auto=format&fit=crop');">
+    <div class="pcontent">
+      <div class="pnum">— Project 04 / Selected Works</div>
+      <h3>Maison Surlej</h3>
+      <div class="pmeta">
+        <div><span>Year</span>2023</div>
+        <div><span>Location</span>Silvaplana, GR</div>
+        <div><span>Type</span>Family residence · 420 m²</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PROJECT 2 -->
+  <section class="panel panel-project" style="background-image: url('https://images.unsplash.com/photo-1520637836862-4d197d17c55a?w=2000&q=85&auto=format&fit=crop');">
+    <div class="pcontent">
+      <div class="pnum">— Project 05 / Selected Works</div>
+      <h3>Chalet Bever</h3>
+      <div class="pmeta">
+        <div><span>Year</span>2024</div>
+        <div><span>Location</span>Bever, Engadin</div>
+        <div><span>Type</span>Restoration · 310 m²</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PROJECT 3 -->
+  <section class="panel panel-project" style="background-image: url('https://images.unsplash.com/photo-1502784444187-359ac186c5bb?w=2000&q=85&auto=format&fit=crop');">
+    <div class="pcontent">
+      <div class="pnum">— Project 06 / Selected Works</div>
+      <h3>Refugio Pontresina</h3>
+      <div class="pmeta">
+        <div><span>Year</span>2025</div>
+        <div><span>Location</span>Pontresina, GR</div>
+        <div><span>Type</span>Mountain retreat · 180 m²</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. STUDIO + FOOTER -->
+  <section class="panel panel-studio">
+    <div class="lhs">
+      <span class="label">— 07 / The Studio</span>
+      <h4 style="margin-top:24px;">A practice held between two valleys.</h4>
+      <p>Atelier Lacroix was founded by Elise Lacroix in 2014, after a decade with Peter Zumthor's office. The studio works from a converted hay-barn in Sils Maria and a small drawing room in Zürich, with seven architects and one resident dog.</p>
+      <p>We accept three private commissions a year.</p>
+    </div>
+    <div class="rhs">
+      <div>
+        <h5>Engadin</h5>
+        <p>Via da Marmoré 14<br>7514 Sils Maria</p>
+      </div>
+      <div>
+        <h5>Zürich</h5>
+        <p>Seefeldstrasse 142<br>8008 Zürich</p>
+      </div>
+      <div>
+        <h5>Correspondence</h5>
+        <p>studio@<br>atelier-lacroix.ch</p>
+      </div>
+      <div>
+        <h5>Press</h5>
+        <p>Espazium · 2024<br>Wallpaper* · 2025</p>
+      </div>
+      <div class="footer">
+        <span>© Atelier Lacroix MMXXVI — Engadin · Zürich</span>
+        <span>v07 — Horizontal Gallery</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    const track = document.getElementById('track');
+    const pbar = document.getElementById('pbar');
+    const dotsWrap = document.getElementById('dots');
+    const counter = document.getElementById('cur');
+    const total = 8;
+
+    // Build dots
+    for (let i = 0; i < total; i++) {
+      const b = document.createElement('button');
+      b.setAttribute('aria-label', 'Go to panel ' + (i + 1));
+      b.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          const panels = document.querySelectorAll('.panel');
+          panels[i] && panels[i].scrollIntoView({ behavior: 'smooth' });
+        } else {
+          track.scrollTo({ left: i * window.innerWidth, behavior: 'smooth' });
+        }
+      });
+      dotsWrap.appendChild(b);
+    }
+    const dots = dotsWrap.querySelectorAll('button');
+
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function updateFromHorizontal() {
+      const max = track.scrollWidth - track.clientWidth;
+      const pct = max > 0 ? (track.scrollLeft / max) : 0;
+      pbar.style.setProperty('--p', (pct * 100) + '%');
+      const idx = Math.round(track.scrollLeft / window.innerWidth);
+      const clamped = Math.max(0, Math.min(total - 1, idx));
+      counter.textContent = pad(clamped + 1);
+      dots.forEach((d, i) => d.classList.toggle('active', i === clamped));
+    }
+
+    function updateFromVertical() {
+      const panels = document.querySelectorAll('.panel');
+      const vh = window.innerHeight;
+      let active = 0;
+      panels.forEach((p, i) => {
+        const r = p.getBoundingClientRect();
+        if (r.top <= vh * 0.5 && r.bottom >= vh * 0.5) active = i;
+      });
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docH > 0 ? (window.scrollY / docH) : 0;
+      pbar.style.setProperty('--p', (pct * 100) + '%');
+      counter.textContent = pad(active + 1);
+      dots.forEach((d, i) => d.classList.toggle('active', i === active));
+    }
+
+    // Wheel: translate vertical wheel into horizontal scroll on desktop
+    function isDesktop() {
+      return !window.matchMedia('(max-width: 860px)').matches;
+    }
+
+    track.addEventListener('wheel', (e) => {
+      if (!isDesktop()) return;
+      // If user is scrolling primarily vertically, redirect to horizontal
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        track.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+      if (!isDesktop()) return;
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        track.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        track.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+      }
+    });
+
+    track.addEventListener('scroll', () => {
+      if (isDesktop()) updateFromHorizontal();
+    }, { passive: true });
+
+    window.addEventListener('scroll', () => {
+      if (!isDesktop()) updateFromVertical();
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      if (isDesktop()) updateFromHorizontal();
+      else updateFromVertical();
+    });
+
+    // Initial state
+    if (isDesktop()) updateFromHorizontal();
+    else updateFromVertical();
+  })();
+</script>
+</body>
+</html>

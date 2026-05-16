@@ -1,0 +1,495 @@
+<!-- Atelier Lacroix · v05 · Cinemagraph Hero -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Lacroix — Chalets Cut From Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f3efe7;
+    --mist: rgba(255,255,255,0.86);
+    --muted: rgba(255,255,255,0.72);
+    --line: rgba(255,255,255,0.28);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: #0a0908;
+    color: #fff;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  .serif {
+    font-family: 'Marcellus', 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+  .kicker {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    color: var(--mist);
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 26px 56px;
+    mix-blend-mode: difference;
+    color: #fff;
+    pointer-events: none;
+  }
+  .nav > * { pointer-events: auto; }
+  .nav .wordmark {
+    font-family: 'Marcellus', serif;
+    font-size: 16px;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+  }
+  .nav ul {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+  .nav a { opacity: 0.9; transition: opacity .4s ease; }
+  .nav a:hover { opacity: 1; }
+
+  /* SECTION FRAME */
+  .scene {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 640px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .scene.tall { height: 110vh; min-height: 720px; }
+  .scene .bg {
+    position: absolute;
+    inset: -4%;
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+    will-change: transform;
+    animation: breathe 22s ease-in-out infinite alternate;
+  }
+  .scene .veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.05) 65%, rgba(0,0,0,0.55) 100%);
+    z-index: -1;
+  }
+  .scene.light .veil {
+    background: linear-gradient(180deg, rgba(255,253,248,0.0) 0%, rgba(255,253,248,0.15) 50%, rgba(255,253,248,0.55) 100%);
+  }
+
+  @keyframes breathe {
+    0%   { transform: scale(1.00) translate3d(0,0,0); }
+    100% { transform: scale(1.10) translate3d(-1%,1%,0); }
+  }
+  @keyframes drift {
+    0%   { transform: scale(1.04) translate3d(1%,0,0); }
+    100% { transform: scale(1.12) translate3d(-2%,-1.5%,0); }
+  }
+  @keyframes still {
+    0%   { transform: scale(1.02); filter: brightness(1.0); }
+    50%  { transform: scale(1.06); filter: brightness(1.04); }
+    100% { transform: scale(1.02); filter: brightness(1.0); }
+  }
+  .anim-drift { animation: drift 28s ease-in-out infinite alternate !important; }
+  .anim-still { animation: still 18s ease-in-out infinite !important; }
+
+  /* CONTENT OVERLAYS */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 56px 88px;
+    z-index: 2;
+  }
+  .overlay.center  { justify-content: center; align-items: center; text-align: center; padding-bottom: 0; }
+  .overlay.top     { justify-content: flex-start; padding-top: 140px; }
+  .overlay.bottom-right { align-items: flex-end; text-align: right; }
+  .overlay.mid-left { justify-content: center; }
+
+  .display {
+    font-family: 'Marcellus', serif;
+    font-size: clamp(44px, 8.4vw, 142px);
+    line-height: 0.98;
+    letter-spacing: -0.012em;
+    max-width: 14ch;
+  }
+  .display.tight { max-width: 10ch; }
+  .head {
+    font-family: 'Marcellus', serif;
+    font-size: clamp(34px, 5.6vw, 88px);
+    line-height: 1.02;
+    letter-spacing: -0.005em;
+    max-width: 16ch;
+  }
+  .body {
+    margin-top: 22px;
+    max-width: 46ch;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--mist);
+    font-weight: 300;
+  }
+  .meta {
+    margin-top: 22px;
+    display: flex;
+    gap: 30px;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta span { display: inline-flex; align-items: center; gap: 10px; }
+  .meta .dot { width: 4px; height: 4px; background: currentColor; border-radius: 50%; opacity: 0.6; }
+
+  /* HERO specifics */
+  .hero .overlay { padding-bottom: 120px; }
+  .hero .display {
+    color: #fff;
+    font-size: clamp(54px, 10vw, 168px);
+  }
+  .hero .kicker-block {
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .hero .kicker-block::before {
+    content: "";
+    width: 48px; height: 1px;
+    background: rgba(255,255,255,0.7);
+  }
+  .hero .footer-line {
+    position: absolute;
+    bottom: 38px; left: 56px; right: 56px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+
+  /* LIGHT (paper) section */
+  .scene.light .display,
+  .scene.light .head,
+  .scene.light .body,
+  .scene.light .kicker,
+  .scene.light .meta { color: #1a1815; }
+  .scene.light .body { color: #3b372f; }
+  .scene.light .kicker { color: #6b665c; }
+
+  /* PROJECT TAGS */
+  .tag-top {
+    position: absolute;
+    top: 140px; left: 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .tag-top .num {
+    font-family: 'Marcellus', serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+  }
+  .tag-top .label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: var(--mist);
+  }
+
+  /* STUDIO */
+  .studio {
+    background: var(--paper);
+    color: #1a1815;
+    padding: 140px 56px 140px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .studio .lede {
+    font-family: 'Marcellus', serif;
+    font-size: clamp(28px, 3.4vw, 50px);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    max-width: 18ch;
+  }
+  .studio .copy { font-size: 15px; line-height: 1.85; color: #3b372f; max-width: 56ch; }
+  .studio .copy p + p { margin-top: 18px; }
+  .studio .kicker { color: #6b665c; margin-bottom: 32px; display: block; }
+
+  /* FOOTER */
+  footer {
+    background: #0a0908;
+    color: rgba(255,255,255,0.75);
+    padding: 64px 56px 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  footer .mark {
+    font-family: 'Marcellus', serif;
+    font-size: 14px;
+    letter-spacing: 0.38em;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1.6s cubic-bezier(.2,.7,.2,1), transform 1.6s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.delay-1 { transition-delay: 0.15s; }
+  .reveal.delay-2 { transition-delay: 0.3s; }
+  .reveal.delay-3 { transition-delay: 0.45s; }
+
+  /* Soft section fade-in on scroll */
+  .scene { transition: opacity 1.4s ease; }
+  .scene.fade-in { opacity: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 820px) {
+    .nav { padding: 20px 24px; }
+    .nav ul { display: none; }
+    .overlay { padding: 0 24px 64px; }
+    .hero .footer-line { left: 24px; right: 24px; bottom: 26px; flex-direction: column; gap: 8px; }
+    .tag-top { left: 24px; top: 110px; }
+    .studio { grid-template-columns: 1fr; padding: 90px 24px; gap: 40px; }
+    footer { flex-direction: column; gap: 18px; padding: 48px 24px; text-align: center; }
+    .meta { flex-wrap: wrap; gap: 14px; }
+    .display { font-size: clamp(40px, 12vw, 78px); }
+    .hero .display { font-size: clamp(48px, 14vw, 96px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene .bg { animation: none !important; }
+    .reveal { transition: none; opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#" class="wordmark">Atelier Lacroix</a>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#journal">Journal</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="scene hero">
+  <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1551524559-8af4e6624178?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="overlay">
+    <div class="reveal kicker-block"><span class="kicker">Engadin · MMXXVI</span></div>
+    <h1 class="display serif reveal delay-1">Chalets Cut From&nbsp;Light</h1>
+  </div>
+  <div class="footer-line reveal delay-3">
+    <span>46° 29′ N · 9° 50′ E</span>
+    <span>Scroll —</span>
+  </div>
+</section>
+
+<!-- INTRO (light/paper) -->
+<section class="scene light tall">
+  <div class="bg anim-still" style="background-image:url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="overlay center">
+    <span class="kicker reveal">A studio of stillness</span>
+    <h2 class="head serif reveal delay-1" style="margin-top:22px;">We build shelters that listen<br/>to the mountain before they speak.</h2>
+  </div>
+</section>
+
+<!-- DETAIL HOLDS WEATHER -->
+<section class="scene">
+  <div class="bg anim-drift" style="background-image:url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="overlay">
+    <span class="kicker reveal">I — Craft</span>
+    <h2 class="display serif tight reveal delay-1" style="margin-top:18px;">Detail Holds Weather.</h2>
+    <p class="body reveal delay-2">Hand-jointed larch, brushed stone, oiled brass. Each surface is drawn to age slowly, to gather snow without resistance, and to admit only the light the room asks for.</p>
+  </div>
+</section>
+
+<!-- ROOMS TUNED TO ALTITUDE -->
+<section class="scene">
+  <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1520208422220-d12a3c588e6c?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="overlay bottom-right">
+    <span class="kicker reveal">II — Atmosphere</span>
+    <h2 class="display serif tight reveal delay-1" style="margin-top:18px;">Rooms Tuned<br/>To Altitude.</h2>
+    <p class="body reveal delay-2" style="margin-left:auto;">Ceiling heights, hearths and thresholds are calibrated to the thinner air of 1,800 metres — a quiet acoustic, a longer breath, the certainty of warmth at dusk.</p>
+  </div>
+</section>
+
+<!-- SELECTED WORK INTRO -->
+<section class="scene light" style="height:60vh; min-height:420px;">
+  <div class="bg anim-still" style="background-image:url('https://images.unsplash.com/photo-1454942901704-3c44c11b2ad1?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="overlay center" id="work">
+    <span class="kicker reveal">Selected Work</span>
+    <h2 class="head serif reveal delay-1" style="margin-top:18px; max-width:20ch;">Three houses, three weathers.</h2>
+  </div>
+</section>
+
+<!-- PROJECT 01 -->
+<section class="scene tall">
+  <div class="bg anim-drift" style="background-image:url('https://images.unsplash.com/photo-1418985991508-e47386d96a71?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="tag-top reveal">
+    <span class="num serif">01</span>
+    <span class="label">Project</span>
+  </div>
+  <div class="overlay">
+    <h3 class="head serif reveal delay-1">Maison Silvaplana</h3>
+    <div class="meta reveal delay-2">
+      <span>MMXXIV</span>
+      <span class="dot"></span>
+      <span>Silvaplana · GR</span>
+      <span class="dot"></span>
+      <span>Residence</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 02 -->
+<section class="scene tall">
+  <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="tag-top reveal">
+    <span class="num serif">02</span>
+    <span class="label">Project</span>
+  </div>
+  <div class="overlay">
+    <h3 class="head serif reveal delay-1">Refuge Bernina</h3>
+    <div class="meta reveal delay-2">
+      <span>MMXXIII</span>
+      <span class="dot"></span>
+      <span>Pontresina · GR</span>
+      <span class="dot"></span>
+      <span>Guesthouse</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 03 -->
+<section class="scene tall">
+  <div class="bg anim-drift" style="background-image:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="tag-top reveal">
+    <span class="num serif">03</span>
+    <span class="label">Project</span>
+  </div>
+  <div class="overlay bottom-right">
+    <h3 class="head serif reveal delay-1">Chalet Fextal</h3>
+    <div class="meta reveal delay-2">
+      <span>MMXXII</span>
+      <span class="dot"></span>
+      <span>Sils · Fex</span>
+      <span class="dot"></span>
+      <span>Private House</span>
+    </div>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section class="studio" id="studio">
+  <div class="reveal">
+    <span class="kicker">The Studio</span>
+    <p class="lede serif">A small practice working between two valleys and one lake.</p>
+  </div>
+  <div class="copy reveal delay-1">
+    <p>Atelier Lacroix was founded in 2009 by Anne-Sophie Lacroix and Til Brunner. The studio works from two rooms — one above the Inn in Zuoz, one across the courtyard in Zürich — with a deliberate annual capacity of four houses.</p>
+    <p>Every commission begins with a season spent on site: drawings made by hand, light measured at dawn, the sound of the wind across the larch logged for a full year. Construction follows only when the place has been understood.</p>
+  </div>
+</section>
+
+<!-- CONTACT TEASER scene -->
+<section class="scene" style="height:80vh; min-height:540px;" id="contact">
+  <div class="bg anim-still" style="background-image:url('https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=2400&q=80');"></div>
+  <div class="veil"></div>
+  <div class="overlay center">
+    <span class="kicker reveal">Commissions opening MMXXVII</span>
+    <h2 class="head serif reveal delay-1" style="margin-top:18px;">studio@atelier-lacroix.ch</h2>
+  </div>
+</section>
+
+<footer>
+  <span class="mark">Atelier Lacroix</span>
+  <span>&copy; Atelier Lacroix MMXXVI — Engadin · Zürich</span>
+  <span>Imprint · Privacy</span>
+</footer>
+
+<script>
+  // Reveal on intersection
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+  reveals.forEach(el => io.observe(el));
+
+  // Soft section fade
+  const scenes = document.querySelectorAll('.scene');
+  const so = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('fade-in');
+      }
+    });
+  }, { threshold: 0.04 });
+  scenes.forEach(s => { s.style.opacity = '0.0001'; s.style.opacity = ''; so.observe(s); });
+
+  // Stagger initial hero reveal
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('in'), 120 + i * 220);
+    });
+  });
+</script>
+
+</body>
+</html>
