@@ -1,0 +1,737 @@
+<!-- Atelier Lacroix · v08 · Asymmetric European Editorial -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Atelier Lacroix — Chalets Cut From Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #f3ede2;
+    --paper: #ece5d6;
+    --ink: #1c1a17;
+    --ink-soft: #45403a;
+    --mustard: #c89a36;
+    --rule: rgba(28, 26, 23, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .serif { font-family: 'DM Serif Display', serif; font-weight: 400; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    padding: 0 32px;
+    max-width: 1480px;
+    margin: 0 auto;
+  }
+
+  /* NAV */
+  nav.top {
+    padding: 22px 32px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    align-items: baseline;
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 50;
+  }
+  nav.top .brand {
+    grid-column: 1 / span 3;
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+  nav.top .brand em {
+    color: var(--mustard);
+    font-style: normal;
+  }
+  nav.top ul {
+    grid-column: 6 / span 5;
+    list-style: none;
+    display: flex;
+    gap: 28px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  nav.top ul li a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.top ul li a:hover { border-color: var(--mustard); }
+  nav.top .loc {
+    grid-column: 12 / span 1;
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* HERO */
+  .hero {
+    padding-top: 60px;
+    padding-bottom: 120px;
+    position: relative;
+  }
+  .hero .hero-img {
+    grid-column: 1 / span 7;
+    aspect-ratio: 5/6;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero .hero-img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: contrast(1.02) saturate(0.92);
+  }
+  .hero .hero-img .img-tag {
+    position: absolute;
+    bottom: 14px; left: 14px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: rgba(28,26,23,0.55);
+    padding: 6px 10px;
+  }
+  .hero .hero-text {
+    grid-column: 9 / span 4;
+    padding-top: 40px;
+    align-self: start;
+  }
+  .hero .kicker {
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--mustard);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero .kicker::before {
+    content: "";
+    width: 32px; height: 1px; background: var(--mustard);
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(56px, 8.4vw, 132px);
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
+    margin-left: -180px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero h1 .it { font-style: italic; color: var(--mustard); }
+  .hero .hero-text p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 280px;
+    line-height: 1.55;
+  }
+  .hero .tiny-rotate {
+    position: absolute;
+    left: 8px; top: 200px;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transform: rotate(-90deg);
+    transform-origin: left top;
+  }
+
+  /* INTRO */
+  .intro {
+    padding: 80px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .intro .label {
+    grid-column: 1 / span 2;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 14px;
+  }
+  .intro .body {
+    grid-column: 4 / span 6;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(24px, 2.6vw, 38px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .intro .body em { color: var(--mustard); font-style: italic; }
+  .intro .footnote {
+    grid-column: 11 / span 2;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding-top: 14px;
+  }
+
+  /* EDITORIAL SECTION */
+  .editorial {
+    padding: 120px 0;
+    position: relative;
+  }
+  .editorial .section-num {
+    grid-column: 1 / span 1;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--mustard);
+  }
+  .editorial .h-large {
+    grid-column: 2 / span 8;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(48px, 7vw, 108px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin-bottom: 48px;
+  }
+  .editorial .h-large .small {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    vertical-align: top;
+    padding-left: 8px;
+  }
+  .editorial .ed-img-small {
+    grid-column: 2 / span 3;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+  .editorial .ed-img-small img { width:100%; height:100%; object-fit:cover; display:block; }
+  .editorial .ed-text {
+    grid-column: 7 / span 4;
+    padding-top: 24px;
+  }
+  .editorial .ed-text p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .editorial .ed-text p:first-child::first-letter {
+    font-family: 'DM Serif Display', serif;
+    font-size: 56px;
+    float: left;
+    line-height: 0.9;
+    padding-right: 8px;
+    padding-top: 4px;
+    color: var(--mustard);
+  }
+  .editorial .rot-tag {
+    grid-column: 12 / span 1;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transform: rotate(90deg);
+    transform-origin: left top;
+    padding-top: 24px;
+    white-space: nowrap;
+  }
+
+  /* SECTION 2 — ROOMS */
+  .rooms {
+    padding: 80px 0 140px;
+    border-top: 1px solid var(--rule);
+  }
+  .rooms .lead-num {
+    grid-column: 1 / span 1;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--mustard);
+    padding-top: 80px;
+  }
+  .rooms .text-col {
+    grid-column: 2 / span 3;
+    padding-top: 60px;
+  }
+  .rooms .text-col h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .rooms .text-col h3 em { color: var(--mustard); font-style: italic; }
+  .rooms .text-col p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .rooms .giant-img {
+    grid-column: 2 / span 11;
+    aspect-ratio: 16/8;
+    overflow: hidden;
+    margin-top: 60px;
+    position: relative;
+  }
+  .rooms .giant-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .rooms .giant-img .cap {
+    position: absolute;
+    right: 16px; bottom: 16px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: rgba(28,26,23,0.5);
+    padding: 6px 10px;
+  }
+  .rooms .side-img {
+    grid-column: 6 / span 6;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+  .rooms .side-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .rooms .side-note {
+    grid-column: 12 / span 1;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 40px;
+    writing-mode: vertical-rl;
+  }
+
+  /* SELECTED WORK */
+  .work {
+    padding: 120px 0;
+    background: var(--paper);
+  }
+  .work-head {
+    padding-bottom: 80px;
+  }
+  .work-head .lab {
+    grid-column: 1 / span 2;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 12px;
+  }
+  .work-head h2 {
+    grid-column: 4 / span 7;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(40px, 5.4vw, 84px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .work-head h2 em { font-style: italic; color: var(--mustard); }
+  .work-head .ix {
+    grid-column: 12 / span 1;
+    text-align: right;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-soft);
+  }
+
+  .proj-huge {
+    grid-column: 2 / span 10;
+    margin-bottom: 80px;
+  }
+  .proj-huge .img {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .proj-huge .img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .proj-huge .meta {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 16px;
+    align-items: baseline;
+  }
+  .proj-huge .meta .num {
+    grid-column: 1 / span 1;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--mustard);
+    font-size: 18px;
+  }
+  .proj-huge .meta .title {
+    grid-column: 2 / span 5;
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    letter-spacing: -0.015em;
+  }
+  .proj-huge .meta .desc {
+    grid-column: 7 / span 3;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .proj-huge .meta .yr {
+    grid-column: 10 / span 1;
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .proj-small-a {
+    grid-column: 2 / span 4;
+  }
+  .proj-small-b {
+    grid-column: 8 / span 3;
+    margin-top: 80px;
+  }
+  .proj-small-a .img, .proj-small-b .img {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .proj-small-a .img img, .proj-small-b .img img {
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .proj-small-a .ttl, .proj-small-b .ttl {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .proj-small-a .sub, .proj-small-b .sub {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* STUDIO */
+  .studio {
+    padding: 140px 0;
+  }
+  .studio .lab {
+    grid-column: 1 / span 2;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 14px;
+  }
+  .studio .body {
+    grid-column: 4 / span 5;
+  }
+  .studio .body h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 4.4vw, 62px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .studio .body h2 em { font-style: italic; color: var(--mustard); }
+  .studio .body p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .studio .body p.sm {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .studio .data {
+    grid-column: 10 / span 3;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink);
+  }
+  .studio .data dl {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .studio .data dt {
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .studio .data dd {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 32px 32px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    max-width: 1480px;
+    margin: 0 auto;
+    align-items: baseline;
+  }
+  footer .copy {
+    grid-column: 1 / span 6;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  footer .copy em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--mustard);
+  }
+  footer .links {
+    grid-column: 9 / span 4;
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  footer .links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-left: 18px;
+  }
+  footer .links a:hover { color: var(--mustard); }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; padding: 0 20px; gap: 24px; }
+    nav.top { grid-template-columns: 1fr 1fr; padding: 16px 20px; }
+    nav.top .brand { grid-column: 1 / span 1; font-size: 18px; }
+    nav.top ul { display: none; }
+    nav.top .loc { grid-column: 2; }
+    .hero { padding-top: 32px; padding-bottom: 60px; }
+    .hero .hero-img,
+    .hero .hero-text { grid-column: 1; }
+    .hero .hero-text { padding-top: 28px; }
+    .hero h1 { font-size: 56px; margin-left: 0; }
+    .hero .tiny-rotate { display: none; }
+    .intro { padding: 48px 0; }
+    .intro .label, .intro .body, .intro .footnote { grid-column: 1; }
+    .intro .body { font-size: 22px; }
+    .editorial { padding: 60px 0; }
+    .editorial .section-num,
+    .editorial .h-large,
+    .editorial .ed-img-small,
+    .editorial .ed-text,
+    .editorial .rot-tag { grid-column: 1; }
+    .editorial .rot-tag { transform: none; padding-top: 0; }
+    .editorial .h-large { font-size: 44px; }
+    .rooms { padding: 48px 0 60px; }
+    .rooms .lead-num,
+    .rooms .text-col,
+    .rooms .giant-img,
+    .rooms .side-img,
+    .rooms .side-note { grid-column: 1; padding-top: 0; margin-top: 24px; }
+    .rooms .side-note { writing-mode: horizontal-tb; }
+    .work { padding: 60px 0; }
+    .work-head .lab,
+    .work-head h2,
+    .work-head .ix,
+    .proj-huge,
+    .proj-small-a,
+    .proj-small-b { grid-column: 1; margin-top: 0; }
+    .proj-huge { margin-bottom: 48px; }
+    .proj-small-b { margin-top: 48px; }
+    .proj-huge .meta { grid-template-columns: 1fr; }
+    .proj-huge .meta .num,
+    .proj-huge .meta .title,
+    .proj-huge .meta .desc,
+    .proj-huge .meta .yr { grid-column: 1; text-align: left; }
+    .studio { padding: 60px 0; }
+    .studio .lab, .studio .body, .studio .data { grid-column: 1; }
+    footer { grid-template-columns: 1fr; padding: 32px 20px; }
+    footer .copy, footer .links { grid-column: 1; text-align: left; }
+    footer .links a { margin-left: 0; margin-right: 18px; display: inline-block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="brand">Atelier <em>Lacroix</em></div>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="loc">46.4983° N · 9.8412° E</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero grid">
+  <div class="tiny-rotate">No. 01 — Engadin Edition · Spring MMXXVI</div>
+  <div class="hero-img reveal">
+    <img src="https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&w=1400&q=80" alt="Alpine chalet at dusk" />
+    <div class="img-tag">Maison Soglio / North Façade</div>
+  </div>
+  <div class="hero-text reveal">
+    <div class="kicker">Werkbund / 2007 — present</div>
+    <h1>Chalets<br/><span class="it">Cut From</span><br/>Light.</h1>
+    <p>A Swiss studio drawing rooms from the angle of the sun, the lay of the larch, the patience of stone. Engadin and Zürich, since 2007.</p>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro grid">
+  <div class="label reveal">§ 00 — Premise</div>
+  <p class="body reveal">We design houses that hold the <em>weather</em> as gently as they hold their guests — measured in winters, drawn in graphite, finished in oiled spruce and dressed stone.</p>
+  <div class="footnote reveal">Studio brief, recorded in the Sils office, January 2026. Translated from the original German.</div>
+</section>
+
+<!-- EDITORIAL: DETAIL HOLDS WEATHER -->
+<section class="editorial grid" id="approach">
+  <div class="section-num reveal">i.</div>
+  <h2 class="h-large reveal">Detail Holds <em style="font-style:italic;color:var(--mustard)">Weather</em><span class="small">— a working note</span></h2>
+  <div class="ed-img-small reveal">
+    <img src="https://images.unsplash.com/photo-1551524559-8af4e6624178?auto=format&fit=crop&w=900&q=80" alt="Timber detail" />
+  </div>
+  <div class="ed-text reveal">
+    <p>Every joint at Atelier Lacroix is drafted twice: once for the eye, once for the föhn. The wind off the Bernina rounds corners we did not intend to soften — so we soften them on purpose, in oiled larch, in lead flashing, in chamfers a thumb wide.</p>
+    <p>We measure rainfall in millimetres and snow in metres. The roof line is not a gesture; it is an argument with the sky, settled in our favour by the time the first frost arrives.</p>
+    <p>A chalet, properly drawn, does not resist the season. It catalogues it.</p>
+  </div>
+  <div class="rot-tag reveal">Plate 04 / Larch &amp; lead</div>
+</section>
+
+<!-- ROOMS TUNED TO ALTITUDE -->
+<section class="rooms grid">
+  <div class="lead-num reveal">ii.</div>
+  <div class="text-col reveal">
+    <h3>Rooms<br/>Tuned To<br/><em>Altitude.</em></h3>
+    <p>At 1,800 metres the air is thinner, the light is sharper, the floor wants to be warmer. We tune ceiling heights, window depths and stove placement to the precise altimetry of each site.</p>
+  </div>
+  <div class="side-note reveal">Section through living room, Maison Soglio, 1 : 50</div>
+  <div class="side-img reveal">
+    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="Warm chalet interior" />
+  </div>
+  <div class="giant-img reveal">
+    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2000&q=80" alt="Wide alpine living room" />
+    <div class="cap">Salon · Chalet Fextal · 1,873 m a.s.l.</div>
+  </div>
+</section>
+
+<!-- SELECTED WORK -->
+<section class="work" id="work">
+  <div class="grid work-head">
+    <div class="lab reveal">§ 02 — Selected Work</div>
+    <h2 class="reveal">Three houses,<br/>three <em>weathers.</em></h2>
+    <div class="ix reveal">i – iii</div>
+  </div>
+
+  <div class="grid">
+    <article class="proj-huge reveal">
+      <div class="img">
+        <img src="https://images.unsplash.com/photo-1542317854-6dfc8b2c8aae?auto=format&fit=crop&w=2000&q=80" alt="Maison Soglio" />
+      </div>
+      <div class="meta">
+        <div class="num">i.</div>
+        <div class="title">Maison Soglio</div>
+        <div class="desc">A five-room residence drawn from a single courtyard of larch, stone and standing snow.</div>
+        <div class="yr">2024</div>
+      </div>
+    </article>
+
+    <article class="proj-small-a reveal">
+      <div class="img">
+        <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=900&q=80" alt="Chalet Fextal" />
+      </div>
+      <div class="ttl">Chalet Fextal</div>
+      <div class="sub">Fex Valley · 2022</div>
+    </article>
+
+    <article class="proj-small-b reveal">
+      <div class="img">
+        <img src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=900&q=80" alt="Haus Bergell" />
+      </div>
+      <div class="ttl">Haus Bergell</div>
+      <div class="sub">Stampa · 2021</div>
+    </article>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section class="studio grid" id="studio">
+  <div class="lab reveal">§ 03 — Studio</div>
+  <div class="body reveal">
+    <h2>A small office,<br/>made of <em>winters.</em></h2>
+    <p>Atelier Lacroix is twelve architects, two model-makers and one cat, working between a converted post house in Sils-Maria and a third-floor studio off Limmatquai in Zürich.</p>
+    <p class="sm">We accept four commissions per year. We draw by hand first. We do not photograph our work before its second snowfall.</p>
+  </div>
+  <div class="data reveal">
+    <dl>
+      <div><dt>Founded</dt><dd>MMVII</dd></div>
+      <div><dt>Offices</dt><dd>Sils · Zürich</dd></div>
+      <div><dt>Practice</dt><dd>Residential / Cultural</dd></div>
+      <div><dt>Languages</dt><dd>DE · IT · RM · EN</dd></div>
+    </dl>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="copy">© Atelier Lacroix <em>MMXXVI</em> — Engadin · Zürich</div>
+  <div class="links">
+    <a href="#">Instagram</a>
+    <a href="#">Journal</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+
+</body>
+</html>

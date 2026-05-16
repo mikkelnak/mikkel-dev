@@ -1,0 +1,1027 @@
+<!-- Atelier Lacroix · v06 · Architectural Blueprint -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Lacroix — Chalets Cut From Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2efe8;
+    --paper: #e7eef4;
+    --ink: #0f1a2a;
+    --line: #0f1a2a;
+    --muted: #5a6472;
+    --hairline: rgba(15,26,42,0.18);
+    --hairline-strong: rgba(15,26,42,0.5);
+    --accent: #1d3557;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .serif {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+  }
+  .dim {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Sheet frame — every section sits inside a drafting sheet */
+  .sheet {
+    position: relative;
+    border-left: 1px solid var(--hairline);
+    border-right: 1px solid var(--hairline);
+  }
+  .sheet::before, .sheet::after {
+    content: "";
+    position: absolute;
+    left: 48px; right: 48px;
+    height: 1px;
+    background: var(--hairline);
+  }
+  .sheet::before { top: 0; }
+  .sheet::after  { bottom: 0; }
+
+  /* Page-edge tick marks */
+  .ticks {
+    position: fixed;
+    top: 0; bottom: 0;
+    width: 28px;
+    pointer-events: none;
+    z-index: 5;
+    background-image: linear-gradient(to bottom, var(--hairline) 0, var(--hairline) 1px, transparent 1px, transparent 40px);
+    background-size: 100% 40px;
+    opacity: 0.55;
+  }
+  .ticks.left  { left: 0; border-right: 1px solid var(--hairline); }
+  .ticks.right { right: 0; border-left: 1px solid var(--hairline); }
+
+  /* Nav */
+  .nav {
+    position: fixed;
+    top: 0; left: 28px; right: 28px;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 32px;
+    background: rgba(242,239,232,0.86);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--hairline);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .nav .wordmark {
+    display: flex; align-items: baseline; gap: 14px;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+  .nav .wordmark .sheet-no {
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .nav ul {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .nav a {
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.78;
+    transition: opacity .3s;
+    position: relative;
+    padding-bottom: 2px;
+  }
+  .nav a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 1px; background: var(--ink);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .35s ease;
+  }
+  .nav a:hover { opacity: 1; }
+  .nav a:hover::after { transform: scaleX(1); }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 140px 80px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .hero .meta-top {
+    position: absolute;
+    top: 96px; left: 80px; right: 80px;
+    display: flex; justify-content: space-between;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(56px, 9vw, 132px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero .kicker::before {
+    content: ""; display: inline-block;
+    width: 48px; height: 1px; background: var(--ink);
+  }
+  .hero .right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 22px;
+  }
+  .hero-svg-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4/3;
+  }
+  .hero-svg-wrap svg { width: 100%; height: 100%; display: block; }
+  .hero .legend {
+    width: 100%; max-width: 520px;
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    border-top: 1px solid var(--hairline); padding-top: 10px;
+  }
+  .hero .stat-row {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--hairline);
+    padding-top: 22px; margin-top: 40px;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero .stat-row b { display:block; font-family:'Cormorant Garamond',serif; font-size: 22px; color: var(--ink); letter-spacing: 0; text-transform: none; font-weight: 400; margin-top: 6px; }
+
+  /* North rose, fixed corner */
+  .north-rose {
+    position: fixed;
+    bottom: 36px; right: 44px;
+    width: 64px; height: 64px;
+    z-index: 50;
+    opacity: 0.85;
+  }
+
+  /* Section wrapper */
+  section {
+    padding: 120px 80px;
+    position: relative;
+  }
+  .section-tag {
+    display: flex; align-items: center; gap: 18px;
+    margin-bottom: 60px;
+    font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-tag .num {
+    border: 1px solid var(--hairline-strong);
+    padding: 4px 10px;
+    color: var(--ink);
+  }
+  .section-tag .rule {
+    flex: 1; height: 1px; background: var(--hairline);
+  }
+
+  /* Intro */
+  .intro {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .intro p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.35;
+    font-weight: 300;
+    color: var(--ink);
+    max-width: 720px;
+  }
+  .intro p em { color: var(--accent); font-style: italic; }
+  .intro .side {
+    border-top: 1px solid var(--hairline-strong);
+    padding-top: 14px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Editorial — Detail Holds Weather */
+  .editorial {
+    background: var(--paper);
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .editorial h2, .rooms h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 5.4vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin-bottom: 30px;
+  }
+  .editorial p, .rooms p {
+    color: var(--muted);
+    font-size: 13px; line-height: 1.75;
+    max-width: 520px;
+    margin-bottom: 14px;
+  }
+  .editorial .figure, .rooms .figure {
+    position: relative;
+    border: 1px solid var(--hairline-strong);
+    background: var(--bg);
+    padding: 28px;
+  }
+  .editorial .figure svg, .rooms .figure svg { width: 100%; height: auto; display: block; }
+  .figure-cap {
+    position: absolute;
+    bottom: -1px; right: -1px;
+    background: var(--bg);
+    border-left: 1px solid var(--hairline-strong);
+    border-top: 1px solid var(--hairline-strong);
+    padding: 8px 14px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .figure-tag {
+    position: absolute;
+    top: 14px; left: 18px;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+  }
+
+  /* Rooms — flip layout */
+  .rooms .editorial-grid { grid-template-columns: 1fr 1.05fr; }
+  .rooms .figure { padding: 18px; }
+
+  /* Work */
+  .work {
+    background: var(--bg);
+  }
+  .work-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .project {
+    border: 1px solid var(--hairline);
+    background: rgba(231,238,244,0.35);
+    padding: 28px 24px 24px;
+    position: relative;
+    transition: border-color .4s ease, transform .5s ease, background .4s ease;
+  }
+  .project:hover {
+    border-color: var(--hairline-strong);
+    background: var(--paper);
+    transform: translateY(-3px);
+  }
+  .project .pno {
+    font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 10px; margin-bottom: 18px;
+    display: flex; justify-content: space-between;
+  }
+  .project .thumb {
+    height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px dashed var(--hairline-strong);
+    margin-bottom: 18px;
+  }
+  .project .thumb svg { width: 100%; height: 100%; display: block; }
+  .project h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .project .meta {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .project p {
+    font-size: 12px; line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* Studio */
+  .studio {
+    background: var(--paper);
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .studio-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: stretch;
+  }
+  .studio h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .studio p {
+    color: var(--muted);
+    font-size: 13px; line-height: 1.8;
+    max-width: 540px;
+    margin-bottom: 18px;
+  }
+  .studio .specs {
+    margin-top: 36px;
+    border-top: 1px solid var(--hairline-strong);
+  }
+  .studio .specs dl {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+  }
+  .studio .specs dt, .studio .specs dd {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .studio .specs dt { color: var(--muted); }
+  .studio .specs dd { color: var(--ink); }
+  .studio .photo {
+    position: relative;
+    border: 1px solid var(--hairline-strong);
+    overflow: hidden;
+    filter: grayscale(0.4) contrast(1.02);
+  }
+  .studio .photo img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 1.4s ease;
+  }
+  .studio .photo:hover img { transform: scale(1.04); }
+  .studio .photo .figure-cap { background: var(--paper); }
+
+  /* Footer */
+  footer {
+    padding: 56px 80px 40px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.32em;
+    color: var(--ink);
+  }
+  footer .cols {
+    display: flex; gap: 56px;
+  }
+  footer a { color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .3s; }
+  footer a:hover { border-bottom-color: var(--muted); }
+
+  /* Reveal animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.delay-1 { transition-delay: .12s; }
+  .reveal.delay-2 { transition-delay: .24s; }
+  .reveal.delay-3 { transition-delay: .36s; }
+
+  /* Hairline draw */
+  @keyframes draw { from { stroke-dashoffset: var(--len, 1000); } to { stroke-dashoffset: 0; } }
+  .draw path, .draw line, .draw polyline, .draw rect, .draw polygon, .draw circle {
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+  }
+  .draw.in path, .draw.in line, .draw.in polyline, .draw.in rect, .draw.in polygon, .draw.in circle {
+    animation: draw 2.2s ease forwards;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 130px 28px 60px; gap: 40px; }
+    .hero .meta-top { left: 28px; right: 28px; }
+    .intro, .editorial-grid, .rooms .editorial-grid, .studio-grid { grid-template-columns: 1fr; gap: 40px; }
+    section { padding: 80px 28px; }
+    .work-list { grid-template-columns: 1fr; }
+    .nav { left: 0; right: 0; padding: 18px 22px; }
+    .nav ul { display: none; }
+    footer { padding: 40px 28px; flex-direction: column; gap: 24px; align-items: flex-start; }
+    footer .cols { gap: 28px; flex-wrap: wrap; }
+    .ticks { display: none; }
+    .north-rose { width: 48px; height: 48px; bottom: 16px; right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticks left"></div>
+<div class="ticks right"></div>
+
+<nav class="nav">
+  <div class="wordmark">
+    <span>Atelier&nbsp;Lacroix</span>
+    <span class="sheet-no">A-001 / SHEET 06</span>
+  </div>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#journal">Journal</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- NORTH ROSE -->
+<svg class="north-rose" viewBox="0 0 100 100" aria-hidden="true">
+  <circle cx="50" cy="50" r="44" fill="none" stroke="#0f1a2a" stroke-width="0.6"/>
+  <circle cx="50" cy="50" r="34" fill="none" stroke="#0f1a2a" stroke-width="0.4" stroke-dasharray="2 3"/>
+  <polygon points="50,8 56,50 50,44 44,50" fill="#0f1a2a"/>
+  <polygon points="50,92 56,50 50,56 44,50" fill="none" stroke="#0f1a2a" stroke-width="0.6"/>
+  <text x="50" y="6" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">N</text>
+  <text x="50" y="99" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#5a6472">S</text>
+  <text x="2" y="52" font-family="JetBrains Mono" font-size="6" fill="#5a6472">W</text>
+  <text x="93" y="52" font-family="JetBrains Mono" font-size="6" fill="#5a6472">E</text>
+</svg>
+
+<!-- HERO -->
+<section class="hero sheet" id="top">
+  <div class="meta-top reveal">
+    <span>46°29'52"N · 9°50'21"E</span>
+    <span>SCALE 1:200</span>
+    <span>SHEET A-001</span>
+    <span>MMXXVI</span>
+  </div>
+
+  <div class="left">
+    <div class="kicker reveal">Engadin · Switzerland · Est. 2008</div>
+    <h1 class="serif reveal delay-1">Chalets<br>Cut From <em>Light</em></h1>
+    <p class="reveal delay-2" style="max-width:420px;color:var(--muted);font-size:13px;line-height:1.75;">
+      Atelier Lacroix designs slow, weather-tuned houses for the high Alps —
+      drawn line by line, sited stone by stone, between the larches of the
+      Upper Engadin valley.
+    </p>
+  </div>
+
+  <div class="right">
+    <div class="hero-svg-wrap reveal delay-2 draw" id="heroDraw">
+      <!-- Chalet elevation -->
+      <svg viewBox="0 0 520 390" preserveAspectRatio="xMidYMid meet">
+        <!-- ground -->
+        <line x1="20" y1="330" x2="500" y2="330" stroke="#0f1a2a" stroke-width="1"/>
+        <line x1="20" y1="334" x2="500" y2="334" stroke="#0f1a2a" stroke-width="0.4" stroke-dasharray="2 3"/>
+        <!-- contour lines below -->
+        <path d="M20 350 Q 130 358 260 350 T 500 348" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+        <path d="M20 368 Q 160 376 260 368 T 500 364" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+        <path d="M20 384 Q 180 378 260 384 T 500 380" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+
+        <!-- chalet body -->
+        <rect x="120" y="200" width="280" height="130" fill="none" stroke="#0f1a2a" stroke-width="1"/>
+        <!-- stone base -->
+        <rect x="120" y="290" width="280" height="40" fill="none" stroke="#0f1a2a" stroke-width="0.6"/>
+        <line x1="120" y1="305" x2="400" y2="305" stroke="#0f1a2a" stroke-width="0.3" stroke-dasharray="2 2"/>
+        <line x1="120" y1="318" x2="400" y2="318" stroke="#0f1a2a" stroke-width="0.3" stroke-dasharray="2 2"/>
+
+        <!-- gable roof -->
+        <polygon points="100,200 260,90 420,200" fill="none" stroke="#0f1a2a" stroke-width="1"/>
+        <line x1="260" y1="90" x2="260" y2="200" stroke="#0f1a2a" stroke-width="0.3" stroke-dasharray="3 3"/>
+        <!-- ridge -->
+        <line x1="100" y1="200" x2="420" y2="200" stroke="#0f1a2a" stroke-width="0.6"/>
+
+        <!-- windows -->
+        <rect x="150" y="220" width="34" height="50" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <line x1="167" y1="220" x2="167" y2="270" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="150" y1="245" x2="184" y2="245" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <rect x="210" y="220" width="34" height="50" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <line x1="227" y1="220" x2="227" y2="270" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="210" y1="245" x2="244" y2="245" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <rect x="280" y="220" width="34" height="50" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <line x1="297" y1="220" x2="297" y2="270" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="280" y1="245" x2="314" y2="245" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <!-- door -->
+        <rect x="340" y="232" width="34" height="58" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <line x1="357" y1="232" x2="357" y2="290" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <!-- gable window -->
+        <polygon points="240,150 280,150 260,128" fill="none" stroke="#0f1a2a" stroke-width="0.6"/>
+
+        <!-- dimension lines -->
+        <line x1="100" y1="68" x2="420" y2="68" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="100" y1="60" x2="100" y2="76" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="420" y1="60" x2="420" y2="76" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="260" y="62" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">12 400</text>
+
+        <line x1="445" y1="90" x2="445" y2="330" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="438" y1="90" x2="452" y2="90" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="438" y1="330" x2="452" y2="330" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="460" y="215" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a" transform="rotate(90 460 215)">9 220</text>
+
+        <!-- level marks -->
+        <text x="60" y="334" font-family="JetBrains Mono" font-size="8" fill="#5a6472">±0.000</text>
+        <text x="60" y="204" font-family="JetBrains Mono" font-size="8" fill="#5a6472">+5.420</text>
+        <text x="60" y="94" font-family="JetBrains Mono" font-size="8" fill="#5a6472">+9.220</text>
+
+        <!-- label -->
+        <text x="20" y="20" font-family="JetBrains Mono" font-size="9" fill="#5a6472">FIG. 01 — SOUTH ELEVATION</text>
+        <text x="500" y="20" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#5a6472">1:200</text>
+      </svg>
+    </div>
+    <div class="legend reveal delay-3">
+      <span>Fig. 01</span>
+      <span>South Elevation</span>
+      <span>Drawn · MJL</span>
+    </div>
+  </div>
+
+  <div class="stat-row reveal delay-3">
+    <div><span>Founded</span><b>MMVIII</b></div>
+    <div><span>Built Work</span><b>34 houses</b></div>
+    <div><span>Altitude Range</span><b>1 060 – 2 440 m</b></div>
+    <div><span>Atelier</span><b>Sils-Maria · Zürich</b></div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="sheet" id="intro">
+  <div class="section-tag reveal">
+    <span class="num">A.02</span>
+    <span>Statement</span>
+    <span class="rule"></span>
+    <span>02 / 06</span>
+  </div>
+  <div class="intro">
+    <div class="side reveal">
+      Manifesto<br>
+      <span class="dim" style="display:block;margin-top:8px;">Issued 2026 · Rev. 04</span>
+    </div>
+    <p class="serif reveal delay-1">
+      A house in the mountains is, before anything else, an instrument
+      <em>for measuring weather</em>. We draw long winter eaves, deep stone
+      plinths, and rooms that hold their warmth into the late blue hour —
+      then quietly let the morning back in.
+    </p>
+  </div>
+</section>
+
+<!-- EDITORIAL — DETAIL HOLDS WEATHER -->
+<section class="editorial sheet" id="detail">
+  <div class="section-tag reveal">
+    <span class="num">A.03</span>
+    <span>Detail</span>
+    <span class="rule"></span>
+    <span>Section · Wall Assembly</span>
+  </div>
+  <div class="editorial-grid">
+    <div class="text reveal">
+      <h2 class="serif">Detail<br>holds weather.</h2>
+      <p>
+        Each wall is a small climate of its own — larch board, ventilated cavity,
+        wood-fibre, cross-lam, lime plaster. We draft it at 1:5, then again at 1:1,
+        until the snow line meets the sill exactly where we wanted it.
+      </p>
+      <p>
+        Every project leaves the atelier with a binder of three hundred details.
+        Not because the house is complicated, but because the weather is.
+      </p>
+      <div style="display:flex;gap:32px;margin-top:32px;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);">
+        <span>U-Value · 0.11</span>
+        <span>· Snow load 5.4 kN</span>
+        <span>· Spec rev. 12</span>
+      </div>
+    </div>
+
+    <div class="figure reveal delay-1 draw">
+      <span class="figure-tag">FIG. 03 · WALL — 1:5</span>
+      <svg viewBox="0 0 460 360" preserveAspectRatio="xMidYMid meet">
+        <!-- Exterior side -->
+        <text x="14" y="20" font-family="JetBrains Mono" font-size="9" fill="#5a6472">EXTERIOR</text>
+        <text x="446" y="20" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#5a6472">INTERIOR</text>
+
+        <!-- layers as vertical bands -->
+        <rect x="40"  y="40" width="40"  height="260" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <rect x="80"  y="40" width="20"  height="260" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <rect x="100" y="40" width="70"  height="260" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <rect x="170" y="40" width="90"  height="260" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <rect x="260" y="40" width="100" height="260" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+        <rect x="360" y="40" width="60"  height="260" fill="none" stroke="#0f1a2a" stroke-width="0.7"/>
+
+        <!-- hatch: larch boards (vertical lines) -->
+        <g stroke="#0f1a2a" stroke-width="0.3">
+          <line x1="48"  y1="40" x2="48"  y2="300"/>
+          <line x1="56"  y1="40" x2="56"  y2="300"/>
+          <line x1="64"  y1="40" x2="64"  y2="300"/>
+          <line x1="72"  y1="40" x2="72"  y2="300"/>
+        </g>
+        <!-- hatch: cavity (dashed) -->
+        <g stroke="#5a6472" stroke-width="0.3" stroke-dasharray="3 3">
+          <line x1="84" y1="40" x2="84" y2="300"/>
+          <line x1="90" y1="40" x2="90" y2="300"/>
+          <line x1="96" y1="40" x2="96" y2="300"/>
+        </g>
+        <!-- hatch: wood-fibre (diagonal) -->
+        <g stroke="#0f1a2a" stroke-width="0.3">
+          <line x1="100" y1="40"  x2="170" y2="110"/>
+          <line x1="100" y1="80"  x2="170" y2="150"/>
+          <line x1="100" y1="120" x2="170" y2="190"/>
+          <line x1="100" y1="160" x2="170" y2="230"/>
+          <line x1="100" y1="200" x2="170" y2="270"/>
+          <line x1="100" y1="240" x2="170" y2="300"/>
+        </g>
+        <!-- hatch: CLT (cross-grid) -->
+        <g stroke="#0f1a2a" stroke-width="0.3">
+          <line x1="170" y1="80"  x2="260" y2="80"/>
+          <line x1="170" y1="140" x2="260" y2="140"/>
+          <line x1="170" y1="200" x2="260" y2="200"/>
+          <line x1="170" y1="260" x2="260" y2="260"/>
+          <line x1="200" y1="40"  x2="200" y2="300"/>
+          <line x1="230" y1="40"  x2="230" y2="300"/>
+        </g>
+        <!-- hatch: plaster (dot stipple via small lines) -->
+        <g stroke="#5a6472" stroke-width="0.4">
+          <line x1="370" y1="60" x2="372" y2="60"/>
+          <line x1="385" y1="80" x2="387" y2="80"/>
+          <line x1="400" y1="60" x2="402" y2="60"/>
+          <line x1="412" y1="90" x2="414" y2="90"/>
+          <line x1="375" y1="120" x2="377" y2="120"/>
+          <line x1="395" y1="140" x2="397" y2="140"/>
+          <line x1="410" y1="170" x2="412" y2="170"/>
+          <line x1="370" y1="200" x2="372" y2="200"/>
+          <line x1="390" y1="230" x2="392" y2="230"/>
+          <line x1="410" y1="260" x2="412" y2="260"/>
+          <line x1="380" y1="280" x2="382" y2="280"/>
+        </g>
+
+        <!-- callout lines + labels -->
+        <line x1="60"  y1="40"  x2="60"  y2="18" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="60"  y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">01</text>
+        <line x1="90"  y1="40"  x2="90"  y2="18" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="90"  y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">02</text>
+        <line x1="135" y1="40"  x2="135" y2="18" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="135" y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">03</text>
+        <line x1="215" y1="40"  x2="215" y2="18" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="215" y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">04</text>
+        <line x1="310" y1="40"  x2="310" y2="18" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="310" y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">05</text>
+        <line x1="390" y1="40"  x2="390" y2="18" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="390" y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f1a2a">06</text>
+
+        <!-- bottom legend -->
+        <line x1="40" y1="300" x2="420" y2="300" stroke="#0f1a2a" stroke-width="0.6"/>
+        <text x="40"  y="320" font-family="JetBrains Mono" font-size="8.5" fill="#0f1a2a">01 LARCH 28mm</text>
+        <text x="40"  y="334" font-family="JetBrains Mono" font-size="8.5" fill="#0f1a2a">02 VENT CAVITY 30</text>
+        <text x="40"  y="348" font-family="JetBrains Mono" font-size="8.5" fill="#0f1a2a">03 WIND BARRIER</text>
+        <text x="220" y="320" font-family="JetBrains Mono" font-size="8.5" fill="#0f1a2a">04 WOOD-FIBRE 200</text>
+        <text x="220" y="334" font-family="JetBrains Mono" font-size="8.5" fill="#0f1a2a">05 CLT 120</text>
+        <text x="220" y="348" font-family="JetBrains Mono" font-size="8.5" fill="#0f1a2a">06 LIME PLASTER</text>
+      </svg>
+      <span class="figure-cap">DET-A.03 · 1:5</span>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS — TUNED TO ALTITUDE -->
+<section class="rooms sheet" id="rooms">
+  <div class="section-tag reveal">
+    <span class="num">A.04</span>
+    <span>Plan</span>
+    <span class="rule"></span>
+    <span>Ground Floor · 1:100</span>
+  </div>
+  <div class="editorial-grid">
+    <div class="figure reveal draw">
+      <span class="figure-tag">FIG. 04 · PLAN — 1:100</span>
+      <svg viewBox="0 0 520 380" preserveAspectRatio="xMidYMid meet">
+        <!-- outer wall -->
+        <rect x="40" y="40" width="440" height="290" fill="none" stroke="#0f1a2a" stroke-width="1.4"/>
+        <!-- thick poché between walls -->
+        <rect x="44" y="44" width="432" height="282" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <!-- interior partitions -->
+        <line x1="230" y1="40" x2="230" y2="190" stroke="#0f1a2a" stroke-width="1"/>
+        <line x1="230" y1="190" x2="480" y2="190" stroke="#0f1a2a" stroke-width="1"/>
+        <line x1="340" y1="190" x2="340" y2="330" stroke="#0f1a2a" stroke-width="1"/>
+
+        <!-- door swings -->
+        <path d="M230 130 A 30 30 0 0 1 260 160" fill="none" stroke="#0f1a2a" stroke-width="0.5"/>
+        <line x1="230" y1="130" x2="230" y2="160" stroke="#0f1a2a" stroke-width="0.6"/>
+        <path d="M340 240 A 28 28 0 0 1 368 268" fill="none" stroke="#0f1a2a" stroke-width="0.5"/>
+        <line x1="340" y1="240" x2="340" y2="268" stroke="#0f1a2a" stroke-width="0.6"/>
+
+        <!-- windows (openings) -->
+        <line x1="80"  y1="40" x2="140" y2="40" stroke="#f2efe8" stroke-width="4"/>
+        <line x1="80"  y1="40" x2="140" y2="40" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="80"  y1="44" x2="140" y2="44" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="320" y1="40" x2="420" y2="40" stroke="#f2efe8" stroke-width="4"/>
+        <line x1="320" y1="40" x2="420" y2="40" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="320" y1="44" x2="420" y2="44" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <line x1="40" y1="120" x2="40" y2="200" stroke="#f2efe8" stroke-width="4"/>
+        <line x1="40" y1="120" x2="40" y2="200" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="44" y1="120" x2="44" y2="200" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <line x1="480" y1="240" x2="480" y2="310" stroke="#f2efe8" stroke-width="4"/>
+        <line x1="480" y1="240" x2="480" y2="310" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="476" y1="240" x2="476" y2="310" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <!-- hearth -->
+        <rect x="120" y="240" width="40" height="40" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+        <line x1="120" y1="240" x2="160" y2="280" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="160" y1="240" x2="120" y2="280" stroke="#0f1a2a" stroke-width="0.4"/>
+
+        <!-- furniture (sofa / table outlines) -->
+        <rect x="80"  y="100" width="120" height="30" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+        <rect x="80"  y="140" width="40"  height="30" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+        <circle cx="170" cy="160" r="14" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+
+        <rect x="260" y="80"  width="80"  height="40" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+        <rect x="260" y="130" width="80"  height="40" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+
+        <rect x="370" y="220" width="90"  height="30" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+        <circle cx="415" cy="285" r="20" fill="none" stroke="#5a6472" stroke-width="0.4"/>
+
+        <!-- room labels -->
+        <text x="135" y="90"  text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">SALON</text>
+        <text x="135" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#5a6472">42.6 m²</text>
+
+        <text x="300" y="60"  text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">CUISINE</text>
+        <text x="300" y="70"  text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#5a6472">18.4 m²</text>
+
+        <text x="410" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">ENTRÉE</text>
+        <text x="410" y="180" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#5a6472">9.1 m²</text>
+
+        <text x="270" y="265" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">CHAMBRE</text>
+        <text x="270" y="275" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#5a6472">22.0 m²</text>
+
+        <text x="415" y="320" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">BAIN</text>
+        <text x="415" y="330" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#5a6472">7.8 m²</text>
+
+        <!-- dimension lines -->
+        <line x1="40" y1="20" x2="480" y2="20" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="40" y1="14" x2="40" y2="26" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="480" y1="14" x2="480" y2="26" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="260" y="16" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">14 800</text>
+
+        <line x1="500" y1="40" x2="500" y2="330" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="494" y1="40" x2="506" y2="40" stroke="#0f1a2a" stroke-width="0.4"/>
+        <line x1="494" y1="330" x2="506" y2="330" stroke="#0f1a2a" stroke-width="0.4"/>
+        <text x="510" y="190" font-family="JetBrains Mono" font-size="9" fill="#0f1a2a">9 800</text>
+
+        <!-- north arrow mini -->
+        <circle cx="60" cy="350" r="10" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+        <polygon points="60,343 63,353 60,351 57,353" fill="#0f1a2a"/>
+        <text x="74" y="353" font-family="JetBrains Mono" font-size="7.5" fill="#5a6472">N · +1.820m</text>
+
+        <text x="40" y="372" font-family="JetBrains Mono" font-size="8" fill="#5a6472">PLAN — NIVEAU 00 — 1:100</text>
+        <text x="480" y="372" text-anchor="end" font-family="JetBrains Mono" font-size="8" fill="#5a6472">DRG · A-204</text>
+      </svg>
+      <span class="figure-cap">PLAN A-204 · 1:100</span>
+    </div>
+
+    <div class="text reveal delay-1">
+      <h2 class="serif">Rooms tuned<br>to altitude.</h2>
+      <p>
+        We design as if the rooms were instruments and the mountain were a slow tide.
+        Sleeping rooms sit east, drawing the first warm light off the Piz Languard.
+        The salon faces south-west, where the valley exhales its evening warmth.
+      </p>
+      <p>
+        Ceilings are low where breath should gather, and tall where the larch wants
+        to climb. Every threshold is a small altitude change — and every altitude
+        change is a small instruction about how to slow down.
+      </p>
+      <div style="display:flex;gap:32px;margin-top:32px;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);">
+        <span>Orient · 14° E of S</span>
+        <span>· Alt 1 820 m</span>
+        <span>· GFA 142 m²</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SELECTED WORK -->
+<section class="work sheet" id="work">
+  <div class="section-tag reveal">
+    <span class="num">A.05</span>
+    <span>Selected Work</span>
+    <span class="rule"></span>
+    <span>2018 — 2025</span>
+  </div>
+
+  <div class="work-list">
+    <article class="project reveal">
+      <div class="pno"><span>P-014</span><span>01 / 03</span></div>
+      <div class="thumb draw">
+        <svg viewBox="0 0 240 130" preserveAspectRatio="xMidYMid meet">
+          <line x1="10" y1="115" x2="230" y2="115" stroke="#0f1a2a" stroke-width="0.7"/>
+          <rect x="60" y="70" width="120" height="45" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <polygon points="50,70 120,30 190,70" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <rect x="78" y="82" width="14" height="22" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="104" y="82" width="14" height="22" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="130" y="82" width="14" height="22" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="156" y="82" width="14" height="22" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <path d="M10 125 Q 120 121 230 125" fill="none" stroke="#5a6472" stroke-width="0.3"/>
+          <text x="10" y="14" font-family="JetBrains Mono" font-size="7" fill="#5a6472">ELEV · 1:300</text>
+        </svg>
+      </div>
+      <h3 class="serif">Maison Surlej</h3>
+      <div class="meta"><span>2023</span><span>Silvaplana · 1 815 m</span></div>
+      <p>A long, single-pitch house above the lake — larch facade, stone plinth, three south rooms.</p>
+    </article>
+
+    <article class="project reveal delay-1">
+      <div class="pno"><span>P-021</span><span>02 / 03</span></div>
+      <div class="thumb draw">
+        <svg viewBox="0 0 240 130" preserveAspectRatio="xMidYMid meet">
+          <line x1="10" y1="115" x2="230" y2="115" stroke="#0f1a2a" stroke-width="0.7"/>
+          <rect x="40" y="78" width="80" height="37" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <polygon points="32,78 80,40 128,78" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <rect x="120" y="86" width="80" height="29" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <polygon points="115,86 160,58 205,86" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <rect x="55"  y="90" width="12" height="20" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="85"  y="90" width="12" height="20" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="140" y="96" width="10" height="16" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="170" y="96" width="10" height="16" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <path d="M10 125 Q 60 121 120 124 T 230 125" fill="none" stroke="#5a6472" stroke-width="0.3"/>
+          <text x="10" y="14" font-family="JetBrains Mono" font-size="7" fill="#5a6472">ELEV · 1:300</text>
+        </svg>
+      </div>
+      <h3 class="serif">Refuge Bever</h3>
+      <div class="meta"><span>2021</span><span>Bever · 1 712 m</span></div>
+      <p>Two volumes linked by a glazed neck — a winter house and a small studio for drawing.</p>
+    </article>
+
+    <article class="project reveal delay-2">
+      <div class="pno"><span>P-028</span><span>03 / 03</span></div>
+      <div class="thumb draw">
+        <svg viewBox="0 0 240 130" preserveAspectRatio="xMidYMid meet">
+          <line x1="10" y1="115" x2="230" y2="115" stroke="#0f1a2a" stroke-width="0.7"/>
+          <rect x="50" y="60" width="140" height="55" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <polygon points="44,60 120,22 196,60" fill="none" stroke="#0f1a2a" stroke-width="0.8"/>
+          <line x1="50" y1="92" x2="190" y2="92" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="64"  y="72" width="14" height="16" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="92"  y="72" width="14" height="16" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="120" y="72" width="14" height="16" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="148" y="72" width="14" height="16" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <rect x="100" y="96" width="40" height="19" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <polygon points="108,42 132,42 120,28" fill="none" stroke="#0f1a2a" stroke-width="0.4"/>
+          <path d="M10 124 Q 120 116 230 122" fill="none" stroke="#5a6472" stroke-width="0.3"/>
+          <text x="10" y="14" font-family="JetBrains Mono" font-size="7" fill="#5a6472">ELEV · 1:300</text>
+        </svg>
+      </div>
+      <h3 class="serif">Haus Languard</h3>
+      <div class="meta"><span>2019</span><span>Pontresina · 1 805 m</span></div>
+      <p>A reworked 1908 chalet — same gable, new heart. The stable became a south-facing salon.</p>
+    </article>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section class="studio sheet" id="studio">
+  <div class="section-tag reveal">
+    <span class="num">A.06</span>
+    <span>Studio</span>
+    <span class="rule"></span>
+    <span>Atelier Lacroix</span>
+  </div>
+
+  <div class="studio-grid">
+    <div class="reveal">
+      <h2 class="serif">A small atelier,<br>drawing slowly.</h2>
+      <p>
+        Marie-Jeanne Lacroix founded the atelier in 2008, after twelve winters at the
+        Engadin valley's older offices. Today, six architects and two carpenters work
+        between Sils-Maria and Zürich — drafting in graphite first, then in light.
+      </p>
+      <p>
+        We work on roughly four houses each year, never more. Every project is led
+        by one architect, and every architect is, eventually, on site in February.
+      </p>
+
+      <div class="specs">
+        <dl>
+          <dt>Principal</dt><dd>Marie-Jeanne Lacroix</dd>
+          <dt>Founded</dt><dd>MMVIII · Sils-Maria</dd>
+          <dt>Atelier</dt><dd>06 architects · 02 carpenters</dd>
+          <dt>Working radius</dt><dd>Engadin · Bregaglia · Valposchiavo</dd>
+          <dt>Affiliations</dt><dd>SIA · BSA · FAS</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="photo reveal delay-1">
+      <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1200&q=70" alt="Drafting table with hand-drawn architectural plans"/>
+      <span class="figure-cap">FIG. 06 · ATELIER · 2026</span>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="mark">© ATELIER LACROIX · MMXXVI</div>
+  <div class="cols">
+    <span>Engadin · Zürich</span>
+    <span><a href="mailto:atelier@lacroix.ch">atelier@lacroix.ch</a></span>
+    <span>+41 81 826 04 12</span>
+    <span>Sheet 06 / 06</span>
+  </div>
+</footer>
+
+<script>
+  // Intersection-based reveal + draw triggers
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .draw').forEach(el => io.observe(el));
+
+  // Trigger hero immediately on load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.hero .reveal, .hero .draw').forEach(el => el.classList.add('in'));
+  });
+
+  // Subtle parallax for the north rose on scroll
+  const rose = document.querySelector('.north-rose');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    rose.style.transform = `rotate(${y * 0.02}deg)`;
+  }, { passive: true });
+</script>
+</body>
+</html>

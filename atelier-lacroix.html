@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Lacroix — Chalets Cut From Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f1ea;
+    --ink: #1a1815;
+    --muted: #6b665c;
+    --line: #d8d2c5;
+    --accent: #8a6f3a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .serif {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    mix-blend-mode: difference;
+    color: #fff;
+  }
+  .nav .wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  .nav ul {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .nav a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity .3s;
+  }
+  .nav a:hover { opacity: 1; }
+
+  /* Hero */
+  .hero {
+    height: 100vh;
+    min-height: 700px;
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.45) 100%),
+      url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=2400&q=85&auto=format&fit=crop')
+      center/cover no-repeat;
+  }
+  .hero-meta {
+    position: absolute;
+    bottom: 48px;
+    left: 48px;
+    right: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: #fff;
+  }
+  .hero-meta .lhs { max-width: 520px; }
+  .hero-meta h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    margin-bottom: 18px;
+  }
+  .hero-meta .kicker {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .hero-meta .scrollhint {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /* Intro line */
+  .intro {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 140px 48px 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  .intro .label-col { padding-top: 8px; }
+  .intro .body-col {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.25;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  /* Editorial 2-col section */
+  .editorial {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .editorial.reverse { grid-template-columns: 1fr 1.1fr; }
+  .editorial.reverse .img { order: 2; }
+  .editorial .img {
+    aspect-ratio: 4/5;
+    background-size: cover;
+    background-position: center;
+  }
+  .editorial h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(36px, 4.5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 18px 0 28px;
+  }
+  .editorial p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 460px;
+  }
+
+  /* Projects strip */
+  .projects {
+    padding: 120px 48px;
+    border-top: 1px solid var(--line);
+  }
+  .projects .head {
+    max-width: 1280px;
+    margin: 0 auto 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .projects h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .projects-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .project {
+    cursor: pointer;
+  }
+  .project .thumb {
+    aspect-ratio: 3/4;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 16px;
+    transition: transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .project:hover .thumb { transform: scale(1.02); }
+  .project .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .project .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+
+  /* Altitude section */
+  .altitude {
+    position: relative;
+    margin-top: 80px;
+    padding: 160px 48px;
+    background:
+      linear-gradient(180deg, rgba(20,18,15,0.55), rgba(20,18,15,0.7)),
+      url('https://images.unsplash.com/photo-1551524559-8af4e6624178?w=2400&q=85&auto=format&fit=crop')
+      center/cover fixed no-repeat;
+    color: #f1ebde;
+    text-align: center;
+  }
+  .altitude .inner { max-width: 760px; margin: 0 auto; }
+  .altitude .label { color: rgba(241,235,222,0.7); margin-bottom: 24px; }
+  .altitude h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(44px, 6vw, 84px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 32px;
+  }
+  .altitude p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: rgba(241,235,222,0.85);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* Studio block */
+  .studio {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 140px 48px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+  }
+  .studio .label { margin-bottom: 24px; }
+  .studio h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 3.6vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 28px;
+  }
+  .studio p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 18px;
+    max-width: 580px;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    margin-top: 100px;
+    padding: 56px 48px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  footer .mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  footer .meta {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Reveal animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal.delay-1 { transition-delay: 0.12s; }
+  .reveal.delay-2 { transition-delay: 0.24s; }
+  .reveal.delay-3 { transition-delay: 0.36s; }
+
+  @media (max-width: 860px) {
+    .nav { padding: 20px 24px; }
+    .nav ul { display: none; }
+    .hero-meta { left: 24px; right: 24px; bottom: 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .intro, .editorial, .editorial.reverse, .studio { grid-template-columns: 1fr; gap: 32px; padding: 80px 24px; }
+    .editorial.reverse .img { order: initial; }
+    .projects { padding: 80px 24px; }
+    .projects-grid { grid-template-columns: 1fr; gap: 48px; }
+    .altitude { padding: 100px 24px; background-attachment: scroll; }
+    footer { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wordmark">Atelier Lacroix</div>
+  <ul>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#">Journal</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-meta">
+    <div class="lhs">
+      <div class="kicker reveal">Bespoke Alpine Architecture · Engadin, CH</div>
+      <h1 class="serif reveal delay-1">Chalets Cut<br>From Light</h1>
+    </div>
+    <div class="scrollhint reveal delay-2">Scroll &darr;</div>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="label-col">
+    <div class="label reveal">Practice — Est. 2014</div>
+  </div>
+  <div class="body-col reveal delay-1">
+    A small studio shaping <em>permanent</em> houses for impermanent light — every chalet
+    drawn to the line of a particular ridge, a particular winter, a particular family.
+  </div>
+</section>
+
+<section class="editorial">
+  <div class="img reveal" style="background-image: url('https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1600&q=85&auto=format&fit=crop');"></div>
+  <div>
+    <div class="label reveal">Material</div>
+    <h2 class="reveal delay-1">Detail Holds Weather</h2>
+    <p class="reveal delay-2">
+      Hand-joined larch facades are scribed to the slope and left to silver over a decade.
+      Each lap, each shadow gap is dimensioned for the season it must survive — snow load
+      computed against the angle of the prevailing wind, drip lines hidden inside a
+      one-millimetre rebate. The chalet ages in public; the joinery does not.
+    </p>
+  </div>
+</section>
+
+<section class="editorial reverse">
+  <div class="img reveal" style="background-image: url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1600&q=85&auto=format&fit=crop');"></div>
+  <div>
+    <div class="label reveal">Interior</div>
+    <h2 class="reveal delay-1">Rooms Tuned<br>To Altitude</h2>
+    <p class="reveal delay-2">
+      Air at 1,800 metres reads differently against plaster. We work the geometry of each
+      room to the angle of December sun, then build the windows last — frameless, set
+      deep, sized to a single view. Stone underfoot stays cool through August and warm
+      through February; the house, in either season, is simply still.
+    </p>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="head">
+    <h3 class="serif reveal">Selected Work</h3>
+    <div class="label reveal">2019 — 2026</div>
+  </div>
+  <div class="projects-grid">
+    <article class="project reveal">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1610529171140-a14e25be3a2f?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="meta"><span>Chalet Sève</span><span>2024 · Sils</span></div>
+      <div class="title serif">A single roofline, three winters.</div>
+    </article>
+    <article class="project reveal delay-1">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="meta"><span>Maison Arve</span><span>2022 · Verbier</span></div>
+      <div class="title serif">Granite plinth, cedar volume.</div>
+    </article>
+    <article class="project reveal delay-2">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=85&auto=format&fit=crop');"></div>
+      <div class="meta"><span>Refuge Pléiades</span><span>2020 · Champéry</span></div>
+      <div class="title serif">Two pavilions, one fire.</div>
+    </article>
+  </div>
+</section>
+
+<section class="altitude">
+  <div class="inner">
+    <div class="label reveal">Atmosphere</div>
+    <h2 class="serif reveal delay-1">Built for the hour the storm passes.</h2>
+    <p class="reveal delay-2">
+      Every project begins on the site, in weather. We move the line until the building
+      stands inside the landscape rather than upon it — until the chalet, seen from
+      the next ridge, is something one might have imagined was already there.
+    </p>
+  </div>
+</section>
+
+<section class="studio" id="studio">
+  <div>
+    <div class="label reveal">Studio</div>
+    <h3 class="reveal delay-1">A practice of twelve, working slowly.</h3>
+  </div>
+  <div>
+    <p class="reveal">
+      Atelier Lacroix was founded in Zürich in 2014 and now keeps a winter office in
+      Sils-Maria. We accept four private commissions a year and a small number of
+      cultural projects. Every drawing leaves the studio by hand before it is built.
+    </p>
+    <p class="reveal delay-1">
+      For commissions, write to <em>commissions@atelier-lacroix.ch</em>. For press,
+      write to <em>press@atelier-lacroix.ch</em>. We do not list a telephone number.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="mark">Atelier Lacroix</div>
+  <div class="meta">© MMXXVI — Engadin · Zürich</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
