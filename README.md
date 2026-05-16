@@ -29,3 +29,5 @@ python3 -m http.server 8000
 ## Kontakt
 
 mikkel.webdesign@outlook.dk · 25 78 89 78
+
+<!-- Force rebuild Sat May 16 13:33:13 UTC 2026 -->
