@@ -1806,3 +1806,124 @@ body {
 .contact-card:hover .btn-arrow{transform:translateX(4px)}
 .contact-direct .form-note{margin-top:20px;text-align:center;color:var(--text-muted);font-size:0.9rem}
 @media (max-width:640px){.contact-card{padding:18px 20px;gap:14px}.contact-card-icon{width:46px;height:46px;font-size:1.4rem}.contact-card-value{font-size:1.15rem}}
+
+/* === Claude Design-style mini-mockups for examples grid === */
+.mockup{aspect-ratio:4/3;display:flex;flex-direction:column;font-family:'Inter',sans-serif;font-size:0.7rem;overflow:hidden;position:relative}
+.mockup-nav{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,0.06)}
+.mockup-body{padding:18px 16px;flex:1;display:flex;flex-direction:column;gap:10px}
+.mockup-title{font-family:'Fraunces',serif;font-size:1.4rem;line-height:1.1;font-weight:500}
+.mockup-title-tight{font-family:'Fraunces',serif;font-size:1.1rem;line-height:1.15;font-weight:500}
+.mockup-title-serif{font-family:'Fraunces',serif;font-size:1.5rem;line-height:1.1;font-weight:500}
+.mockup-title-serif-sm{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500}
+.mockup-title-sans-light{font-size:0.95rem;font-weight:500;color:#fff;padding:14px 18px;background:#3a2a1a}
+.mockup-title-cream{font-size:0.95rem;font-weight:500;color:#2a1a10;padding:14px 18px;background:#f7ede0}
+.mockup-title-neon{font-size:0.95rem;font-weight:700;color:#fff;letter-spacing:-0.01em}
+.mockup-title-bornehave{font-size:0.95rem;color:#2a2a28;line-height:1.25}
+.mockup-sub{font-size:0.65rem;color:#666;line-height:1.35}
+.mockup-sub-small{font-size:0.6rem;color:rgba(255,255,255,0.55);line-height:1.35}
+.mockup-sub-tight{font-size:0.6rem;color:#888;line-height:1.3;margin-bottom:8px}
+.mockup-btn,.mockup-btn-sm,.mockup-btn-lg,.mockup-btn-dark,.mockup-btn-sm-outline{padding:7px 12px;border-radius:6px;font-size:0.6rem;font-weight:600;display:inline-block;width:fit-content;letter-spacing:0.02em}
+.mockup-pill{padding:4px 10px;border-radius:6px;font-size:0.55rem;font-weight:600;letter-spacing:0.02em}
+.mockup-pkg-pill{padding:4px 10px;border-radius:6px;font-size:0.55rem;font-weight:700;letter-spacing:0.05em;background:#22c55e;color:#0a0a0a}
+.mockup-pkg-pill-dark{background:#0f0f0f;color:#fff}
+.mockup-pkg-pill-light{background:#e8e8e8;color:#0a0a0a}
+.mockup-list{margin-top:auto;border-top:1px solid rgba(0,0,0,0.05);padding-top:8px}
+.mockup-row{display:flex;justify-content:space-between;font-size:0.6rem;padding:3px 0;color:#444}
+.mockup-row span:first-child{font-style:italic;color:#555}
+.mockup-row span:last-child{font-weight:500;color:#888;font-size:0.55rem}
+.mockup-tags{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:6px}
+.mockup-tags span{background:#fff;border:1px solid #ddd;padding:5px;font-size:0.55rem;text-align:center;border-radius:3px;color:#333}
+.mockup-tags-light{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:6px}
+.mockup-tags-light span{background:rgba(255,255,255,0.08);padding:5px;font-size:0.55rem;text-align:center;border-radius:3px;color:#fff}
+.mockup-menu,.mockup-menu-mini{font-size:0.55rem;color:#999;letter-spacing:0.03em}
+
+/* === Per-brand styles === */
+.mockup-advokat{background:#0F1B2C;color:#fff}
+.mockup-advokat .mockup-brand{font-family:'Fraunces',serif;color:#C9A961;font-size:0.75rem;letter-spacing:0.15em;font-weight:500}
+.mockup-advokat .mockup-menu{color:rgba(255,255,255,0.5)}
+.mockup-advokat .mockup-title{font-style:italic;color:#fff}
+.mockup-advokat .mockup-sub{color:rgba(255,255,255,0.7)}
+.mockup-advokat .mockup-btn{background:#C9A961;color:#0F1B2C}
+
+.mockup-tandklinik{background:#fff;color:#1a3a5c}
+.mockup-tandklinik .mockup-brand{font-family:'Fraunces',serif;color:#1a3a5c;font-size:0.8rem;font-style:italic}
+.mockup-tandklinik .mockup-pill{background:#3b82f6;color:#fff}
+.mockup-tandklinik .mockup-title{color:#1a3a5c}
+
+.mockup-fotograf{background:#0a0a0a;color:#fff;padding:14px}
+.mockup-fotograf .mockup-nav{border:none;padding:0 0 12px 0}
+.mockup-fotograf .mockup-brand-serif{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:#fff}
+.mockup-fotograf .mockup-menu-mini{color:rgba(255,255,255,0.4);letter-spacing:0.2em;font-size:0.5rem}
+.mockup-fotograf .mockup-grid-photos{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}
+.mockup-fotograf .mockup-grid-photos > div{background:#1f1f1f;border-radius:3px}
+.mockup-fotograf .mockup-caption{font-style:italic;font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:8px}
+
+.mockup-vvs{background:#1a1a1a;color:#fff}
+.mockup-vvs .mockup-nav{background:#0d0d0d;border-bottom:none}
+.mockup-vvs .mockup-brand-bold{font-weight:800;font-size:0.75rem;letter-spacing:0.05em;color:#fff}
+.mockup-vvs .mockup-phone{background:#f59e0b;color:#1a1a1a;padding:3px 8px;border-radius:4px;font-size:0.55rem;font-weight:700}
+.mockup-vvs .mockup-title-tight{color:#fff}
+
+.mockup-rengoring{background:#0c0c10;color:#fff}
+.mockup-rengoring .mockup-title,.mockup-rengoring .mockup-title-tight{color:#fff}
+.mockup-rengoring .mockup-sub-small{color:rgba(255,255,255,0.55)}
+.mockup-rengoring .mockup-btn-sm{background:#22c55e;color:#0a0a0a}
+.mockup-rengoring .mockup-btn-lg{background:#3b82f6;color:#fff;flex:1;text-align:center}
+.mockup-rengoring .mockup-btn-sm-outline{border:1px solid rgba(255,255,255,0.2);color:#fff;padding:7px 14px}
+.mockup-rengoring .mockup-row-btn{display:flex;gap:6px;margin-top:auto}
+.mockup-rengoring .mockup-phone-light{color:#22c55e;font-size:0.55rem;font-weight:600}
+
+.mockup-frisor{background:linear-gradient(135deg,#f5e6d6,#e8d3bf);color:#3a2a1a}
+.mockup-frisor .mockup-brand-script{font-family:'Fraunces',serif;font-style:italic;font-size:0.75rem;letter-spacing:0.15em;color:#3a2a1a}
+.mockup-frisor .mockup-circles{display:flex;gap:8px}
+.mockup-frisor .mockup-circles span{width:34px;height:34px;border-radius:50%;background:#e8c9a8;display:inline-block}
+.mockup-frisor .mockup-circles span:nth-child(2){background:#d4a784;width:22px;height:22px}
+.mockup-frisor .mockup-btn-dark{background:#3a2a1a;color:#fff;margin-top:auto}
+
+.mockup-oko{background:#f7f3eb;color:#2a2a28}
+.mockup-oko .mockup-brand-serif{font-family:'Fraunces',serif;font-style:italic;font-size:0.85rem;color:#3a4a2a}
+.mockup-oko .mockup-color-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex:1}
+.mockup-oko .mockup-color-grid span{border-radius:4px;display:block}
+.c-sage{background:#a8b89a}.c-terra{background:#c8866a}.c-olive{background:#7a8a5a}
+.c-tan{background:#c4a484}.c-sage-d{background:#88997a}.c-clay{background:#b87a5a}
+
+.mockup-blomster{background:#fdf4f0;color:#2a2a28}
+.mockup-blomster .mockup-brand-lower{font-family:'Fraunces',serif;font-style:italic;font-size:0.85rem;color:#c46a8a}
+.mockup-blomster .mockup-color-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex:1}
+.mockup-blomster .mockup-color-grid span{border-radius:4px;display:block}
+.c-pink{background:#f4c2d4}.c-sage2{background:#a8b89a}.c-rose{background:#e89aa6}
+.c-blush{background:#d4889a}.c-cream{background:#e8d0b8}.c-leaf{background:#9aa888}
+
+.mockup-restaurant{background:#0f0a05;color:#fff;font-family:'Fraunces',serif}
+.mockup-restaurant .mockup-restaurant-header{background:#c9a961;padding:10px 14px}
+.mockup-restaurant .mockup-brand-italic{font-style:italic;color:#0f0a05;font-size:1rem;font-weight:600}
+.mockup-restaurant .mockup-menu-list{margin-top:auto}
+.mockup-restaurant .mockup-menu-row{display:flex;justify-content:space-between;font-size:0.65rem;padding:3px 18px;color:rgba(255,255,255,0.85)}
+.mockup-restaurant .mockup-menu-row span:first-child{font-style:italic}
+
+.mockup-cafe{background:#3a2418;color:#f7ede0;font-family:'Fraunces',serif}
+.mockup-cafe .mockup-cafe-header{background:#5a3a26;padding:10px 14px}
+.mockup-cafe .mockup-brand-italic-cream{font-style:italic;color:#f7ede0;font-size:1rem;font-weight:600}
+.mockup-cafe .mockup-menu-list-light{margin-top:auto;padding:0 18px 14px 18px}
+.mockup-cafe .mockup-menu-row-l{display:flex;justify-content:space-between;font-size:0.65rem;padding:3px 0;color:#2a1a10}
+.mockup-cafe .mockup-menu-row-l span:first-child{font-style:italic}
+
+.mockup-fitness{background:#0a0a0a;color:#fff}
+.mockup-fitness .mockup-fitness-tag{background:#c5ff3a;color:#0a0a0a;padding:5px 14px;font-weight:800;font-size:0.7rem;letter-spacing:0.08em;align-self:flex-start}
+.mockup-fitness .mockup-neon-buttons{display:flex;gap:10px;margin-top:auto}
+.mockup-fitness .mockup-neon-btn{flex:1;height:30px;background:#c5ff3a;border-radius:3px}
+.mockup-fitness .mockup-fitness-note{font-size:0.55rem;color:rgba(255,255,255,0.5);margin-top:8px}
+
+.mockup-bornehave{background:#fdf4e8;color:#2a2a28}
+.mockup-bornehave .mockup-bornehave-tag{background:#f4886e;color:#fff;padding:5px 14px;font-weight:700;font-size:0.7rem;letter-spacing:0.05em;align-self:flex-start;border-radius:3px}
+.mockup-bornehave .mockup-blocks{display:flex;gap:8px;margin-top:8px}
+.mockup-bornehave .mockup-blocks span{flex:1;height:24px;border-radius:4px}
+.b-yellow{background:#f5cc4a}.b-coral{background:#f4886e}.b-blue{background:#7eb3c8}
+.mockup-bornehave .mockup-bornehave-note{font-size:0.6rem;color:#666;margin-top:auto;font-style:italic}
+
+/* Work card updates */
+.work-card .mockup{margin:0;border:none}
+.work-info .work-meta{display:flex;justify-content:space-between;margin-top:8px;align-items:baseline}
+.work-info .work-price{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--accent);font-weight:500}
+.work-info .work-days{font-size:0.75rem;color:var(--text-muted)}
+.heading-italic{font-style:italic;color:var(--text-muted);font-weight:400}
