@@ -221,6 +221,20 @@ Ollama, lader den drive autonome agenter via OpenClaw, og har bundet det
 hele sammen med et selvbygget Node.js-dashboard. Mission Control er
 visualiserings-laget — ikke selve AI-systemet.
 
+### Kilder & forbehold
+
+- **Setup-tour:** TikTok `@viral7275` — viser hardware, dashboard, terminaler.
+- **Stack-forklaring:** TikTok `@Future Ai With Julian` — "China just made
+  OpenClaw free forever 🤯 Install Qwen 3.6 through Ollama" (hyped clickbait-tone).
+- **Forbehold:** Tech-TikToks overdriver ofte. "OpenClaw" som et reelt
+  kinesisk open-source-projekt er ikke uafhængigt bekræftet på tidspunktet
+  for dette dokument — det kan også være `@viral7275`'s egen branding af et
+  generisk lokalt agent-framework (fx OpenCode, OpenDevin, Aider eller
+  lignende), som Julian-videoen så rider videre på. Qwen-modellerne fra
+  Alibaba og Ollama-runtime'en er derimod veldokumenterede. Hvis du selv
+  vil bygge stakken, så verificér først, at "OpenClaw" findes som forventet
+  — ellers brug en kendt åben Claude-Code-pendant.
+
 > **Noter til prompts:** Hvis du tilføjer en scene med en terminal, der
 > starter modellen op, kan kommandoen `ollama launch openclaw --model
 > qwen3.6` med fordel være synlig — det er den eneste "ægte" hint i hele
