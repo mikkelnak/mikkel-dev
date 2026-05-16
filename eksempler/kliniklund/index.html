@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Klinik Lund — Tandlæge i Aarhus</title>
+<meta name="description" content="Moderne tandklinik i Aarhus C. Tandrensning, implantater, blegning. Book online.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f6fafd;--surface:#fff;--blue:#3b82f6;--blue-dark:#1d4ed8;--blue-light:#e0edff;--text:#0f1729;--text-muted:#5a6478;--border:#e2eaf2}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500}
+a{color:inherit;text-decoration:none}
+.nav{background:var(--surface);padding:18px 0;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.brand{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--blue)}
+.brand .dot{color:var(--text)}
+.nav-menu{display:flex;gap:28px;font-size:0.95rem;color:var(--text-muted)}
+.nav-cta{background:var(--blue);color:#fff;padding:11px 22px;border-radius:24px;font-size:0.9rem;font-weight:500;transition:.2s}
+.nav-cta:hover{background:var(--blue-dark)}
+/* Hero */
+.hero{padding:80px 0 60px;text-align:center;background:linear-gradient(180deg,var(--surface),var(--bg))}
+.hero .badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-light);color:var(--blue-dark);padding:8px 18px;border-radius:40px;font-size:0.85rem;font-weight:500;margin-bottom:24px}
+.hero .badge::before{content:"";width:8px;height:8px;background:#22c55e;border-radius:50%}
+.hero h1{font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.1;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.hero p{font-size:1.15rem;color:var(--text-muted);max-width:580px;margin:0 auto 36px}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+.btn{padding:14px 30px;border-radius:30px;font-weight:500;font-size:0.95rem;font-family:inherit;cursor:pointer;border:none;transition:.2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+/* Stats */
+.stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--border);max-width:600px;margin:0 auto}
+.stat strong{display:block;font-family:'Fraunces',serif;font-size:2rem;color:var(--blue);margin-bottom:4px}
+.stat span{font-size:0.85rem;color:var(--text-muted)}
+/* Priser */
+.priser{padding:90px 0;background:var(--surface)}
+.section-header{text-align:center;margin-bottom:50px}
+.section-tag{font-size:0.8rem;color:var(--blue);font-weight:600;letter-spacing:0.15em;margin-bottom:14px;display:block;text-transform:uppercase}
+.section-header h2{font-size:clamp(1.8rem,3.8vw,2.6rem);margin-bottom:14px}
+.section-header p{color:var(--text-muted)}
+.price-list{max-width:680px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.price-row{display:flex;justify-content:space-between;align-items:center;padding:22px 28px;border-bottom:1px solid var(--border);font-size:1rem}
+.price-row:last-child{border-bottom:none}
+.price-row .label strong{display:block;margin-bottom:2px}
+.price-row .label small{color:var(--text-muted);font-size:0.85rem}
+.price-row .amount{font-family:'Fraunces',serif;color:var(--blue);font-weight:500;font-size:1.15rem}
+/* Hvorfor */
+.hvorfor{padding:90px 0}
+.hvorfor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px}
+.hvorfor-card{background:var(--surface);padding:32px;border-radius:16px;border:1px solid var(--border)}
+.hvorfor-card .icon{width:48px;height:48px;background:var(--blue-light);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:1.4rem}
+.hvorfor-card h3{font-size:1.2rem;margin-bottom:8px}
+.hvorfor-card p{color:var(--text-muted);font-size:0.95rem}
+/* Booking */
+.booking{padding:90px 0;background:var(--blue);color:#fff;text-align:center}
+.booking h2{font-size:clamp(1.8rem,3.5vw,2.4rem);margin-bottom:18px;color:#fff}
+.booking p{margin-bottom:30px;opacity:0.85;max-width:480px;margin-left:auto;margin-right:auto}
+.booking .btn-primary{background:#fff;color:var(--blue)}
+.booking .btn-primary:hover{background:var(--blue-light)}
+/* Footer */
+.footer{padding:36px 0;text-align:center;color:var(--text-muted);font-size:0.85rem;background:var(--surface);border-top:1px solid var(--border)}
+.demo-banner{background:#000;color:#fff;text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:#7eb3ff;text-decoration:underline}
+@media (max-width:768px){.nav-menu{display:none}}
+</style>
+</head>
+<body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktiv klinik</div>
+<nav class="nav"><div class="container nav-inner">
+  <span class="brand">Klinik<span class="dot">.</span>Lund</span>
+  <div class="nav-menu"><a href="#priser">Priser</a><a href="#hvorfor">Klinikken</a><a href="#kontakt">Kontakt</a></div>
+  <a href="#kontakt" class="nav-cta">Book online</a>
+</div></nav>
+
+<header class="hero"><div class="container">
+  <span class="badge">Ledige tider denne uge</span>
+  <h1>Tandlæge der husker dit navn.</h1>
+  <p>Moderne tandklinik midt i Aarhus C. Faste priser, mild bedøvelse og tid til at snakke om det du tænker over.</p>
+  <div class="hero-cta">
+    <a href="#kontakt" class="btn btn-primary">Book online</a>
+    <a href="#priser" class="btn btn-ghost">Se priser</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong>2.300+</strong><span>tilfredse patienter</span></div>
+    <div class="stat"><strong>4,9★</strong><span>på Google</span></div>
+    <div class="stat"><strong>14 år</strong><span>i Aarhus</span></div>
+  </div>
+</div></header>
+
+<section class="priser" id="priser"><div class="container">
+  <div class="section-header"><span class="section-tag">Priser</span><h2>Faste priser. Ingen overraskelser.</h2><p>Vi sender skriftligt tilbud før vi går i gang. Du bestemmer.</p></div>
+  <div class="price-list">
+    <div class="price-row"><div class="label"><strong>Undersøgelse</strong><small>Inkl. røntgen efter behov</small></div><span class="amount">395 kr</span></div>
+    <div class="price-row"><div class="label"><strong>Tandrensning</strong><small>30–45 min</small></div><span class="amount">595 kr</span></div>
+    <div class="price-row"><div class="label"><strong>Plombe (kompositt)</strong><small>Per tand</small></div><span class="amount">fra 850 kr</span></div>
+    <div class="price-row"><div class="label"><strong>Implantat</strong><small>Inkl. krone, op til 6 mdr behandling</small></div><span class="amount">fra 9.500 kr</span></div>
+    <div class="price-row"><div class="label"><strong>Blegning</strong><small>Hjemmeblegning, 2 ugers behandling</small></div><span class="amount">2.495 kr</span></div>
+    <div class="price-row"><div class="label"><strong>Akut konsultation</strong><small>Inden for 24 timer</small></div><span class="amount">695 kr</span></div>
+  </div>
+</div></section>
+
+<section class="hvorfor" id="hvorfor"><div class="container">
+  <div class="section-header"><span class="section-tag">Klinikken</span><h2>Det her kan du regne med.</h2></div>
+  <div class="hvorfor-grid">
+    <div class="hvorfor-card"><div class="icon">🦷</div><h3>Moderne udstyr</h3><p>Digital røntgen, 3D-scanner, mikroskopassisteret behandling.</p></div>
+    <div class="hvorfor-card"><div class="icon">💬</div><h3>Tid til samtale</h3><p>Vi sætter 30 min af ved første besøg. Spørg om alt.</p></div>
+    <div class="hvorfor-card"><div class="icon">💸</div><h3>Sygesikring</h3><p>Tilskud direkte fra Sygesikringen — du betaler kun resten.</p></div>
+    <div class="hvorfor-card"><div class="icon">🅿️</div><h3>Lige ved Aarhus C</h3><p>P-pladser i nærheden. 5 min gang fra Banegården.</p></div>
+  </div>
+</div></section>
+
+<section class="booking" id="kontakt"><div class="container">
+  <h2>Klar til en tid?</h2>
+  <p>Book online på 60 sekunder. Eller ring 86 12 34 56 i åbningstiden.</p>
+  <a href="#" class="btn btn-primary">Book online →</a>
+</div></section>
+
+<footer class="footer"><div class="container">
+  <p>Klinik Lund · Frederiks Allé 12 · 8000 Aarhus C · 86 12 34 56</p>
+  <p style="margin-top:8px">Demo · ikke en reel klinik · <a href="https://mikkeldev.dk/" style="color:var(--blue)">mikkel.dev</a></p>
+</div></footer>
+</body>
+</html>

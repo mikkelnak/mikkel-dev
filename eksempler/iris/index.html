@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iris — Friske blomster, leveret i dag</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fdf4f0;--surface:#fff;--pink:#f4c2d4;--pink-deep:#c46a8a;--blush:#e89aa6;--sage:#a8b89a;--text:#3a2030;--muted:#6a4555;--border:#f0d4dc}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500}
+a{color:inherit;text-decoration:none}
+.nav{padding:18px 0;background:var(--surface)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:'Fraunces',serif;font-style:italic;color:var(--pink-deep);font-size:1.6rem;letter-spacing:-0.02em}
+.nav-menu{display:flex;gap:24px;font-size:0.9rem;color:var(--muted)}
+.hero{padding:70px 0;text-align:center}
+.hero h1{font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.05;margin-bottom:18px}
+.hero h1 em{font-style:italic;color:var(--pink-deep)}
+.hero p{max-width:520px;margin:0 auto 30px;color:var(--muted);font-size:1.05rem}
+.btn{padding:13px 28px;border-radius:30px;font-family:inherit;font-size:0.95rem;border:none;cursor:pointer;font-weight:500;display:inline-block;transition:.2s}
+.btn-primary{background:var(--pink-deep);color:#fff}
+.btn-primary:hover{transform:translateY(-2px)}
+.color-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:720px;margin:50px auto 0}
+.color-tile{aspect-ratio:1;border-radius:50%}
+.c1{background:#f4c2d4}.c2{background:#a8b89a}.c3{background:#e89aa6}.c4{background:#d4889a}.c5{background:#e8d0b8}.c6{background:#9aa888}
+.bukett{padding:80px 0;background:var(--surface)}
+.bukett-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.bukett-card{background:var(--bg);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.bukett-img{aspect-ratio:1;background:radial-gradient(circle at 30% 30%,var(--pink),var(--blush))}
+.bukett-card:nth-child(2) .bukett-img{background:radial-gradient(circle at 30% 30%,#a8b89a,#7a8a5a)}
+.bukett-card:nth-child(3) .bukett-img{background:radial-gradient(circle at 30% 30%,#e8d0b8,#bda58a)}
+.bukett-card:nth-child(4) .bukett-img{background:radial-gradient(circle at 30% 30%,#d4889a,#c46a8a)}
+.bukett-info{padding:24px;text-align:center}
+.bukett h3{font-size:1.3rem;font-style:italic;margin-bottom:6px}
+.bukett .pris{font-family:'Fraunces',serif;color:var(--pink-deep);font-weight:500;font-size:1.2rem;display:block;margin-top:8px}
+.section-header{text-align:center;margin-bottom:40px}
+.section-header h2{font-size:clamp(1.8rem,3.5vw,2.6rem)}
+.section-header .label{font-style:italic;color:var(--pink-deep);font-family:'Fraunces',serif;margin-bottom:8px;display:block}
+.cta-section{padding:80px 0;text-align:center}
+.cta-section h2{margin-bottom:18px;font-style:italic}
+.footer{padding:30px 0;text-align:center;color:var(--muted);font-size:0.85rem;background:var(--surface);border-top:1px solid var(--border)}
+.footer a{color:var(--pink-deep)}
+.demo-banner{background:var(--pink-deep);color:#fff;text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:#fff;text-decoration:underline}
+@media (max-width:768px){.nav-menu{display:none}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktiv blomsterbutik</div>
+<nav class="nav"><div class="container nav-inner">
+  <span class="brand">iris</span>
+  <div class="nav-menu"><a href="#shop">Shop</a><a href="#">Om</a><a href="#">Konto</a></div>
+</div></nav>
+<header class="hero"><div class="container">
+  <h1><em>Friske</em> blomster,<br>leveret i dag.</h1>
+  <p>Bestil før kl. 13 — vi leverer samme eftermiddag i Odense. Sæsonens blomster fra danske gartnerier.</p>
+  <a href="#shop" class="btn btn-primary">Se buketter</a>
+  <div class="color-grid">
+    <div class="color-tile c1"></div><div class="color-tile c2"></div><div class="color-tile c3"></div>
+    <div class="color-tile c4"></div><div class="color-tile c5"></div><div class="color-tile c6"></div>
+  </div>
+</div></header>
+<section class="bukett" id="shop"><div class="container">
+  <div class="section-header"><span class="label">I dag</span><h2>Sæsonens buketter</h2></div>
+  <div class="bukett-grid">
+    <div class="bukett-card"><div class="bukett-img"></div><div class="bukett-info"><h3>Forårsbrise</h3><p style="color:var(--muted);font-size:0.85rem">Roser, frisia, eukalyptus</p><span class="pris">395 kr</span></div></div>
+    <div class="bukett-card"><div class="bukett-img"></div><div class="bukett-info"><h3>Markeng</h3><p style="color:var(--muted);font-size:0.85rem">Salvie, ranunkel, grønt</p><span class="pris">295 kr</span></div></div>
+    <div class="bukett-card"><div class="bukett-img"></div><div class="bukett-info"><h3>Beige bryllup</h3><p style="color:var(--muted);font-size:0.85rem">Pampas, roser, hvedeaks</p><span class="pris">495 kr</span></div></div>
+    <div class="bukett-card"><div class="bukett-img"></div><div class="bukett-info"><h3>Pink stor</h3><p style="color:var(--muted);font-size:0.85rem">Peoner, dahlia, fyldigt grønt</p><span class="pris">595 kr</span></div></div>
+  </div>
+</div></section>
+<section class="cta-section"><div class="container">
+  <h2>Et abonnement?</h2>
+  <p style="color:var(--muted);margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto">Få friske blomster hver eller hver anden uge. Skift, pause eller opsig fra dag til dag.</p>
+  <a href="#" class="btn btn-primary">Læs mere</a>
+</div></section>
+<footer class="footer"><div class="container">Iris · Albanigade 8 · 5000 Odense C — Demo · <a href="https://mikkeldev.dk/">mikkel.dev</a></div></footer>
+</body></html>

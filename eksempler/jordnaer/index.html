@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jordnær — Økologisk gårdbutik i Roskilde</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f7f3eb;--surface:#fff;--sage:#a8b89a;--sage-dark:#3a4a2a;--terra:#c8866a;--olive:#7a8a5a;--text:#2a2a28;--muted:#5a5a55;--border:#e0d8c8}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500}
+a{color:inherit;text-decoration:none}
+.nav{padding:20px 0;background:var(--surface);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.brand{font-family:'Fraunces',serif;font-style:italic;color:var(--sage-dark);font-size:1.6rem}
+.nav-menu{display:flex;gap:24px;font-size:0.9rem;color:var(--muted)}
+.nav-cta{background:var(--sage-dark);color:#fff;padding:9px 18px;border-radius:24px;font-size:0.85rem}
+.hero{padding:70px 0 50px;text-align:center}
+.hero h1{font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.05;margin-bottom:20px}
+.hero h1 em{font-style:italic;color:var(--terra)}
+.hero p{max-width:540px;margin:0 auto 30px;color:var(--muted);font-size:1.1rem}
+.btn{padding:13px 28px;border-radius:30px;font-family:inherit;font-size:0.95rem;border:none;cursor:pointer;font-weight:500;transition:.2s;display:inline-block}
+.btn-primary{background:var(--sage-dark);color:#fff}
+.btn-primary:hover{transform:translateY(-1px)}
+.color-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;max-width:760px;margin:50px auto 0}
+.color-tile{aspect-ratio:1;border-radius:8px;display:flex;align-items:flex-end;padding:14px;color:#fff;font-size:0.8rem;font-style:italic;font-family:'Fraunces',serif}
+.c1{background:#a8b89a}.c2{background:#c8866a}.c3{background:#7a8a5a}.c4{background:#c4a484}.c5{background:#88997a}.c6{background:#b87a5a}
+.shop{padding:80px 0;background:var(--surface)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.product{background:var(--bg);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.product-img{aspect-ratio:1;background:var(--sage);position:relative}
+.product:nth-child(2) .product-img{background:var(--terra)}
+.product:nth-child(3) .product-img{background:var(--olive)}
+.product:nth-child(4) .product-img{background:#c4a484}
+.product-info{padding:20px}
+.product h3{font-size:1.05rem;margin-bottom:4px}
+.product .farm{color:var(--muted);font-size:0.85rem;font-style:italic;margin-bottom:10px}
+.product .pris{font-family:'Fraunces',serif;color:var(--sage-dark);font-weight:500;font-size:1.1rem}
+.section-header{text-align:center;margin-bottom:40px}
+.section-header h2{font-size:clamp(1.8rem,3.5vw,2.6rem)}
+.section-header .label{font-family:'Fraunces',serif;font-style:italic;color:var(--terra);margin-bottom:8px;display:block;font-size:1.05rem}
+.story{padding:80px 0;text-align:center}
+.story p{max-width:540px;margin:0 auto;color:var(--muted);font-size:1.05rem}
+.footer{padding:32px 0;text-align:center;color:var(--muted);font-size:0.85rem;background:var(--surface);border-top:1px solid var(--border)}
+.footer a{color:var(--sage-dark)}
+.demo-banner{background:var(--sage-dark);color:var(--bg);text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:#f0e8d0;text-decoration:underline}
+@media (max-width:768px){.nav-menu{display:none}.color-grid{grid-template-columns:repeat(3,1fr)}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktiv øko-butik</div>
+<nav class="nav"><div class="container nav-inner">
+  <span class="brand">Jordnær</span>
+  <div class="nav-menu"><a href="#shop">Shop</a><a href="#story">Om</a><a href="#">Konto</a></div>
+  <a href="#shop" class="nav-cta">Bestil →</a>
+</div></nav>
+<header class="hero"><div class="container">
+  <h1>Mad <em>fra marker</em><br>du kan besøge.</h1>
+  <p>Økologiske grøntsager, mejeri og kød fra Sjælland. Bestil online — leveret til døren eller hentet i Roskilde-butikken.</p>
+  <a href="#shop" class="btn btn-primary">Se ugens kasse</a>
+  <div class="color-grid">
+    <div class="color-tile c1">Grønt</div><div class="color-tile c2">Rod</div><div class="color-tile c3">Mejeri</div>
+    <div class="color-tile c4">Æg</div><div class="color-tile c5">Frugt</div><div class="color-tile c6">Kaffe</div>
+  </div>
+</div></header>
+<section class="shop" id="shop"><div class="container">
+  <div class="section-header"><span class="label">Ugens kasse</span><h2>Friskt fra marken</h2></div>
+  <div class="shop-grid">
+    <div class="product"><div class="product-img"></div><div class="product-info"><h3>Forårsgrønt-kasse</h3><p class="farm">Skuldelev Gård</p><span class="pris">249 kr</span></div></div>
+    <div class="product"><div class="product-img"></div><div class="product-info"><h3>Rodfrugt-mix</h3><p class="farm">Vibeke's Have</p><span class="pris">189 kr</span></div></div>
+    <div class="product"><div class="product-img"></div><div class="product-info"><h3>Mejeri-kasse</h3><p class="farm">Næsbyholm Mejeri</p><span class="pris">329 kr</span></div></div>
+    <div class="product"><div class="product-img"></div><div class="product-info"><h3>Kød-kasse</h3><p class="farm">Aase &amp; Knud</p><span class="pris">695 kr</span></div></div>
+  </div>
+</div></section>
+<section class="story" id="story"><div class="container">
+  <div class="section-header"><span class="label">Historien</span><h2>Vi kender bonden bag hvert produkt.</h2></div>
+  <p>Jordnær er et lille kollektiv af 14 mindre øko-landbrug på Sjælland. Vi pakker hvert mandag fra gården i Roskilde — du henter eller får leveret tirsdag.</p>
+</div></section>
+<footer class="footer"><div class="container">Jordnær · Hvalsø Hovedgade 22 · 4000 Roskilde · CVR 33 22 11 00 — Demo · <a href="https://mikkeldev.dk/">mikkel.dev</a></div></footer>
+</body></html>

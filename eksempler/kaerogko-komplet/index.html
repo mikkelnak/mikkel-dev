@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kær & Ko — Book rengøring online</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0c0c10;--surface:#18181b;--surface-2:#27272a;--green:#22c55e;--blue:#3b82f6;--text:#fafafa;--muted:rgba(255,255,255,0.6);--border:rgba(255,255,255,0.1)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600}
+a{color:inherit;text-decoration:none}
+.nav{padding:20px 0;border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.brand-row{display:flex;align-items:center;gap:12px}
+.brand{font-weight:700}.brand .amp{color:var(--green)}
+.pkg-badge{background:#e8e8e8;color:#0a0a0a;padding:5px 14px;border-radius:4px;font-size:0.75rem;font-weight:700;letter-spacing:0.1em}
+.nav-cta{color:var(--green);font-weight:700;font-size:0.95rem}
+.hero{padding:60px 0 30px;text-align:center}
+.hero h1{font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.1;margin-bottom:14px}
+.hero p{color:var(--muted);max-width:540px;margin:0 auto 32px;font-size:1rem}
+.booker{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:760px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field{display:flex;flex-direction:column}
+.field label{font-size:0.8rem;color:var(--muted);margin-bottom:8px;letter-spacing:0.08em;text-transform:uppercase}
+.field select,.field input{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:14px 16px;border-radius:8px;font-family:inherit;font-size:1rem}
+.field-full{grid-column:1 / -1}
+.estimate{grid-column:1 / -1;background:var(--bg);border:2px solid var(--green);border-radius:10px;padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px}
+.estimate-info span{color:var(--muted);font-size:0.85rem;display:block;margin-bottom:4px;letter-spacing:0.08em;text-transform:uppercase}
+.estimate-info strong{font-family:'Fraunces',serif;font-size:2.4rem;color:var(--green);font-weight:600}
+.btn{padding:14px 28px;border-radius:8px;font-weight:600;display:inline-block;cursor:pointer;border:none;font-family:inherit;font-size:0.95rem;transition:.15s}
+.btn-primary{background:var(--green);color:#0a0a0a}.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:#fff;border:1px solid var(--border)}
+.features{padding:70px 0}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.feature{background:var(--surface);padding:24px;border-radius:10px;border:1px solid var(--border)}
+.feature .icon{width:40px;height:40px;background:rgba(34,197,94,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feature h3{font-size:1.05rem;margin-bottom:6px}
+.feature p{color:var(--muted);font-size:0.88rem}
+.section-header{text-align:center;margin-bottom:36px}
+.section-header h2{font-size:clamp(1.7rem,3vw,2.2rem)}
+.section-header .tag{color:var(--green);font-size:0.8rem;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;display:block;margin-bottom:8px}
+.footer{padding:28px 0;text-align:center;color:var(--muted);font-size:0.85rem;border-top:1px solid var(--border)}
+.demo-banner{background:#000;color:#fff;text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:var(--green);text-decoration:underline}
+@media (max-width:768px){.booker{grid-template-columns:1fr;padding:24px}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktivt rengøringsfirma</div>
+<nav class="nav"><div class="container nav-inner">
+  <div class="brand-row"><span class="brand">Kær <span class="amp">&</span> Ko</span><span class="pkg-badge">KOMPLET</span></div>
+  <a href="tel:+4570112233" class="nav-cta">📞 70 11 22 33</a>
+</div></nav>
+<header class="hero"><div class="container">
+  <h1>Book din rengøring online.<br><em style="font-style:italic;color:var(--green)">Få pris med det samme.</em></h1>
+  <p>Vælg areal, frekvens og dato. Du får en fast pris og kvittering på mail.</p>
+  <form class="booker" onsubmit="return false">
+    <div class="field"><label>Areal</label><select><option>0–60 m²</option><option selected>60–100 m²</option><option>100–150 m²</option><option>150+ m²</option></select></div>
+    <div class="field"><label>Frekvens</label><select><option>Hver uge</option><option selected>Hver 14. dag</option><option>Hver måned</option><option>Engangs</option></select></div>
+    <div class="field"><label>Start dato</label><input type="date" value="2026-05-20"></div>
+    <div class="field"><label>Tidsrum</label><select><option>Morgen (8–11)</option><option selected>Formiddag (10–13)</option><option>Eftermiddag (13–16)</option></select></div>
+    <div class="field field-full"><label>Adresse</label><input type="text" placeholder="Vejnavn nr, postnummer by"></div>
+    <div class="estimate">
+      <div class="estimate-info"><span>Estimeret pris</span><strong>1.295 kr</strong></div>
+      <button class="btn btn-primary">Book og betal →</button>
+    </div>
+  </form>
+</div></header>
+<section class="features"><div class="container">
+  <div class="section-header"><span class="tag">Hvorfor Kær &amp; Ko</span><h2>Det du får med</h2></div>
+  <div class="features-grid">
+    <div class="feature"><div class="icon">🔒</div><h3>Fast pris</h3><p>Du ved hvad det koster før de kommer.</p></div>
+    <div class="feature"><div class="icon">📅</div><h3>Online booking</h3><p>Bestil, ændr, aflys — alt sammen på mobilen.</p></div>
+    <div class="feature"><div class="icon">👥</div><h3>Fast medarbejder</h3><p>Samme person hver gang. Hun lærer dit hjem at kende.</p></div>
+    <div class="feature"><div class="icon">📩</div><h3>Kvittering på mail</h3><p>Du får hver gang en kvittering og foto af det udførte.</p></div>
+  </div>
+</div></section>
+<footer class="footer"><div class="container">Kær &amp; Ko · Aarhus · Demo · <a href="https://mikkeldev.dk/" style="color:var(--green)">mikkel.dev</a></div></footer>
+</body></html>

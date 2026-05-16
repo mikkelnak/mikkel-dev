@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kær & Ko — Privat rengøring i Aarhus</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0c0c10;--surface:#18181b;--green:#22c55e;--text:#fafafa;--muted:rgba(255,255,255,0.6);--border:rgba(255,255,255,0.1)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1000px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.02em}
+a{color:inherit;text-decoration:none}
+.nav{padding:20px 0;border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:700;letter-spacing:0.03em}.brand .amp{color:var(--green)}
+.pkg-badge{background:var(--green);color:#0a0a0a;padding:5px 14px;border-radius:4px;font-size:0.75rem;font-weight:700;letter-spacing:0.1em}
+.nav-menu{display:flex;gap:24px;font-size:0.9rem;color:var(--muted)}
+.hero{padding:80px 0 60px;text-align:center}
+.hero h1{font-size:clamp(2.4rem,5.5vw,4rem);line-height:1.05;margin-bottom:20px}
+.hero p{max-width:520px;margin:0 auto 32px;color:var(--muted);font-size:1.1rem}
+.btn{padding:16px 32px;border-radius:6px;font-weight:600;border:none;font-family:inherit;cursor:pointer;font-size:0.95rem;display:inline-block;transition:.2s}
+.btn-primary{background:var(--green);color:#0a0a0a}.btn-primary:hover{transform:translateY(-1px)}
+.priser{padding:60px 0;background:var(--surface);text-align:center}
+.priser h2{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:14px}
+.priser p{color:var(--muted);margin-bottom:32px}
+.pris-box{background:var(--bg);padding:48px 32px;border-radius:14px;border:1px solid var(--border);max-width:480px;margin:0 auto}
+.pris-box .number{font-family:'Fraunces',serif;font-size:3.4rem;color:var(--green);margin-bottom:8px;font-weight:600}
+.pris-box .unit{color:var(--muted);font-size:1rem}
+.pris-box ul{list-style:none;margin:32px 0;text-align:left}
+.pris-box li{padding:10px 0;border-bottom:1px solid var(--border);font-size:0.95rem}
+.pris-box li::before{content:"✓ ";color:var(--green);font-weight:700;margin-right:6px}
+.kontakt{padding:60px 0;text-align:center}
+.kontakt h2{margin-bottom:20px}
+.footer{padding:28px 0;text-align:center;color:var(--muted);font-size:0.85rem;border-top:1px solid var(--border)}
+.demo-banner{background:#000;color:#fff;text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:var(--green);text-decoration:underline}
+@media (max-width:768px){.nav-menu{display:none}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktivt rengøringsfirma</div>
+<nav class="nav"><div class="container nav-inner">
+  <span><span class="brand">Kær <span class="amp">&</span> Ko</span> <span class="pkg-badge" style="margin-left:8px">EXPRESS</span></span>
+  <div class="nav-menu"><a href="#priser">Pris</a><a href="#kontakt">Kontakt</a></div>
+</div></nav>
+<header class="hero"><div class="container">
+  <h1>Ren bolig. <em style="font-style:italic;color:var(--green)">Stille folk.</em></h1>
+  <p>Privat rengøring i Aarhus. Faste medarbejdere, samme tid hver uge. Frihedspris — ingen lange kontrakter.</p>
+  <a href="#kontakt" class="btn btn-primary">Få et tilbud →</a>
+</div></header>
+<section class="priser" id="priser"><div class="container">
+  <h2>Én pris. Ingen overraskelser.</h2>
+  <p>Privat rengøring per uge. Vi medbringer alt.</p>
+  <div class="pris-box">
+    <span class="number">280 kr</span><span class="unit">/time inkl. moms</span>
+    <ul>
+      <li>Faste medarbejdere</li>
+      <li>Vi medbringer rengøringsmidler</li>
+      <li>Forsikret &amp; afløsning ved sygdom</li>
+      <li>Opsig fra dag til dag</li>
+    </ul>
+    <a href="#kontakt" class="btn btn-primary">Bestil prøve-rengøring</a>
+  </div>
+</div></section>
+<section class="kontakt" id="kontakt"><div class="container">
+  <h2>Skriv til os</h2>
+  <p style="color:var(--muted);margin-bottom:20px">Vi ringer tilbage indenfor 24 timer.</p>
+  <p><a href="mailto:hej@kaerogko.dk" style="color:var(--green);border-bottom:1px solid">hej@kaerogko.dk</a> · <a href="tel:+4570112233" style="color:var(--green)">70 11 22 33</a></p>
+</div></section>
+<footer class="footer"><div class="container">Kær &amp; Ko · Aarhus · CVR 88 77 66 55 — Demo · <a href="https://mikkeldev.dk/" style="color:var(--green)">mikkel.dev</a></div></footer>
+</body></html>

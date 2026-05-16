@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kær & Ko — Rengøringsfirma Aarhus</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0c0c10;--surface:#18181b;--green:#22c55e;--blue:#3b82f6;--text:#fafafa;--muted:rgba(255,255,255,0.6);--border:rgba(255,255,255,0.1)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600}
+a{color:inherit;text-decoration:none}
+.nav{padding:20px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.brand-row{display:flex;align-items:center;gap:12px}
+.brand{font-weight:700}.brand .amp{color:var(--green)}
+.pkg-badge{background:#0f0f0f;color:#fff;padding:5px 14px;border-radius:4px;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;border:1px solid var(--border)}
+.nav-cta{background:var(--green);color:#0a0a0a;padding:8px 18px;border-radius:6px;font-size:0.85rem;font-weight:700}
+.nav-cta::before{content:"📞 "}
+.hero{padding:60px 0 50px;text-align:center}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);line-height:1.05;margin-bottom:20px}
+.hero p{max-width:580px;margin:0 auto 28px;color:var(--muted);font-size:1.05rem}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:760px;margin:0 auto}
+.service-tag{background:var(--surface);padding:14px 16px;border-radius:8px;text-align:center;font-size:0.9rem;font-weight:500;border:1px solid var(--border)}
+.priser-section{padding:70px 0;background:var(--surface)}
+.priser-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.pris-card{background:var(--bg);padding:30px 24px;border-radius:12px;border:1px solid var(--border)}
+.pris-card h3{font-size:1.2rem;margin-bottom:8px}
+.pris-card .number{font-family:'Fraunces',serif;font-size:2rem;color:var(--green);margin-bottom:4px;font-weight:600}
+.pris-card .unit{color:var(--muted);font-size:0.85rem;margin-bottom:18px}
+.pris-card p{color:var(--muted);font-size:0.9rem}
+.section-header{text-align:center;margin-bottom:36px}
+.section-header h2{font-size:clamp(1.7rem,3vw,2.2rem)}
+.section-header .tag{color:var(--green);font-size:0.8rem;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;margin-bottom:10px;display:block}
+.about{padding:70px 0;text-align:center}
+.about p{max-width:540px;margin:0 auto;color:var(--muted)}
+.kontakt{padding:60px 0;background:var(--surface);text-align:center}
+.kontakt h2{margin-bottom:20px}
+.btn{padding:14px 28px;border-radius:6px;font-weight:600;display:inline-block;transition:.2s}
+.btn-primary{background:var(--green);color:#0a0a0a}
+.footer{padding:28px 0;text-align:center;color:var(--muted);font-size:0.85rem;border-top:1px solid var(--border)}
+.demo-banner{background:#000;color:#fff;text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:var(--green);text-decoration:underline}
+@media (max-width:768px){.services-grid{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktivt rengøringsfirma</div>
+<nav class="nav"><div class="container nav-inner">
+  <div class="brand-row"><span class="brand">Kær <span class="amp">&</span> Ko</span><span class="pkg-badge">STANDARD</span></div>
+  <a href="tel:+4570112233" class="nav-cta">70 11 22 33</a>
+</div></nav>
+<header class="hero"><div class="container">
+  <h1>Privat. Erhverv.<br><em style="font-style:italic;color:var(--green)">Flytterengøring.</em></h1>
+  <p>Faste hold, faste tider, faste priser. Vi tager både din lejlighed, dit kontor og din flytning.</p>
+  <div class="services-grid">
+    <div class="service-tag">Privat</div><div class="service-tag">Erhverv</div><div class="service-tag">Flytte</div>
+    <div class="service-tag">Vinduer</div><div class="service-tag">Hovedrengøring</div><div class="service-tag">Akut</div>
+  </div>
+</div></header>
+<section class="priser-section"><div class="container">
+  <div class="section-header"><span class="tag">Priser</span><h2>Vælg det der passer dig</h2></div>
+  <div class="priser-grid">
+    <div class="pris-card"><h3>Privat</h3><span class="number">280</span><span class="unit">kr/time inkl. moms</span><p>Ugentlig eller hver 14. dag. Faste medarbejdere.</p></div>
+    <div class="pris-card"><h3>Erhverv</h3><span class="number">395</span><span class="unit">kr/time eks. moms</span><p>Kontor, butik, klinik. Aften eller weekend.</p></div>
+    <div class="pris-card"><h3>Flytterengøring</h3><span class="number">fra 2.495</span><span class="unit">kr fast pris</span><p>Op til 80 m² lejlighed inkl. ovn, hårde hvidevarer, vinduer indvendigt.</p></div>
+    <div class="pris-card"><h3>Hovedrengøring</h3><span class="number">595</span><span class="unit">kr/time</span><p>1-2 gange årligt — vinduer, indenfor skabe, gulvbehandling.</p></div>
+  </div>
+</div></section>
+<section class="about"><div class="container">
+  <div class="section-header"><span class="tag">Om os</span><h2>Lokalt, fast personale.</h2></div>
+  <p>Vi har faste medarbejdere — ingen vikarbureau-kæder. Det betyder at det er den samme person der kommer hjem til dig, og hvis hun er syg, sender vi en der allerede har set dit hjem.</p>
+</div></section>
+<section class="kontakt" id="kontakt"><div class="container">
+  <h2>Få et tilbud — gratis</h2>
+  <p style="color:var(--muted);margin:14px 0 24px">Vi kommer på besøg og giver dig en pris inden vi går i gang.</p>
+  <a href="tel:+4570112233" class="btn btn-primary">📞 Ring 70 11 22 33</a>
+</div></section>
+<footer class="footer"><div class="container">Kær &amp; Ko · Aarhus · Demo · <a href="https://mikkeldev.dk/" style="color:var(--green)">mikkel.dev</a></div></footer>
+</body></html>

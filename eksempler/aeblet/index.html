@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Æblet — Privat børnehave i Vejle</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fdf4e8;--surface:#fff;--yellow:#f5cc4a;--coral:#f4886e;--blue:#7eb3c8;--green:#9ec38a;--text:#2a2a28;--muted:#6a6a65;--border:#f0e0c4}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600}
+a{color:inherit;text-decoration:none}
+.nav{padding:18px 0;background:var(--surface)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.4rem;color:var(--coral);font-weight:600}
+.brand::before{content:"🍎"}
+.nav-menu{display:flex;gap:24px;font-size:0.95rem;color:var(--muted)}
+.nav-cta{background:var(--coral);color:#fff;padding:9px 18px;border-radius:30px;font-size:0.85rem;font-weight:500}
+.hero{padding:60px 0 50px}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5vw,4rem);line-height:1.05;margin-bottom:18px}
+.hero h1 em{font-style:italic;color:var(--coral)}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:540px;margin-bottom:28px}
+.btn{padding:13px 26px;border-radius:30px;font-family:inherit;font-size:0.95rem;border:none;cursor:pointer;font-weight:500;display:inline-block;transition:.2s}
+.btn-primary{background:var(--coral);color:#fff}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text);border:2px solid var(--border);margin-left:8px}
+.blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.block{aspect-ratio:1;border-radius:20px;display:flex;align-items:flex-end;padding:18px;color:#fff;font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600}
+.block.b1{background:var(--yellow);color:#3a2a10}
+.block.b2{background:var(--coral)}
+.block.b3{background:var(--blue)}
+.block.b4{background:var(--green);color:#1a2a10}
+.block.b5{background:#e89aa6}
+.block.b6{background:#dd9d40}
+.about{padding:80px 0;background:var(--surface)}
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+.about-card{padding:28px;background:var(--bg);border-radius:16px}
+.about-card .icon{width:54px;height:54px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:1.6rem}
+.about-card:nth-child(2) .icon{background:var(--coral)}
+.about-card:nth-child(3) .icon{background:var(--blue)}
+.about-card:nth-child(4) .icon{background:var(--green)}
+.about-card h3{font-size:1.2rem;margin-bottom:8px}
+.about-card p{color:var(--muted);font-size:0.95rem}
+.section-header{text-align:center;margin-bottom:40px}
+.section-header h2{font-size:clamp(1.8rem,3.5vw,2.6rem)}
+.section-header .label{font-family:'Fraunces',serif;font-style:italic;color:var(--coral);margin-bottom:6px;display:block;font-size:1.05rem}
+.tilmelding{padding:80px 0;text-align:center;background:var(--coral);color:#fff}
+.tilmelding h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:18px;color:#fff}
+.tilmelding p{margin-bottom:24px;opacity:0.95;max-width:480px;margin-left:auto;margin-right:auto;font-size:1.05rem}
+.tilmelding .btn-primary{background:#fff;color:var(--coral)}
+.footer{padding:30px 0;text-align:center;color:var(--muted);font-size:0.85rem;background:var(--surface)}
+.footer a{color:var(--coral)}
+.demo-banner{background:#3a2a10;color:var(--yellow);text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:#fff;text-decoration:underline}
+@media (min-width:900px){.hero-grid{grid-template-columns:1.3fr 1fr}}
+@media (max-width:768px){.nav-menu{display:none}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktiv børnehave</div>
+<nav class="nav"><div class="container nav-inner">
+  <span class="brand">Æblet</span>
+  <div class="nav-menu"><a href="#om">Om os</a><a href="#hverdag">Hverdagen</a><a href="#tilmeld">Tilmeld</a></div>
+  <a href="#tilmeld" class="nav-cta">Tilmeld dit barn</a>
+</div></nav>
+<header class="hero"><div class="container">
+  <div class="hero-grid">
+    <div>
+      <h1>En lille børnehave med <em>plads til store ideer.</em></h1>
+      <p>Vejles ældste privatbørnehave med skoven som nabo. 22 børn, 5 voksne, hjemmelavet mad. Ledige pladser fra september.</p>
+      <div><a href="#tilmeld" class="btn btn-primary">Bog rundvisning</a><a href="#hverdag" class="btn btn-ghost">Se hverdagen</a></div>
+    </div>
+    <div class="blocks">
+      <div class="block b1">Leg</div><div class="block b2">Skov</div><div class="block b3">Bål</div>
+      <div class="block b4">Mad</div><div class="block b5">Kunst</div><div class="block b6">Sang</div>
+    </div>
+  </div>
+</div></header>
+<section class="about" id="om"><div class="container">
+  <div class="section-header"><span class="label">Sådan er det hos os</span><h2>Plads, ro og pædagoger der ser dit barn.</h2></div>
+  <div class="about-grid">
+    <div class="about-card"><div class="icon">🌳</div><h3>Ude hver dag</h3><p>Stor naturlegeplads + skoven 50 meter væk. Vi er ude i al slags vejr.</p></div>
+    <div class="about-card"><div class="icon">🥕</div><h3>Hjemmelavet mad</h3><p>Vores kok laver alt fra bunden — også brød og syltetøj. 80% økologi.</p></div>
+    <div class="about-card"><div class="icon">👩‍🏫</div><h3>5 voksne · 22 børn</h3><p>Lille gruppe, fast personale. Børnene kender alle voksne ved navn.</p></div>
+    <div class="about-card"><div class="icon">🎨</div><h3>Kreative hjørner</h3><p>Maling, ler, byggeklodser, dukketeater. Dit barn vælger selv.</p></div>
+  </div>
+</div></section>
+<section class="tilmelding" id="tilmeld"><div class="container">
+  <h2>Vil du komme på besøg?</h2>
+  <p>Vi har rundvisning hver onsdag kl. 10. Du møder pædagoger, ser huset og snakker med os om dit barn.</p>
+  <a href="mailto:hej@aeblet.dk" class="btn btn-primary">Skriv til os</a>
+</div></section>
+<footer class="footer"><div class="container">Æblet Børnehave · Skovbyvej 12 · 7100 Vejle · Tlf 75 12 34 56 — Demo · <a href="https://mikkeldev.dk/">mikkel.dev</a></div></footer>
+</body></html>

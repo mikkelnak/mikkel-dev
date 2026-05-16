@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Salon Vinter — Frisør på Frederiksberg</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f5e6d6;--bg-deep:#e8d3bf;--brown:#3a2a1a;--brown-soft:#5a4030;--rose:#d4a784;--text:#2a1a10}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:-0.01em}
+a{color:inherit;text-decoration:none}
+.nav{padding:24px 0;text-align:center;border-bottom:1px solid rgba(58,42,26,0.15)}
+.brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.4rem;letter-spacing:0.25em;color:var(--brown)}
+.hero{padding:80px 0;text-align:center}
+.hero .label{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brown-soft);margin-bottom:18px;font-size:1.1rem}
+.hero h1{font-size:clamp(2.6rem,6vw,5rem);line-height:1.05;margin-bottom:24px;font-style:italic}
+.hero p{max-width:480px;margin:0 auto 36px;color:var(--brown-soft);font-size:1.05rem}
+.btn{padding:14px 36px;font-family:inherit;border:none;cursor:pointer;font-size:0.95rem;letter-spacing:0.08em;text-transform:uppercase;display:inline-block;transition:.2s}
+.btn-primary{background:var(--brown);color:var(--bg)}
+.btn-primary:hover{background:#000}
+.dot-row{display:flex;gap:14px;justify-content:center;margin:60px 0 0}
+.dot-row span{width:50px;height:50px;border-radius:50%;background:#e8c9a8}
+.dot-row span:nth-child(2){background:#d4a784;width:35px;height:35px;align-self:center}
+.dot-row span:nth-child(3){background:#bd8a5e;width:45px;height:45px}
+.dot-row span:nth-child(4){background:#9c6c40;width:30px;height:30px;align-self:center}
+.behand{padding:80px 0;background:var(--bg-deep)}
+.behand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.behand-card{background:var(--bg);padding:32px}
+.behand-card h3{font-size:1.5rem;font-style:italic;margin-bottom:8px}
+.behand-card .pris{font-family:'Cormorant Garamond',serif;color:var(--brown);font-size:1.2rem;font-weight:500;margin-bottom:14px;display:block}
+.behand-card p{color:var(--brown-soft);font-size:0.95rem}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header h2{font-size:clamp(1.8rem,3.5vw,2.6rem);font-style:italic}
+.section-header .label{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brown-soft);margin-bottom:8px;display:block}
+.book{padding:80px 0;text-align:center}
+.book h2{font-size:clamp(2rem,4vw,3rem);font-style:italic;margin-bottom:24px}
+.footer{padding:30px 0;text-align:center;color:var(--brown-soft);font-size:0.85rem;background:var(--brown);color:var(--bg)}
+.footer a{color:var(--rose);text-decoration:underline}
+.demo-banner{background:var(--brown);color:var(--bg);text-align:center;padding:10px;font-size:0.8rem}
+.demo-banner a{color:var(--rose);text-decoration:underline}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktiv salon</div>
+<nav class="nav"><div class="container"><span class="brand">SALON VINTER</span></div></nav>
+<header class="hero"><div class="container">
+  <p class="label">Frisør på Frederiksberg</p>
+  <h1>Klip der<br>klæder dig.</h1>
+  <p>Faglig klipning, naturlige farver og tid til samtale. Book online — eller bare kig forbi.</p>
+  <a href="#book" class="btn btn-primary">Book tid</a>
+  <div class="dot-row"><span></span><span></span><span></span><span></span></div>
+</div></header>
+<section class="behand"><div class="container">
+  <div class="section-header"><span class="label">Behandlinger</span><h2>Alt fra trim til transformation</h2></div>
+  <div class="behand-grid">
+    <div class="behand-card"><h3>Dameklip</h3><span class="pris">595 kr</span><p>Klipning inkl. vask og styling. 60 min.</p></div>
+    <div class="behand-card"><h3>Herreklip</h3><span class="pris">395 kr</span><p>Klipning og styling. 30 min.</p></div>
+    <div class="behand-card"><h3>Striber</h3><span class="pris">fra 1.195 kr</span><p>Foliestriber, naturlige farver. 2 timer.</p></div>
+    <div class="behand-card"><h3>Helfarve</h3><span class="pris">fra 895 kr</span><p>Inkl. klipning og styling. 90 min.</p></div>
+    <div class="behand-card"><h3>Behandling</h3><span class="pris">395 kr</span><p>Olaplex eller dybdegående kur.</p></div>
+    <div class="behand-card"><h3>Bryllupshår</h3><span class="pris">895 kr</span><p>Opsætning + prøvedag. Booket separat.</p></div>
+  </div>
+</div></section>
+<section class="book" id="book"><div class="container">
+  <h2>Klar til en tid?</h2>
+  <p style="color:var(--brown-soft);margin-bottom:30px">Book direkte online — eller ring 38 12 34 56.</p>
+  <a href="#" class="btn btn-primary">Book online</a>
+</div></section>
+<footer class="footer"><div class="container">Salon Vinter · Falkoner Allé 12 · 2000 Frederiksberg · Demo · <a href="https://mikkeldev.dk/">mikkel.dev</a></div></footer>
+</body></html>

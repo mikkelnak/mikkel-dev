@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bønnen — Specialty kaffe på Nørrebro</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#3a2418;--cream:#f7ede0;--cream-deep:#e8d0b0;--brown-dark:#2a1a10;--accent:#5a3a26;--muted:rgba(247,237,224,0.7)}
+body{font-family:'Fraunces',serif;background:var(--bg);color:var(--cream);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-weight:500}
+a{color:inherit;text-decoration:none}
+.nav{padding:22px 0;background:var(--accent);text-align:center}
+.brand{font-style:italic;font-size:1.6rem;color:var(--cream);font-weight:600}
+.hero{padding:70px 0 50px;text-align:center}
+.hero h1{font-size:clamp(2.6rem,6vw,4.8rem);line-height:1.05;margin-bottom:18px;font-style:italic;font-weight:400}
+.hero p{max-width:520px;margin:0 auto 30px;color:var(--muted);font-family:'Inter',sans-serif;font-size:1.05rem;line-height:1.7}
+.hours{display:inline-block;background:var(--cream);color:var(--brown-dark);padding:8px 22px;border-radius:30px;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:500}
+.menu{padding:70px 0;background:var(--cream);color:var(--brown-dark)}
+.menu-title{text-align:center;margin-bottom:40px}
+.menu-title span{font-style:italic;color:var(--accent);font-size:1.05rem;display:block;margin-bottom:6px}
+.menu-title h2{font-size:clamp(1.8rem,3.5vw,2.6rem);font-style:italic}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:780px;margin:0 auto}
+.menu-col h3{font-style:italic;color:var(--accent);font-size:1.1rem;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dotted var(--accent)}
+.menu-row{display:flex;justify-content:space-between;padding:7px 0;font-family:'Inter',sans-serif;font-size:0.95rem}
+.menu-row .price{font-family:'Fraunces',serif;font-style:italic;color:var(--accent)}
+.about{padding:70px 0;text-align:center}
+.about h2{font-style:italic;font-size:clamp(1.8rem,3.5vw,2.4rem);margin-bottom:18px}
+.about p{max-width:540px;margin:0 auto;color:var(--muted);font-family:'Inter',sans-serif}
+.footer{padding:28px 0;text-align:center;color:var(--muted);font-family:'Inter',sans-serif;font-size:0.85rem;background:var(--accent)}
+.footer a{color:var(--cream);text-decoration:underline}
+.demo-banner{background:var(--bg);color:var(--cream);text-align:center;padding:10px;font-family:'Inter',sans-serif;font-size:0.8rem}
+.demo-banner a{color:var(--cream-deep);text-decoration:underline}
+@media (max-width:680px){.menu-grid{grid-template-columns:1fr;gap:32px}}
+</style></head><body>
+<div class="demo-banner">Eksempel-design fra <a href="https://mikkeldev.dk/">mikkel.dev</a> — fiktiv café</div>
+<nav class="nav"><div class="container"><span class="brand">Bønnen</span></div></nav>
+<header class="hero"><div class="container">
+  <h1><em>Specialty</em> kaffe<br>&amp; nybagte boller.</h1>
+  <p>Lille café i Stefansgade. Vi rister selv kaffen i kælderen. Hjemmebagt brød hver morgen kl. 7.</p>
+  <span class="hours">Hverdage 7:00–17:00 · Weekend 8:00–16:00</span>
+</div></header>
+<section class="menu"><div class="container">
+  <div class="menu-title"><span>Menu</span><h2>Det vi laver</h2></div>
+  <div class="menu-grid">
+    <div class="menu-col"><h3>Kaffe</h3>
+      <div class="menu-row"><span>Brygkaffe</span><span class="price">38</span></div>
+      <div class="menu-row"><span>Espresso</span><span class="price">32</span></div>
+      <div class="menu-row"><span>Cortado</span><span class="price">42</span></div>
+      <div class="menu-row"><span>Cappuccino</span><span class="price">48</span></div>
+      <div class="menu-row"><span>Latte</span><span class="price">52</span></div>
+      <div class="menu-row"><span>Filterkaffe (300g)</span><span class="price">165</span></div>
+    </div>
+    <div class="menu-col"><h3>Bageri &amp; mad</h3>
+      <div class="menu-row"><span>Bolle med smør</span><span class="price">24</span></div>
+      <div class="menu-row"><span>Cinnamon roll</span><span class="price">38</span></div>
+      <div class="menu-row"><span>Croissant</span><span class="price">32</span></div>
+      <div class="menu-row"><span>Morgenmad-skål</span><span class="price">85</span></div>
+      <div class="menu-row"><span>Frokost (skiftende)</span><span class="price">95</span></div>
+      <div class="menu-row"><span>Kage (dagens)</span><span class="price">42</span></div>
+    </div>
+  </div>
+</div></section>
+<section class="about"><div class="container">
+  <h2>Vi rister selv</h2>
+  <p>Bønnerne kommer direkte fra avlere i Etiopien, Colombia og Guatemala — vi rister i kælderen hver onsdag. Tager du en pose med hjem, er den højst en uge gammel.</p>
+</div></section>
+<footer class="footer"><div class="container">Bønnen · Stefansgade 8 · 2200 København N — Demo · <a href="https://mikkeldev.dk/">mikkel.dev</a></div></footer>
+</body></html>
