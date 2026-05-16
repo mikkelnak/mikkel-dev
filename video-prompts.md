@@ -200,7 +200,34 @@ AGENTS
 
 ---
 
-## Variationer du kan bytte ind
+## Tech stack (baggrund — hvad der faktisk kører bag UI'et)
+
+Selvom selve videoen kun viser UI'et, har skaberen (`@viral7275`) i en
+opfølgende video afsløret den underliggende open-source-stak. Den er
+**ikke nødvendig** for at lave video-prompten, men hjælper, hvis du vil
+genskabe nogle af terminal-/browser-detaljerne præcist eller selv bygge
+en lignende opsætning.
+
+| Lag | Værktøj | Funktion |
+|---|---|---|
+| LLM-runtime | **Ollama** | Open-source, kører store sprogmodeller lokalt på egen GPU — fjerner API-omkostninger til OpenAI/Anthropic. |
+| Model | **Qwen 3.6** (Alibaba) | Open-source LLM, optimeret til kode og autonom agent-adfærd ("coding monster"). |
+| Agent-framework | **OpenClaw** (også omtalt som "OpenCode") | Open-source lokal pendant til Claude Code / Cursor — autonome AI-agenter, der løser kode- og driftsopgaver. |
+| Brugerflade | **Node.js + custom web-dashboard** | Selvbygget "BV Mission Control"-UI ovenpå OpenClaw — visualiserer agent-aktivitet, indtjening, opgaver i realtid. |
+| Forbindelse | `ollama launch openclaw --model qwen3.6` | Ollama-kommando set on-screen, der binder OpenClaw til Qwen-modellen. |
+
+**Kort fortalt:** Skaberen kører den kinesiske Qwen-model gratis lokalt via
+Ollama, lader den drive autonome agenter via OpenClaw, og har bundet det
+hele sammen med et selvbygget Node.js-dashboard. Mission Control er
+visualiserings-laget — ikke selve AI-systemet.
+
+> **Noter til prompts:** Hvis du tilføjer en scene med en terminal, der
+> starter modellen op, kan kommandoen `ollama launch openclaw --model
+> qwen3.6` med fordel være synlig — det er den eneste "ægte" hint i hele
+> videoen om, hvad der faktisk kører. Resten af dashboardet er custom
+> branding.
+
+---
 
 | Element | Variation |
 |---|---|
