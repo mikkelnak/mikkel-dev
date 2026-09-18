@@ -243,6 +243,9 @@
     font-size: .88rem; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow);
     max-width: calc(100% - 24px);
   }
+  .toast.t-bad { background: var(--red); color: #fff; }
+  .toast.t-ok { background: var(--green-strong); color: #fff; }
+  .toast.t-bad button, .toast.t-ok button { border-color: #fff; color: #fff; }
   .toast button { min-height: 32px; padding: 4px 10px; background: transparent; border-color: var(--bg); color: var(--bg); }
 
   .footnote { color: var(--muted); font-size: .76rem; text-align: center; margin: 18px 0 0; }
@@ -334,9 +337,18 @@ function lastBusinessDayOfMonth(y, m) {
 }
 const sidsteDagIFebruar = y => fmtISO(y, 2, daysInMonth(y, 2)); // skudår!
 
+/* Punktum er kun tusindseparator når der også er et komma (dansk format) eller
+   når der er mere end ét punktum. Ellers er det et decimaltegn — ellers blev
+   0.750 til 750, og en belægningsgrad på 0,75 til 800. */
 const num = s => {
   if (s === null || s === undefined || s === "") return null;
-  const v = parseFloat(String(s).replace(/[\s\u00a0]/g, "").replace(/\.(?=\d{3}\b)/g, "").replace(",", "."));
+  let t = String(s).replace(/[\s\u00a0]/g, "");
+  if (!t) return null;
+  const punktummer = (t.match(/\./g) || []).length;
+  if (t.indexOf(",") >= 0 || punktummer > 1) t = t.replace(/\./g, "");
+  t = t.replace(",", ".");
+  if (!/^-?\d*\.?\d+$/.test(t)) return null;
+  const v = parseFloat(t);
   return Number.isFinite(v) ? v : null;
 };
 const fin = v => (typeof v === "number" && Number.isFinite(v) ? v : null);
@@ -395,7 +407,7 @@ function defaultKvalitet() {
 function defaultKrav(afgrode) {
   return afgrode === "raps"
     ? { protein_min: null, faldtal_min: null, hl_min: null, vand_maks: 9.0, renhed_min: 98, olie_min: 40 }
-    : { protein_min: 11.0, faldtal_min: 250, hl_min: 76, vand_maks: 14.0, renhed_min: 98, olie_min: null };
+    : { protein_min: 11.5, faldtal_min: 275, hl_min: 77.0, vand_maks: 14.0, renhed_min: 98, olie_min: null, don_maks: 1.25 };
 }
 function defaultBe() {
   return { stykomk: null, maskin: null, arbejde: null, kapacitet: null, forpagtning: null,
@@ -423,7 +435,7 @@ function emptyState() {
     paamindelser: {},
     ui: { aktivFane: "handling", sidsteVerdikt: {}, sidsteBesoeg: null, enhed: "hkg",
       storSkrift: false, onboardet: false, eksempeldata: false, kalGrupper: null,
-      prisSidst: { afgrode: "hvede", kvalitet: "broed", leveringsperiode: "spot", kilde: "" } }
+      prisSidst: { afgrode: "hvede", kvalitet: "broed", leveringsperiode: "spot", kilde: "", enhed: "kr_hkg" } }
   };
 }
 
@@ -441,7 +453,7 @@ function migrate(d) {
         : (s.paamindelser || {})
     });
   }
-  if (s.schema > SCHEMA) { readOnly = true; return Object.assign(emptyState(), s); }
+  readOnly = s.schema > SCHEMA;
   const e = emptyState();
   return Object.assign({}, e, s, {
     bedrift: Object.assign({}, e.bedrift, s.bedrift || {}),
@@ -451,11 +463,17 @@ function migrate(d) {
     kvalitetslog: Array.isArray(s.kvalitetslog) ? s.kvalitetslog : [],
     koeberfrister: Array.isArray(s.koeberfrister) ? s.koeberfrister : [],
     terminer: Array.isArray(s.terminer) ? s.terminer : [],
-    partier: (s.partier || []).map(p => Object.assign({}, defaultParti(p.afgrode, p.hoestaar), p, {
+    partier: (s.partier || []).map(p0 => {
+      const p = Object.assign({}, p0);
+      if (!AFGRODE[p.afgrode]) p.afgrode = "hvede";
+      const aar = Math.round(Number(p.hoestaar));
+      p.hoestaar = Number.isFinite(aar) && aar >= 1900 && aar <= 2200 ? aar : new Date().getFullYear();
+      return Object.assign({}, defaultParti(p.afgrode, p.hoestaar), p, {
       be: Object.assign({}, defaultBe(), p.be || {}),
-      kvalitet: Object.assign({}, defaultKvalitet(), p.kvalitet || {}),
-      kvalitetskrav: Object.assign({}, defaultKrav(p.afgrode), p.kvalitetskrav || {})
-    }))
+      kvalitet: Object.assign({}, defaultKvalitet(), (p.kvalitet && typeof p.kvalitet === "object" && !Array.isArray(p.kvalitet)) ? p.kvalitet : {}),
+      kvalitetskrav: Object.assign({}, defaultKrav(p.afgrode), (p.kvalitetskrav && typeof p.kvalitetskrav === "object") ? p.kvalitetskrav : {})
+      });
+    })
   });
 }
 
@@ -488,35 +506,57 @@ function saveState() {
 function mutate(fn, fortrydTekst) {
   const snapshot = JSON.stringify(S);
   fn(S);
-  saveState();
+  const gemt = saveState();
+  if (!gemt && readOnly) {
+    // Skrivning er spærret. Så må ændringen heller ikke se ud som om den blev gemt.
+    S = migrate(JSON.parse(snapshot));
+    render();
+    visToast("Ændringen blev ikke gemt: dine data er skrevet af en nyere version af siden. Opdatér siden (hård genindlæsning) først.", { ms: 12000, type: "bad" });
+    return;
+  }
   if (fortrydTekst) visFortryd(fortrydTekst, snapshot);
   render();
 }
-function visFortryd(tekst, snapshot) {
-  fortryd = snapshot;
+/* Svar på brugerens egen handling vises som toast. Bannerne øverst er
+   forbeholdt vedvarende systemtilstand — ellers kan et fast banner sulte
+   svaret på "Gem prisen" ud, og knappen føles død. */
+function visToast(tekst, opt) {
+  opt = opt || {};
   const host = document.getElementById("toastHost");
-  host.innerHTML = '<div class="toast"><span>' + esc(tekst) + '</span><button type="button" id="btnFortryd">Fortryd</button></div>';
-  document.getElementById("btnFortryd").onclick = () => {
-    if (!fortryd) return;
-    S = migrate(JSON.parse(fortryd)); fortryd = null; saveState(); host.innerHTML = ""; render();
-  };
+  if (!host) return;
+  host.innerHTML = '<div class="toast' + (opt.type ? " t-" + opt.type : "") + '"><span>' + esc(tekst) + "</span>"
+    + (opt.fortryd ? '<button type="button" id="btnFortryd">Fortryd</button>' : '<button type="button" id="btnToastLuk">OK</button>')
+    + "</div>";
+  const luk = () => { host.innerHTML = ""; fortryd = null; };
+  if (opt.fortryd) {
+    fortryd = opt.fortryd;
+    document.getElementById("btnFortryd").onclick = () => {
+      if (!fortryd) return;
+      S = migrate(JSON.parse(fortryd)); fortryd = null; saveState(); host.innerHTML = ""; render();
+    };
+  } else document.getElementById("btnToastLuk").onclick = luk;
   clearTimeout(fortrydTimer);
-  fortrydTimer = setTimeout(() => { host.innerHTML = ""; fortryd = null; }, 8000);
+  fortrydTimer = setTimeout(luk, opt.ms || 8000);
 }
+const visFortryd = (tekst, snapshot) => visToast(tekst, { fortryd: snapshot });
+const visBanner = (type, tekst) => visToast(tekst, { type, ms: type === "bad" ? 12000 : 7000 });
 </script>
 
 <script>
 "use strict";
 /* -------------------------------------------------------- §3 beregninger */
 
+/* En ukendt afgrøde (ældre version der åbner nyere data, hånd-rettet backup)
+   må aldrig kaste — den falder tilbage på hvede. */
+const AFG = p => AFGRODE[p && p.afgrode] || AFGRODE.hvede;
 const partiMaengde = p => fin(p.hoestet_maengde_hkg) !== null ? p.hoestet_maengde_hkg : fin(p.maengde_hkg_forventet);
-const hoestIHus = (p, idag) => fin(p.hoestet_maengde_hkg) !== null || idag >= AFGRODE[p.afgrode].hoeststart(p.hoestaar);
+const hoestIHus = (p, idag) => fin(p.hoestet_maengde_hkg) !== null || idag >= AFG(p).hoeststart(p.hoestaar);
 function kontraktloft(p, P) {
   if (fin(p.hoestet_maengde_hkg) !== null) return p.hoestet_maengde_hkg;
   const m = fin(p.maengde_hkg_forventet);
   return m === null ? null : m * P.udbytte_sikkerhed;
 }
-const prisPeriodeForParti = (p, idag) => (idag < AFGRODE[p.afgrode].hoeststart(p.hoestaar) ? "ny_hoest" : "spot");
+const prisPeriodeForParti = (p, idag) => (idag < AFG(p).hoeststart(p.hoestaar) ? "ny_hoest" : "spot");
 const partiKvalitet = p => (p.afgrode === "raps" ? "raps" : (p.kvalitetsklasse || "foder"));
 const vindueStart = p => (p.afgrode === "raps" ? fmtISO(p.hoestaar, 1, 1) : fmtISO(p.hoestaar - 1, 11, 1));
 const partiNavn = p => (p.afgrode === "raps" ? "Raps" : (p.kvalitetsklasse === "broed" ? "Brødhvede" : "Foderhvede")) + " høst " + p.hoestaar;
@@ -535,10 +575,15 @@ function beregnBE(p, P) {
 
   let BE_DB = null, BE_kontant = null, BE_fuld = null, BE_fuld_optimist = null, kilde = "ingen";
 
-  if (p.be_input_mode === "kr_hkg" && (fin(b.be_fuld_kr_hkg) !== null || fin(b.be_db_kr_hkg) !== null)) {
+  const harKrHkg = fin(b.be_fuld_kr_hkg) !== null || fin(b.be_db_kr_hkg) !== null;
+  const kanKrHa = harKrHa && u > 0;
+  // Tilstanden vælger rækkefølgen, men et udfyldt felt bliver aldrig ignoreret:
+  // ellers forsvandt landmandens eget indtastede krav tavst.
+  const brugKrHkg = harKrHkg && (p.be_input_mode === "kr_hkg" || !kanKrHa);
+  if (brugKrHkg) {
     BE_DB = fin(b.be_db_kr_hkg); BE_kontant = fin(b.be_kontant_kr_hkg); BE_fuld = fin(b.be_fuld_kr_hkg);
     BE_fuld_optimist = BE_fuld; kilde = "kr_hkg";
-  } else if (p.be_input_mode === "kr_ha" && harKrHa && u) {
+  } else if (kanKrHa) {
     const kontant = sum("stykomk", "maskin", "arbejde", "kapacitet", "forpagtning", "renter");
     const fuld = kontant + sum("afskrivning", "egen_loen", "egenkapital");
     BE_DB = sum("stykomk") / u;
@@ -817,6 +862,20 @@ const BAND_KLASSE = {
   SAELG_IKKE: "v-saelg_ikke", FYSISK: "v-fysisk", INGEN_DATA: "v-info", REGNESTYKKE: "v-info"
 };
 const capBand = (b, loft) => (BAND_RANG[b] > BAND_RANG[loft] ? loft : b);
+const BAND_STIGE = ["SAELG_IKKE", "VENT", "SAELG_HALV", "SAELG_TRANCHE", "SAELG_NU"];
+const GRAENSER = { SAELG_NU: 85, SAELG_TRANCHE: 70, SAELG_HALV: 58, VENT: 45, SAELG_IKKE: 0 };
+
+/* Nedkølingsplan. Korn er først lagerfast når det både er tørt OG koldt;
+   kravet strammes hen over efteråret, og insektrisikoen stiger igen om foråret. */
+function nedkoelingsGraense(afgrode, md, egenHoestmaaned) {
+  const raps = afgrode === "raps";
+  if (egenHoestmaaned) return raps ? 20 : 20;     // nyhøstet: kun det groveste fanges
+  if (md >= 11 || md <= 3) return raps ? 6 : 7;   // vinter: lagerfast
+  if (md === 10) return raps ? 8 : 10;
+  if (md === 9) return raps ? 10 : 15;
+  if (md === 7 || md === 8) return raps ? 12 : 18;
+  return raps ? 12 : 15;                          // apr-jun: insekterne yngler over 15 °C
+}
 
 /* Fysisk lagerkontrol. Korn rådner uanset om prisen er logget — men en
    måling der er over 30 dage gammel udløser ingen alarm, kun en opgave. */
@@ -831,12 +890,14 @@ function fysiskTjek(p, idag) {
       tekst: "Mål " + (p.afgrode === "raps" ? "vandprocent og temperatur i rapsen" : "vandprocent og temperatur i hveden")
         + (alder === null ? " — der er ingen måling endnu." : " — din seneste måling er " + alder + " dage gammel.") };
   }
-  const hoestMd = Number(AFGRODE[p.afgrode].hoeststart(p.hoestaar).slice(5, 7));
+  const hoestMd = Number(AFG(p).hoeststart(p.hoestaar).slice(5, 7));
   const md = Number(idag.slice(5, 7));
-  if (md === hoestMd) return { aktiv: false }; // nyhøstet korn ligger 20-28 °C. Ingen alarm i høstmåneden.
+  // Kun TEMPERATUR-kravet er lempet i høstmåneden, og kun for årets egen høst:
+  // nyhøstet korn ligger 20-28 °C. Vand er aldrig undtaget — for vådt korn
+  // varmeløber inden for dage, også i august.
+  const egenHoestmaaned = md === hoestMd && p.hoestaar === Number(idag.slice(0, 4));
   const vandMaks = p.afgrode === "raps" ? (fin(krav.vand_maks) || 9.0) : (fin(krav.vand_maks) || 14.0);
-  const tempMaks = p.afgrode === "raps" ? 15 : 18;
-  const efterOkt = md >= 10 || md <= 6;
+  const tempMaks = nedkoelingsGraense(p.afgrode, md, egenHoestmaaned);
   const vand = fin(k.vand_pct), temp = fin(k.korntemp_c), ude = fin(k.udeluft_7dogn_c);
   const grunde = [];
   let handling = null;
@@ -844,12 +905,20 @@ function fysiskTjek(p, idag) {
     grunde.push("Vandprocenten er " + nf(vand, 1) + " % — over grænsen på " + nf(vandMaks, 1) + " %.");
     handling = "TØR";
   }
-  const varm = temp !== null && ((ude !== null && temp > ude + 5) || (efterOkt && temp > tempMaks));
+  const varm = temp !== null && ((ude !== null && temp > ude + 5) || temp > tempMaks);
   if (varm) {
-    grunde.push("Korntemperaturen er " + nf(temp, 1) + " °C" + (ude !== null ? " mod " + nf(ude, 1) + " °C udeluft" : "") + ".");
-    if (!handling) handling = (ude !== null && ude < temp) ? "KØL / BELUFT" : (efterOkt ? "KØL / BELUFT" : "OMRØR / FLYT");
+    grunde.push("Korntemperaturen er " + nf(temp, 1) + " °C — over " + nf(tempMaks, 0) + " °C, som er grænsen på denne årstid"
+      + (ude !== null ? " (udeluft " + nf(ude, 1) + " °C)" : "") + ".");
+    if (!handling) handling = (ude !== null && ude < temp) ? "KØL / BELUFT" : (temp > tempMaks ? "KØL / BELUFT" : "OMRØR / FLYT");
   }
   if (!grunde.length) return { aktiv: false };
+  // Nyhøstet korn kommer ind ved 20-28 °C og køles ned over de følgende uger.
+  // I landmandens egen høstmåned er en varm bunke derfor en OPGAVE, ikke en
+  // alarm — men er kornet også for vådt, er det en alarm uanset måned.
+  if (egenHoestmaaned && handling !== "TØR") {
+    return { aktiv: false, opgave: true, alder,
+      tekst: grunde.join(" ") + " Nyhøstet korn er varmt — sæt nedkølingen i gang nu, så det er lagerfast til oktober." };
+  }
   return { aktiv: true, handling, grunde, alder,
     tekst: grunde.join(" ") + " Det er et fysisk problem — giv det et fysisk svar, ikke et salg." };
 }
@@ -898,6 +967,9 @@ function vurderParti(p, idag) {
     anbefaling: "VENT", maengde_hkg: null, limitpris_brutto: null, provenu: null
   };
 
+  ud.kroner_pr_10kr = rest !== null ? round2(rest * 10) : null;
+  ud.pris_ved_at_vente = rest !== null ? round2(3 * L.L_md * rest) : null;
+
   /* ---- H0 datagate. Fysikken evalueres alligevel. ---- */
   if (netto === null || alderPris > 14) {
     ud.anbefaling = fysisk.aktiv ? "FYSISK" : "INGEN_DATA";
@@ -913,7 +985,7 @@ function vurderParti(p, idag) {
   /* ---- Score ---- */
   const beRef = be.BE_fuld_eff !== null ? be.BE_fuld_eff : be.GULV;
   const r = beRef ? netto / beRef : null;
-  let K_be = 0;
+  let K_be = be.GULV === null ? -20 : 0;   // intet krav = ingen gratis point
   if (r !== null) {
     if (r >= 1.15) K_be = 30; else if (r >= 1.10) K_be = 22; else if (r >= 1.05) K_be = 15;
     else if (r >= 1.00) K_be = 5;
@@ -949,7 +1021,13 @@ function vurderParti(p, idag) {
     const b = S.bedrift;
     if (!(fin(b.kassekredit_ramme) > 0)) return false;
     if (!isISO(b.traek_maalt_dato) || daysBetween(b.traek_maalt_dato, idag) > 30) return false;
-    return (fin(b.kassekredit_traek) || 0) / b.kassekredit_ramme > 0.80;
+    const graden = (fin(b.kassekredit_traek) || 0) / b.kassekredit_ramme;
+    // Mange bedrifter kører rutinemæssigt 80-90 % af rammen om foråret uden at
+    // banken rører sig. Reglen kræver derfor enten et reelt pres på rammen eller
+    // et konkret, dateret likviditetsbehov.
+    const konkretBehov = fin(b.likviditetsbehov_kr) > 0 && isISO(b.likviditetsbehov_dato)
+      && daysBetween(idag, b.likviditetsbehov_dato) >= 0 && daysBetween(idag, b.likviditetsbehov_dato) <= 120;
+    return graden > 0.90 || (graden > 0.80 && konkretBehov);
   })();
   const H3aktiv = dageTilDeadline !== null && dageTilDeadline <= 45 && (rest || 0) > 0;
   const K_risiko_op = (fysisk.aktiv ? 15 : 0) + (H2aktiv ? 15 : 0) + (H3aktiv ? 10 : 0);
@@ -967,13 +1045,23 @@ function vurderParti(p, idag) {
   let band = score >= 85 ? "SAELG_NU" : score >= 70 ? "SAELG_TRANCHE"
     : score >= 58 ? (plan.afvigelse < -5 ? "SAELG_HALV" : "VENT") : score >= 45 ? "VENT" : "SAELG_IKKE";
 
-  /* ---- Hysterese: et bånd skifter først når scoren har krydset med >= 4 point ---- */
-  const GRAENSER = { SAELG_NU: 85, SAELG_TRANCHE: 70, SAELG_HALV: 58, VENT: 45 };
+  ud.raa_baand = band;   // gemmes til hysteresen — ellers kan låsen fodre sig selv
+
+  /* ---- Hysterese: hvert ENKELT båndskifte kræver 4 points margin. Scoren går
+     et trin ad gangen mod det nye bånd og standser ved den første grænse den
+     ikke har krydset klart. Et spring på flere bånd må aldrig kastes hele
+     vejen tilbage til det gamle. ---- */
   const forrige = S.ui.sidsteVerdikt[p.id];
   if (forrige && forrige.baand && forrige.baand !== band && BAND_RANG[forrige.baand] !== undefined) {
-    const op = BAND_RANG[band] > BAND_RANG[forrige.baand];
-    const graense = op ? GRAENSER[band] : GRAENSER[forrige.baand];
-    if (graense !== undefined && Math.abs(score - graense) < 4) { band = forrige.baand; ud.uaendret_siden = forrige.dato; }
+    let r = BAND_RANG[forrige.baand];
+    const maal = BAND_RANG[band];
+    while (r !== maal) {
+      if (r < maal) { if (!(score >= GRAENSER[BAND_STIGE[r + 1]] + 4)) break; r++; }
+      else { if (!(score <= GRAENSER[BAND_STIGE[r]] - 4)) break; r--; }
+    }
+    if (BAND_STIGE[r] !== band) { band = BAND_STIGE[r]; ud.uaendret_siden = forrige.dato; }
+    // En halv tranche giver kun mening når man er bagud — samme regel som ovenfor.
+    if (band === "SAELG_HALV" && !(plan.afvigelse < -5)) band = "VENT";
   }
 
   /* ---- Hard overrides: H1 → H4 → H2 → H3 → H5 → H6 ---- */
@@ -1010,10 +1098,14 @@ function vurderParti(p, idag) {
     const behov = fin(b.likviditetsbehov_kr) > 0 ? b.likviditetsbehov_kr
       : Math.max(0, (fin(b.kassekredit_traek) || 0) - 0.70 * b.kassekredit_ramme);
     tvungenMaengde = netto > 0 ? Math.ceil(behov / netto) : null;
-    band = "SAELG_TRANCHE";
+    if (BAND_RANG[band] < BAND_RANG.SAELG_TRANCHE) band = "SAELG_TRANCHE";
     overrideTekst = "Likviditet: dit kassekredittræk er " + pct(100 * (fin(b.kassekredit_traek) || 0) / b.kassekredit_ramme)
-      + " af rammen. Tvangssalg om tre måneder bliver dyrere end et planlagt salg i dag.";
+      + " af rammen, og du skal bruge " + kr(behov) + ". Det svarer til " + hkg(tvungenMaengde) + " til dagens pris."
+      + (be.GULV !== null && netto < be.GULV
+        ? " Prisen er under dit eget gulv, så jeg anbefaler det ikke — men det er regnestykket, hvis banken presser."
+        : "");
     handling = "SÆLG";
+    ud.h2 = true;
   }
 
   if (H3aktiv && !fysisk.aktiv) {
@@ -1028,13 +1120,15 @@ function vurderParti(p, idag) {
     ud.h3 = true;
   }
 
-  if (!fysisk.aktiv && !H2aktiv && !ud.h3 && be.beSat && be.BE_DB !== null && netto < be.BE_DB) {
+  if (!fysisk.aktiv && !ud.h3 && be.beSat && be.BE_DB !== null && netto < be.BE_DB) {
     band = "SAELG_IKKE";
     overrideTekst = "Prisen dækker ikke udsæd, gødning og kemi (" + krhkg(be.BE_DB) + ").";
   }
 
-  /* G0 / H6: intet plan- eller scorebaseret signal må give SÆLG under gulvet. */
-  if (be.GULV !== null && netto < be.GULV && !fysisk.aktiv && !H2aktiv && !ud.h3) {
+  /* G0 / H6: intet plan- eller scorebaseret signal må give SÆLG under gulvet.
+     Kun en dokumenteret fysisk nød (H1) eller en hård frist (H3) kan bryde det —
+     et selvrapporteret kassekredittal kan ikke. */
+  if (be.GULV !== null && netto < be.GULV && !fysisk.aktiv && !ud.h3) {
     band = capBand(band, "VENT");
     ud.under_gulv = true;
   }
@@ -1046,12 +1140,28 @@ function vurderParti(p, idag) {
     ud.maalpris_naaet = true;
   }
 
+  /* Uden et priskrav kan prisen ikke vurderes — så anbefales der ikke salg. */
+  if (be.GULV === null && !fysisk.aktiv && !ud.h3) {
+    band = capBand(band, "VENT");
+    ud.intet_gulv = true;
+    ud.advarsler.push("Du har hverken en break-even eller en minimumspris, så jeg kan ikke afgøre om prisen er god nok. Udfyld dit priskrav under Mine tal.");
+  }
+
   /* ---- Grundlagsstyrke ---- */
   if (gs.score < 3 && !fysisk.aktiv && !ud.h3) {
     ud.anbefaling = "REGNESTYKKE";
   } else if (!fysisk.aktiv) {
     if (gs.score < 5) band = capBand(band, "SAELG_TRANCHE");
     ud.anbefaling = band;
+  }
+
+  /* G1 inaktivitet — hæver kun bandet og løber derefter gennem de samme
+     guardrails som alt andet. Den må aldrig sætte en mængde selv. */
+  if (dageSidenSalg !== null && dageSidenSalg > 75 && plan.solgtPct < plan.planPctNu
+    && be.GULV !== null && netto >= be.GULV && plan.naeste && !ud.stop_overkontrahering
+    && BAND_RANG[band] !== undefined && BAND_RANG[band] < BAND_RANG.SAELG_TRANCHE) {
+    band = "SAELG_TRANCHE";
+    ud.g1 = true;
   }
 
   /* ---- Mængde + guardrails ---- */
@@ -1074,7 +1184,7 @@ function vurderParti(p, idag) {
 
     // G4 førhøstloft — håndhæves på faktiske salg
     if (!hoestIHus(p, idag) && loft !== null) {
-      const hStart = AFGRODE[p.afgrode].hoeststart(p.hoestaar);
+      const hStart = AFG(p).hoeststart(p.hoestaar);
       const foerhoest = salgListe.filter(s => s.dato < hStart).reduce((a, s) => a + (fin(s.maengde_hkg) || 0), 0);
       const tilladt = Math.max(0, P.maks_prehoest_pct / 100 * loft - foerhoest);
       if (tilladt <= 0) {
@@ -1097,13 +1207,7 @@ function vurderParti(p, idag) {
     if (maengde !== null && maengde <= 0) { maengde = null; ud.anbefaling = capBand(ud.anbefaling, "VENT"); }
   }
 
-  /* G1 inaktivitet */
-  if (dageSidenSalg !== null && dageSidenSalg > 75 && plan.solgtPct < plan.planPctNu
-    && be.GULV !== null && netto >= be.GULV && BAND_RANG[ud.anbefaling] < BAND_RANG.SAELG_TRANCHE) {
-    ud.anbefaling = "SAELG_TRANCHE";
-    ud.advarsler.push("Der er gået " + dageSidenSalg + " dage siden dit sidste salg, og du er bagud for planen.");
-    if (maengde === null && plan.naeste) maengde = Math.round(Math.max(0, (plan.naeste.maal_hkg || 0) - (plan.naeste.solgt_hkg || 0)) / 10) * 10;
-  }
+  if (ud.g1) ud.advarsler.push("Der er gået " + dageSidenSalg + " dage siden dit sidste salg, og du er bagud for planen.");
   /* G5 leveringspligt */
   const terminSolgt = salgListe.filter(s => s.kontrakttype === "termin" || s.kontrakttype === "futures")
     .reduce((a, s) => a + (fin(s.maengde_hkg) || 0), 0);
@@ -1138,9 +1242,21 @@ function vurderParti(p, idag) {
   if (p.afgrode === "hvede" && p.kvalitetsklasse === "broed") {
     const pf = nyestePris(p.afgrode, "foder", periode, idag);
     if (pf !== null && brutto !== null && (brutto - pf) < 8) sig.push({ id: "S12", txt: "Brødpræmien er under 8 kr/hkg — overvej at sælge som foder", prio: 3 });
-    const ft = fin((p.kvalitet || {}).faldtal_sek);
-    if (ft !== null && fin(p.kvalitetskrav.faldtal_min) !== null && ft < p.kvalitetskrav.faldtal_min)
-      sig.push({ id: "S13", txt: "Faldtal " + nf(ft, 0) + " er under kontraktens " + nf(p.kvalitetskrav.faldtal_min, 0), prio: 2 });
+    const kv = p.kvalitet || {}, kk = p.kvalitetskrav || {};
+    const ft = fin(kv.faldtal_sek);
+    if (ft !== null && fin(kk.faldtal_min) !== null && ft < kk.faldtal_min)
+      sig.push({ id: "S13", txt: "Faldtal " + nf(ft, 0) + " er under kravet på " + nf(kk.faldtal_min, 0) + " — brødpræmien er i fare", prio: 2 });
+    const pr = fin(kv.protein_pct);
+    if (pr !== null && fin(kk.protein_min) !== null && pr < kk.protein_min)
+      sig.push({ id: "S13b", txt: "Protein " + nf(pr, 1) + " % er under kravet på " + nf(kk.protein_min, 1) + " %", prio: 2 });
+    const hl = fin(kv.hl_vaegt_kg);
+    if (hl !== null && fin(kk.hl_min) !== null && hl < kk.hl_min)
+      sig.push({ id: "S13c", txt: "Hektolitervægt " + nf(hl, 1) + " er under kravet på " + nf(kk.hl_min, 1), prio: 2 });
+    const don = fin(kv.DON_ppm);
+    if (don !== null && don > (fin(kk.don_maks) || 1.25))
+      sig.push({ id: "S13d", txt: "DON " + nf(don, 2) + " ppm er over EU's grænse for konsum (1,25 ppm)", prio: 1 });
+    if ([ft, pr, hl].some(x => x !== null) && sig.some(x => String(x.id).indexOf("S13") === 0))
+      sig.push({ id: "S13e", txt: "Møllen måler på sin egen prøve — regn med 5-10 sek. og 0,2 %-point i analyseusikkerhed", prio: 3 });
   }
   if (alderPris > 10) sig.push({ id: "S14", txt: "Prisdata er " + alderPris + " dage gamle", prio: 3 });
   if (ud.maalpris_naaet) sig.unshift({ id: "S15", txt: "Din målpris er nået", prio: 1 });
@@ -1278,10 +1394,16 @@ const VTIMEZONE_LINJER = [
   "END:VTIMEZONE"
 ];
 
+/* UID'et overlever alt; tælleren ligger i localStorage og kan gå tabt (Safari
+   rydder efter 7 dage). Derfor har SEQUENCE et gulv der følger uret, så en ny
+   tæller aldrig kan starte under et niveau kalenderen allerede har set. */
+const SEQ_EPOKE = Date.UTC(2020, 0, 1);
 function seqFor(key, indhold) {
   const hash = h32(indhold);
+  const gulv = Math.max(0, Math.floor((Date.now() - SEQ_EPOKE) / 36e5));
   const cur = S.paamindelser[key] || { seq: 0, hash: "" };
-  if (cur.hash && cur.hash !== hash) cur.seq++;
+  if (!cur.hash) cur.seq = gulv;
+  else if (cur.hash !== hash) cur.seq = Math.max(cur.seq + 1, gulv);
   cur.hash = hash; S.paamindelser[key] = cur;
   return cur.seq;
 }
@@ -1291,8 +1413,11 @@ function vevent(o) {
   const L = ["BEGIN:VEVENT", "UID:" + uidFor(o.key), "DTSTAMP:" + toUTCStamp(o.stamp || new Date()),
     "SEQUENCE:" + (o.seq || 0)];
   L.push("DTSTART;TZID=Europe/Copenhagen:" + localStamp(o.dateISO, t.hh, t.mm));
-  const em = t.mm + (o.mins || 30), eh = t.hh + Math.floor(em / 60);
-  L.push("DTEND;TZID=Europe/Copenhagen:" + localStamp(o.dateISO, eh % 24, em % 60));
+  // Slutningen skal rulle over til næste dag, ellers lander DTEND før DTSTART
+  // ved sene klokkeslæt, og klienten smider eventet væk.
+  const slutMin = t.hh * 60 + t.mm + (o.mins || 30);
+  const slutISO = addDays(o.dateISO, Math.floor(slutMin / 1440));
+  L.push("DTEND;TZID=Europe/Copenhagen:" + localStamp(slutISO, Math.floor((slutMin % 1440) / 60), slutMin % 60));
   if (o.rrule) L.push("RRULE:" + o.rrule);
   L.push("SUMMARY:" + icsEscape(o.summary));
   if (o.description) L.push("DESCRIPTION:" + icsEscape(o.description));
@@ -1338,6 +1463,14 @@ function validerICS(txt) {
       let ds = null;
       for (let j = i; j >= 0; j--) if (logiske[j].indexOf("DTSTART") === 0) { ds = logiske[j]; break; }
       if (/UNTIL=\d{8}(?!T)/.test(l) !== /VALUE=DATE:/.test(ds || "")) fejl.push("UNTIL matcher ikke DTSTART-typen: " + l);
+    }
+  }
+  let dts = null;
+  for (const l of logiske) {
+    if (l.indexOf("DTSTART;TZID=") === 0) dts = l.split(":")[1];
+    else if (l.indexOf("DTEND;TZID=") === 0 && dts) {
+      if (l.split(":")[1] <= dts) fejl.push("DTEND ligger ikke efter DTSTART: " + l);
+      dts = null;
     }
   }
   if (/TRIGGER;VALUE=DATE-TIME/.test(raa)) fejl.push("absolut TRIGGER er forbudt");
@@ -1392,12 +1525,12 @@ function genererEvents(idag) {
       const d14 = addDays(t.deadline, -14);
       if (d14 >= addDays(idag, -90)) push({
         key: "t." + p.id + "." + t.id + ".d14", gruppe: "tranche", dateISO: d14,
-        summary: "Tjek " + AFGRODE[p.afgrode].navn + "prisen — " + t.id + "-vinduet lukker om 14 dage",
+        summary: "Tjek " + AFG(p).navn + "prisen — " + t.id + "-vinduet lukker om 14 dage",
         description: desc, url: appUrl, gentag: null
       });
       push({
         key: "t." + p.id + "." + t.id + ".due", gruppe: "tranche", dateISO: t.deadline,
-        summary: "Tjek " + AFGRODE[p.afgrode].navn + "prisen — " + t.id + " lukker i dag (" + pct(t.andel_eff) + ", " + hkg(t.maal_hkg) + ")",
+        summary: "Tjek " + AFG(p).navn + "prisen — " + t.id + " lukker i dag (" + pct(t.andel_eff) + ", " + hkg(t.maal_hkg) + ")",
         description: desc, url: appUrl, alarms: [{ trigger: "-P1D" }, { trigger: "-PT0M" }], gentag: null
       });
     });
@@ -1409,10 +1542,14 @@ function genererEvents(idag) {
     });
     /* --- D. Lagerkontrol --- */
     if (fin(p.lagerbeholdning_hkg) > 0 && isISO(p.haard_deadline) && p.haard_deadline > idag) {
-      const start = p.afgrode === "raps" ? idag : fmtISO(Number(idag.slice(0, 4)), Number(idag.slice(5, 7)), 1);
+      // Fast anker udledt af partiet selv. Med dagens dato som DTSTART blev hele
+      // serien flyttet — og SEQUENCE hævet — hver eneste gang filen blev hentet.
+      const hStart = AFG(p).hoeststart(p.hoestaar);
+      const start = p.afgrode === "raps" ? naesteUgedag(1, hStart)
+        : fmtISO(Number(hStart.slice(0, 4)), Number(hStart.slice(5, 7)), 1);
       push({
-        key: "l." + p.id + ".kontrol", gruppe: "lager", dateISO: start >= idag ? start : addMonths(start, 1),
-        summary: p.afgrode === "raps" ? "Rapslager: mål vand og temperatur (maks 9 % / 8 °C)"
+        key: "l." + p.id + ".kontrol", gruppe: "lager", dateISO: start,
+        summary: p.afgrode === "raps" ? "Rapslager: mål vand og temperatur (maks 9 % vand, køl mod 6-8 °C)"
           : "Lagerkontrol " + partiNavn(p) + ": temperatur, lugt, insekter",
         description: p.afgrode === "raps"
           ? "Raps tager varme hurtigt. Mål i midten af partiet, noter i appen, så lagersignalet er friskt. Varmedannelse og frie fedtsyrer kan ikke vindes tilbage."
@@ -1590,8 +1727,10 @@ function eksporterICS(pakke) {
   const linjer = alle.map(e => {
     const kvit = S.paamindelser[e.key] || {};
     const afvist = kvit.status === "slettet";
-    const indhold = e.dateISO + "|" + e.summary + "|" + (e.description || "") + "|" + (e.rrule || "")
-      + "|" + JSON.stringify(e.alarms || []);
+
+    const indhold = e.dateISO + "|" + p2(e.hh) + p2(e.mm) + "|" + e.summary + "|" + (e.description || "")
+      + "|" + (e.rrule || "") + "|" + JSON.stringify(e.alarms || []) + "|" + (e.url || "")
+      + "|" + (afvist ? "CANCELLED" : "");
     const seq = seqFor(e.key, indhold);
     const gammelt = e.dateISO < idag && !e.gentag;
     return vevent({
@@ -1664,11 +1803,12 @@ function tegnGraf(host, serie, opt) {
 const $ = id => document.getElementById(id);
 const on = (id, ev, fn) => { const e = $(id); if (e) e.addEventListener(ev, fn); };
 const onAll = (sel, ev, fn) => document.querySelectorAll(sel).forEach(e => e.addEventListener(ev, fn));
-let bannerEkstra = [];
 let grafObserver = null;
-function visBanner(type, tekst) { bannerEkstra.push({ type, tekst }); renderBannere(); }
 
 function renderBannere() {
+  try { byggBannere(); } catch (err) { $("bannere").innerHTML = ""; }
+}
+function byggBannere() {
   const b = [];
   if (readOnly) b.push({ type: "bad", tekst: "<strong>Dine data er gemt af en nyere version af siden.</strong> Der bliver ikke gemt noget, før du har opdateret siden (hård genindlæsning)." });
   if (!storageOK) b.push({ type: "bad", tekst: "<strong>Denne browser gemmer ikke data her.</strong> Åbner du siden som en lokal fil eller i et privat vindue, forsvinder alt når du lukker. Læg siden på en webadresse, eller eksportér dine data efter hver gang." });
@@ -1679,7 +1819,6 @@ function renderBannere() {
   const ms = S.lastExportAt ? Date.parse(S.lastExportAt) : NaN;
   if (S.partier.length && (!Number.isFinite(ms) || Date.now() - ms > 30 * 864e5))
     b.push({ type: "", tekst: "Du har ikke taget en sikkerhedskopi af dine tal i over en måned. <button class='link' id='bnExport'>Eksportér nu</button>" });
-  bannerEkstra.forEach(x => b.push(x));
   $("bannere").innerHTML = b.slice(0, 2).map(x => '<div class="banner ' + x.type + '">' + x.tekst + "</div>").join("");
   on("bnExport", "click", eksporterData);
 }
@@ -1698,6 +1837,7 @@ function forfaldnePaamindelser(idag) {
 }
 
 /* ------------------------------------------------------ Handling-fanen */
+let aendretPris = false;
 function renderHandling() {
   const idag = todayISO();
   const aktive = aktivePartier(idag);
@@ -1711,12 +1851,21 @@ function renderHandling() {
   // Husk bandet, så hysteresen har noget at sammenligne med næste gang.
   let aendret = false;
   vurderinger.forEach(v => {
-    if (BAND_RANG[v.anbefaling] === undefined) return;
+    const baand = v.raa_baand;   // det rå score-bånd, ikke det hysteriserede
+    if (BAND_RANG[baand] === undefined) return;
     const f = S.ui.sidsteVerdikt[v.parti_id];
-    if (!f || f.baand !== v.anbefaling) { S.ui.sidsteVerdikt[v.parti_id] = { baand: v.anbefaling, score: v.score, dato: idag }; aendret = true; }
+    if (!f || f.baand !== baand) { S.ui.sidsteVerdikt[v.parti_id] = { baand, score: v.score, dato: idag }; aendret = true; }
   });
-  if (aendret) saveState();
+  if (aendret || aendretPris) { aendretPris = false; saveState(); }
   const top = vurderinger[0];
+  // Prisfeltet skal handle om det parti kortet viser — ellers taster han
+  // rapsprisen ind som hvedepris.
+  if (top && S.ui.prisSidst.afgrode !== top.afgrode && !S.ui.prisLaastAfBruger) {
+    const p0 = S.partier.find(x => x.id === top.parti_id);
+    S.ui.prisSidst.afgrode = top.afgrode;
+    if (p0) S.ui.prisSidst.kvalitet = partiKvalitet(p0);
+    aendretPris = true;
+  }
   let html = kortForVurdering(top, true);
   if (vurderinger.length > 1) {
     html += '<div class="card"><h2>Dine øvrige partier</h2><ul class="list">'
@@ -1794,9 +1943,15 @@ function kortForVurdering(v, fuld) {
 }
 
 function hurtigPrisKort(v) {
-  const sidst = S.prislog.slice().sort((a, b) => (a.dato < b.dato ? -1 : 1)).pop();
   const ps = S.ui.prisSidst;
-  return '<div class="card noprint"><h2>Log dagens pris</h2>'
+  const vare = ps.afgrode === "raps" ? "raps" : ps.kvalitet === "broed" ? "brødhvede" : "foderhvede";
+  const sidst = S.prislog.filter(o => o.afgrode === ps.afgrode
+    && o.kvalitet === (ps.afgrode === "raps" ? "raps" : ps.kvalitet))
+    .sort((a, b) => (a.dato < b.dato ? -1 : 1)).pop();
+  const passer = !v || v.afgrode === ps.afgrode;
+  return '<div class="card noprint"><h2>Log prisen på ' + esc(vare) + "</h2>"
+    + (!passer ? '<div class="banner warn small">Kortet ovenfor handler om ' + esc(String(v.navn).toLowerCase())
+      + " — skift afgrøde her, hvis det er den pris, du taster.</div>" : "")
     + (sidst ? '<p class="small muted">Sidst: ' + esc(nf(sidst.pris_kr_hkg, 2)) + " kr/hkg (" + esc(DK_DATO(sidst.dato)) + ")</p>" : "")
     + '<div class="seg" style="margin-bottom:10px">'
     + '<button type="button" data-act="prisafgrode" data-v="hvede" aria-pressed="' + (ps.afgrode === "hvede") + '">Hvede</button>'
@@ -1806,19 +1961,23 @@ function hurtigPrisKort(v) {
       + '<button type="button" data-act="priskval" data-v="foder" aria-pressed="' + (ps.kvalitet === "foder") + '">Foderhvede</button></div>' : "")
     + '<div class="stepper"><button type="button" data-act="pris-" data-v="5">−5</button>'
     + '<button type="button" data-act="pris-" data-v="1">−1</button>'
-    + '<input type="text" inputmode="decimal" autocomplete="off" id="prisInput" placeholder="kr/hkg" value="">'
+    + '<input type="text" inputmode="decimal" autocomplete="off" id="prisInput" placeholder="' + esc(ENHED_NAVN[prisEnhed()]) + '" value="">'
     + '<button type="button" data-act="pris+" data-v="1">+1</button>'
     + '<button type="button" data-act="pris+" data-v="5">+5</button></div>'
-    + '<div class="hint" id="prisOmregn">Indtast i kr/hkg. Tallet vises også som kr/t og EUR/t.</div>'
+    + '<div class="hint" id="prisOmregn"></div>'
     + '<div class="btnrow"><button class="primary" data-act="gempris">Gem prisen</button>'
-    + '<button data-act="fane" data-v="pris">Flere muligheder</button></div></div>';
+    + '<button data-act="fane" data-v="pris">Skift enhed eller dato</button></div></div>';
 }
+
 </script>
 
 <script>
 "use strict";
 /* ---------------------------------------------------------- Pris-fanen */
 const PRIS_BAAND = { hvede: [90, 330], raps: [220, 700] };
+/* Det interval hvor MATIF-noteringen i EUR/t ligner en dansk kr/hkg-pris.
+   Båndene ovenfor fanger kr/t (1.500 &gt; 330), men ikke denne forveksling. */
+const EUR_OVERLAP = { hvede: [160, 280], raps: [380, 600] };
 
 function renderPris() {
   const idag = todayISO();
@@ -1836,9 +1995,9 @@ function renderPris() {
     + '<button type="button" data-act="prisper" data-v="ny_hoest" aria-pressed="' + (ps.leveringsperiode === "ny_hoest") + '">Ny høst</button></div>'
     + '<div class="hint">Gammel og ny høst ligger typisk 15–30 kr/hkg fra hinanden. De holdes derfor adskilt i statistikken.</div></div>'
     + '<div class="field"><label>Enhed</label><div class="seg">'
-    + '<button type="button" data-act="prisenhed" data-v="kr_hkg" aria-pressed="true">kr/hkg</button>'
-    + '<button type="button" data-act="prisenhed" data-v="kr_t" aria-pressed="false">kr/t</button>'
-    + '<button type="button" data-act="prisenhed" data-v="EUR_t" aria-pressed="false">EUR/t</button></div></div>'
+    + ["kr_hkg", "kr_t", "EUR_t"].map(e => '<button type="button" data-act="prisenhed" data-v="' + e
+      + '" aria-pressed="' + (prisEnhed() === e) + '">' + ENHED_NAVN[e] + "</button>").join("")
+    + "</div></div>"
     + '<div class="stepper"><button type="button" data-act="pris-" data-v="5">−5</button>'
     + '<button type="button" data-act="pris-" data-v="1">−1</button>'
     + '<input type="text" inputmode="decimal" autocomplete="off" id="prisInput" placeholder="pris">'
@@ -2131,7 +2290,9 @@ function felt(type, id, label, v) {
   if (type === "date") return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><input type="date" id="' + id + '" value="' + esc(val) + '"></div>';
   if (type === "time") return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><input type="time" id="' + id + '" value="' + esc(val) + '"></div>';
   const inp = type === "dec" ? 'inputmode="decimal"' : "";
-  return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><input type="text" ' + inp + ' autocomplete="off" id="' + id + '" value="' + esc(typeof val === "number" ? nf(val, val % 1 ? 2 : 0) : val) + '"></div>';
+  // Ingen tusindtalsseparator i et felt der skal læses tilbage — kun dansk komma.
+  const tal = typeof val === "number" ? String(round2(val)).replace(".", ",") : val;
+  return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><input type="text" ' + inp + ' autocomplete="off" id="' + id + '" value="' + esc(tal) + '"></div>';
 }
 function vaelg(id, label, v, opts) {
   return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><select id="' + id + '">'
@@ -2286,7 +2447,7 @@ function dlgKvalitet(id) {
       + felt("dec", "kk_faldtal", "Min. faldtal (sek.)", kr_.faldtal_min)
       + felt("dec", "kk_hl", "Min. hl-vægt (kg/hl)", kr_.hl_min) : "")
     + "</div>"
-    + '<p class="small muted">Kravene her er branchestandard, ikke din aftale. Mange danske møllekontrakter ligger på 10,5–11,0 % protein og 220–250 sekunder — ret dem efter din kontrakt.</p>'
+    + '<p class="small muted">Standardkravene her svarer til danske møllers minimum (11,5 % protein, faldtal 275, 77,0 kg/hl). Din kontrakt kan ligge et andet sted — ret tallene efter den, ikke efter håbet. Møllen måler på sin egen prøve, så regn med 5–10 sekunders og 0,2 %-points analyseusikkerhed.</p>'
     + '<div class="btnrow"><button class="primary" data-act="gemKvalitet" data-id="' + esc(p.id) + '">Gem</button>'
     + '<button data-act="luk">Annullér</button></div>');
 }
@@ -2375,43 +2536,58 @@ function dlgHvorfor(id) {
 <script>
 "use strict";
 /* ------------------------------------------------------- handlinger */
-let prisEnhed = "kr_hkg";
+const ENHED_NAVN = { kr_hkg: "kr/hkg", kr_t: "kr/t", EUR_t: "EUR/t" };
+const prisEnhed = () => (S.ui.prisSidst && S.ui.prisSidst.enhed) || "kr_hkg";
 
 function prisIKrHkg(raw) {
   const v = num(raw); if (v === null) return null;
-  if (prisEnhed === "kr_t") return round2(v / 10);
-  if (prisEnhed === "EUR_t") return round2(v * S.parametre.EURDKK / 10);
+  if (prisEnhed() === "kr_t") return round2(v / 10);
+  if (prisEnhed() === "EUR_t") return round2(v * S.parametre.EURDKK / 10);
   return round2(v);
 }
 function opdaterPrisHint() {
   const el = $("prisInput"), ud = $("prisOmregn"); if (!el || !ud) return;
   const v = prisIKrHkg(el.value);
-  if (v === null) { ud.textContent = "Indtast prisen i " + (prisEnhed === "kr_t" ? "kr/t" : prisEnhed === "EUR_t" ? "EUR/t" : "kr/hkg") + "."; return; }
+  if (v === null) { ud.textContent = "Du indtaster i " + ENHED_NAVN[prisEnhed()] + "."; return; }
   ud.textContent = nf(v, 2) + " kr/hkg  ·  " + nf(v * 10, 0) + " kr/t  ·  " + nf(krHkgTilEur(v, S.parametre.EURDKK), 2) + " EUR/t";
 }
+const treEnheder = v => nf(v, 2) + " kr/hkg  ·  " + nf(v * 10, 0) + " kr/t  ·  "
+  + nf(krHkgTilEur(v, S.parametre.EURDKK), 2) + " EUR/t";
+
 function gemPris() {
   const el = $("prisInput"); if (!el) return;
+  const raa = num(el.value);
   const v = prisIKrHkg(el.value);
   const ps = S.ui.prisSidst;
-  if (v === null) { visBanner("warn", "Skriv et tal først."); return; }
+  const kval = ps.afgrode === "raps" ? "raps" : ps.kvalitet;
+  if (v === null) { visToast("Skriv et tal først.", { type: "bad" }); return; }
   const baand = PRIS_BAAND[ps.afgrode];
   if (v < baand[0] || v > baand[1]) {
-    visBanner("bad", "Er det rigtigt? " + nf(v, 2) + " kr/hkg ligger uden for det mulige for "
-      + ps.afgrode + " (" + baand[0] + "–" + baand[1] + " kr/hkg). Tjek enheden — EUR/t og kr/hkg forveksles let.");
+    visToast("Er det rigtigt? " + nf(v, 2) + " kr/hkg ligger uden for det mulige for " + ps.afgrode
+      + " (" + baand[0] + "–" + baand[1] + " kr/hkg). Du taster i " + ENHED_NAVN[prisEnhed()]
+      + " — skift enhed, hvis tallet kom fra MATIF.", { type: "bad", ms: 14000 });
     return;
   }
-  const sidste = S.prislog.filter(o => o.afgrode === ps.afgrode && o.kvalitet === (ps.afgrode === "raps" ? "raps" : ps.kvalitet))
+  const sidste = S.prislog.filter(o => o.afgrode === ps.afgrode && o.kvalitet === kval)
     .sort((a, b) => (a.dato < b.dato ? -1 : 1)).pop();
-  if (sidste && Math.abs(v - sidste.pris_kr_hkg) / sidste.pris_kr_hkg > 0.15)
-    visBanner("warn", "Bemærk: det er over 15 % fra din seneste pris på " + nf(sidste.pris_kr_hkg, 2) + " kr/hkg. Den er gemt — ret den, hvis det var en slåfejl.");
+  // Den farlige forveksling: en MATIF-notering i EUR/t ligner en dansk kr/hkg-pris.
+  // Tal-båndet kan ikke skelne, så første gang beder vi om en bekræftelse med alle tre enheder.
+  const ov = EUR_OVERLAP[ps.afgrode];
+  if (!sidste && prisEnhed() === "kr_hkg" && raa !== null && raa >= ov[0] && raa <= ov[1]) {
+    if (!confirm("Du taster " + nf(raa, 2) + " i kr/hkg.\n\n" + treEnheder(v)
+      + "\n\nEn MATIF-notering i EUR/t ligger i samme talområde. Er " + nf(raa, 2) + " kr/hkg rigtigt?")) return;
+  }
   const dato = ($("prisDato") && $("prisDato").value) || todayISO();
   const kilde = ($("prisKilde") && $("prisKilde").value) || "";
   mutate(s => {
-    s.prislog.push({ id: nyId("o"), dato, afgrode: ps.afgrode,
-      kvalitet: ps.afgrode === "raps" ? "raps" : ps.kvalitet,
+    s.prislog.push({ id: nyId("o"), dato, afgrode: ps.afgrode, kvalitet: kval,
       leveringsperiode: ps.leveringsperiode || "spot", pris_kr_hkg: v, kilde, note: "" });
     s.ui.prisSidst.kilde = kilde;
-  }, "Pris gemt: " + nf(v, 2) + " kr/hkg");
+  }, null);
+  if (sidste && Math.abs(v - sidste.pris_kr_hkg) / sidste.pris_kr_hkg > 0.15) {
+    visToast("Gemt " + treEnheder(v) + " — men det er over 15 % fra din seneste pris på "
+      + nf(sidste.pris_kr_hkg, 2) + " kr/hkg. Ret den, hvis det var en slåfejl.", { type: "bad", ms: 12000 });
+  } else visToast("Pris gemt: " + treEnheder(v), { type: "ok" });
 }
 
 async function hentICS(pakke) {
@@ -2601,6 +2777,143 @@ function koerSelvtest() {
     const rm = eksporterICS("marked");
     ok("Markedsfilen valideres ok", rm.validering.ok, true);
   } finally { S = migrate(JSON.parse(gemt)); }
+
+  /* --- Regressioner fra den adversarielle gennemgang --- */
+  ok("num: 0.750 er 0,75 — ikke 750", num("0.750"), 0.75);
+  ok("num: 0.060 er 0,06", num("0.060"), 0.06);
+  ok("num: 7.460 er 7,46", num("7.460"), 7.46);
+  ok("num: 1.234.567 er tusindtal", num("1.234.567"), 1234567);
+  ok("num: 1.234,5 er dansk format", num("1.234,5"), 1234.5);
+  ok("num: abc er ikke et tal", num("abc"), null);
+  ok("num: 12,5,6 afvises", num("12,5,6"), null);
+  const rundtur = v => num(String(round2(v)).replace(".", ","));
+  ok("felt-format tur-retur: 2026", rundtur(2026), 2026);
+  ok("felt-format tur-retur: 6720", rundtur(6720), 6720);
+  ok("felt-format tur-retur: 0,75", rundtur(0.75), 0.75);
+  ok("felt-format tur-retur: 1500000", rundtur(1500000), 1500000);
+
+  const gemt2 = JSON.stringify(S);
+  try {
+    const idag = "2027-09-18";
+    const mkParti = extra => Object.assign(defaultParti("hvede", 2027), {
+      id: "tp", maengde_hkg_forventet: 8000, areal_ha: 100, forventet_udbytte_hkg_ha: 80,
+      hoestet_maengde_hkg: 8000, kvalitetsklasse: "foder", typiske_fradrag_kr_hkg: 6,
+      salgshistorik_bekraeftet: true, be_input_mode: "kr_hkg",
+      be: Object.assign(defaultBe(), { be_fuld_kr_hkg: 130, be_kontant_kr_hkg: 105, be_db_kr_hkg: 60 })
+    }, extra || {});
+    const mkLog = pris => {
+      const l = [];
+      for (let i = 0; i < 39; i++) l.push({ id: "h" + i, dato: addDays(idag, -300 + i * 7), afgrode: "hvede",
+        kvalitet: "foder", leveringsperiode: "spot", pris_kr_hkg: 110 + (i % 7) });
+      l.push({ id: "nu", dato: idag, afgrode: "hvede", kvalitet: "foder", leveringsperiode: "spot", pris_kr_hkg: pris });
+      return l;
+    };
+    // FUND 1: hysteresen må højst holde ét trin, og må ikke fodre sig selv
+    S.partier = [mkParti()]; S.prislog = mkLog(140); S.terminer = []; S.salg = [];
+    S.ui.sidsteVerdikt = {};
+    const fri = vurderParti(S.partier[0], idag);
+    S.ui.sidsteVerdikt = { tp: { baand: "SAELG_IKKE", score: 20, dato: addDays(idag, -40) } };
+    const laast = vurderParti(S.partier[0], idag);
+    ok("hysterese: et spring på flere bånd falder højst ét trin",
+      BAND_RANG[laast.anbefaling] >= BAND_RANG[fri.anbefaling] - 1, true);
+    ok("hysterese: låser ikke fast på SÆLG IKKE ved score " + fri.score, laast.anbefaling !== "SAELG_IKKE", true);
+    ok("hysterese: det rå bånd gemmes, ikke det hysteriserede", laast.raa_baand, fri.raa_baand);
+    S.ui.sidsteVerdikt = {};
+
+    // FUND 2: G1 må ikke omgå kontraktloftet
+    S.partier = [mkParti({ maengde_hkg_forventet: 1000, hoestet_maengde_hkg: null, areal_ha: null })];
+    S.salg = [{ id: "g1", parti_id: "tp", dato: addDays(idag, -190), maengde_hkg: 850, pris_kr_hkg: 150, pris_status: "fast" }];
+    S.prislog = mkLog(150);
+    const vG1 = vurderParti(S.partier[0], idag);
+    ok("G1: inaktivitet kan ikke sælge ud over kontraktloftet",
+      vG1.maengde_hkg === null || vG1.maengde_hkg <= Math.max(0, kontraktloft(S.partier[0], P) - 850), true);
+
+    // FUND 17: likviditet må ikke bryde gulvet
+    S.partier = [mkParti({ minimumspris_kr_hkg: 175 })];
+    S.salg = []; S.prislog = mkLog(134);
+    S.bedrift = Object.assign(defaultBedrift(), { kassekredit_ramme: 1500000, kassekredit_traek: 1400000,
+      traek_maalt_dato: idag, likviditetsbehov_kr: 210000, likviditetsbehov_dato: addDays(idag, 30) });
+    const vH2 = vurderParti(S.partier[0], idag);
+    ok("H2: likviditet sælger ikke under landmandens eget gulv",
+      BAND_RANG[vH2.anbefaling] <= BAND_RANG.VENT, true);
+    S.bedrift = defaultBedrift();
+
+    // FUND 18: intet priskrav = intet salgsråd
+    S.partier = [mkParti({ minimumspris_kr_hkg: null, be_input_mode: "kr_ha", be: defaultBe() })];
+    S.prislog = mkLog(96); S.salg = [];
+    const vUdenBE = vurderParti(S.partier[0], idag);
+    ok("uden break-even og minimumspris gives intet salgsråd",
+      BAND_RANG[vUdenBE.anbefaling] === undefined || BAND_RANG[vUdenBE.anbefaling] <= BAND_RANG.VENT, true);
+    // ... og et indtastet kr/hkg-krav må ikke ignoreres af tilstanden
+    ok("be_input_mode kr_ha ignorerer ikke et udfyldt kr/hkg-krav",
+      beregnBE(mkParti({ be_input_mode: "kr_ha" }), P).BE_fuld, 130);
+    ok("udbytte 0 vælter ikke break-even",
+      beregnBE(mkParti({ hoestet_maengde_hkg: 0, be_input_mode: "kr_ha" }), P).BE_fuld, 130);
+
+    // FUND 3 + 15: fysisk alarm i høstmåneden
+    S.partier = [Object.assign(defaultParti("hvede", 2026), { id: "tp", lagerbeholdning_hkg: 1000,
+      hoestet_maengde_hkg: 1000, maengde_hkg_forventet: 1000,
+      kvalitet: Object.assign(defaultKvalitet(), { vand_pct: 18.5, korntemp_c: 26, maalt_dato: "2027-08-15" }) })];
+    S.prislog = [];
+    const vAug = vurderParti(S.partier[0], "2027-08-15");
+    ok("for vådt korn alarmerer også i august (gammelt høstår)", vAug.anbefaling === "FYSISK" && vAug.handling === "TØR", true);
+    S.partier[0].hoestaar = 2027;
+    S.partier[0].kvalitet.vand_pct = 12;
+    const vAugTemp = vurderParti(S.partier[0], "2027-08-15");
+    ok("nyhøstet varmt korn giver en nedkølingsopgave, ikke en salgsalarm",
+      vAugTemp.anbefaling !== "FYSISK" && fysiskTjek(S.partier[0], "2027-08-15").opgave === true, true);
+    S.partier[0].kvalitet.maalt_dato = "2027-09-20";
+    const vSep = vurderParti(S.partier[0], "2027-09-20");
+    ok("26 °C i september alarmerer (nedkølingsplan)", vSep.anbefaling === "FYSISK", true);
+
+    // FUND 4: DTEND efter DTSTART ved sent klokkeslæt
+    S.partier = [mkParti({ lagerbeholdning_hkg: 4000, haard_deadline: "2028-06-30" })];
+    S.salg = []; S.prislog = []; S.koeberfrister = [];
+    S.parametre = Object.assign(defaultParametre(), { notifikationstid: "23:45" });
+    const sent = eksporterICS("standard");
+    ok("ICS med påmindelse kl. 23:45 er stadig gyldig", sent.validering.ok, true);
+    ok("ICS kl. 23:45 giver ingen DTEND før DTSTART",
+      sent.validering.fejl.filter(f => f.indexOf("DTEND") >= 0).length, 0);
+    S.parametre = defaultParametre();
+
+    // FUND 5: serien må ikke flytte sig ved hver eksport
+    S.partier = [Object.assign(defaultParti("raps", 2027), { id: "tr", maengde_hkg_forventet: 1400,
+      lagerbeholdning_hkg: 1400, haard_deadline: "2027-12-31" })];
+    const e1 = genererEvents("2027-09-01").find(e => e.key === "l.tr.kontrol");
+    const e2 = genererEvents("2027-09-15").find(e => e.key === "l.tr.kontrol");
+    ok("rapsens lagerserie har samme startdato uanset eksportdag", e1 && e2 && e1.dateISO === e2.dateISO, true);
+
+    // FUND 6: SEQUENCE må aldrig falde tilbage under et udsendt niveau
+    S.paamindelser = {};
+    const seqA = seqFor("m.insekt", "indhold-a");
+    S.paamindelser = {};                                   // som om localStorage blev ryddet
+    const seqB = seqFor("m.insekt", "indhold-a");
+    ok("SEQUENCE starter ikke forfra når lageret ryddes", seqB >= seqA, true);
+
+    // FUND 19: klokkeslæt indgår i hashen
+    S.paamindelser = {};
+    S.parametre = Object.assign(defaultParametre(), { notifikationstid: "07:00" });
+    eksporterICS("standard");
+    const foer = JSON.parse(JSON.stringify(S.paamindelser));
+    S.parametre = Object.assign(defaultParametre(), { notifikationstid: "17:30" });
+    eksporterICS("standard");
+    const bumpet = Object.keys(foer).filter(k => S.paamindelser[k] && S.paamindelser[k].seq > foer[k].seq);
+    ok("ændret klokkeslæt hæver SEQUENCE på alle events", bumpet.length, Object.keys(foer).length);
+    S.parametre = defaultParametre();
+
+    // FUND 7 + 8: skadelige data må hverken køre kode eller vælte siden
+    const ondt = migrate({ schema: 2, partier: [{ afgrode: "byg", hoestaar: "<img src=x onerror=alert(1)>" }],
+      prislog: [], salg: [] });
+    ok("ukendt afgrøde saniteres", ondt.partier[0].afgrode, "hvede");
+    ok("høstår saniteres til et tal", typeof ondt.partier[0].hoestaar, "number");
+    ok("esc fanger anførselstegn", esc('" onmouseover="x'), "&quot; onmouseover=&quot;x");
+
+    // FUND 20: kronetallene findes også uden pris
+    S.partier = [mkParti()]; S.prislog = []; S.salg = [];
+    const vTom = vurderParti(S.partier[0], idag);
+    ok("kronetallene er sat selv uden en pris", fin(vTom.kroner_pr_10kr) !== null, true);
+  } finally { S = migrate(JSON.parse(gemt2)); }
+
   return T;
 }
 
@@ -2619,16 +2932,25 @@ function render() {
 
   const f = S.ui.aktivFane;
   let html = "";
-  if (!S.ui.onboardet && f === "handling") html = renderOnboarding();
-  else if (f === "handling") html = renderHandling();
-  else if (f === "pris") html = renderPris();
-  else if (f === "plan") html = renderPlan();
-  else if (f === "paamind") html = renderPaamind();
-  else html = renderTal();
+  try {
+    if (!S.ui.onboardet && f === "handling") html = renderOnboarding();
+    else if (f === "handling") html = renderHandling();
+    else if (f === "pris") html = renderPris();
+    else if (f === "plan") html = renderPlan();
+    else if (f === "paamind") html = renderPaamind();
+    else html = renderTal();
+  } catch (err) {
+    // Aldrig en blank side uden vej ud: dine data skal altid kunne reddes.
+    html = '<div class="card"><h2>Noget gik galt</h2>'
+      + '<p>Siden kunne ikke tegne denne fane. Dine tal er der stadig — hent en kopi, før du gør noget andet.</p>'
+      + '<p class="small muted">' + esc(String((err && err.message) || err)) + "</p>"
+      + '<div class="btnrow"><button class="primary" data-act="eksportData">Eksportér mine data</button>'
+      + '<button data-act="importData">Importér en kopi</button>'
+      + '<button class="danger" data-act="nulstil">Slet alt og start forfra</button></div></div>';
+  }
   $("app").innerHTML = html;
   document.querySelectorAll("#app details[data-d]").forEach(d => { if (aabne.has(d.dataset.d)) d.open = true; });
   renderBannere();
-  bannerEkstra = [];
 
   if (f === "pris") {
     const g = $("graf");
@@ -2671,6 +2993,16 @@ const FELT_BEDRIFT = {
   b_ramme: ["kassekredit_ramme", "tal"], b_traek: ["kassekredit_traek", "tal"],
   b_traekdato: ["traek_maalt_dato", "txt"], b_behov: ["likviditetsbehov_kr", "tal"]
 };
+/* Et fejltastet punktum må ikke kunne sætte en spærring ud af kraft:
+   en belægningsgrad på 800 gjorde kontraktloftet 800 gange for stort. */
+const PARAM_GRAENSER = {
+  r_kredit: [0, 0.5], svind_pct_md: [0, 0.05], el_beluftning: [0, 5], anlaeg_aar: [0, 100],
+  belaegningsgrad: [0.05, 1], lagerleje_ekstern: [0, 20], ind_udlagring_kr_hkg: [0, 50],
+  EURDKK: [5, 10], praemie_broedhvede: [0, 200], merudgift_broedhvede_kr_ha: [0, 5000],
+  nedklass_omk: [0, 100], toerresats: [0, 20], oliebasis_pct: [30, 50], oliefaktor: [0, 5],
+  udbytte_sikkerhed: [0.3, 1], maks_prehoest_pct: [0, 100], maks_enkelthandel_pct: [1, 100],
+  min_dage_mellem_trancher: [0, 180]
+};
 const FELT_PARAM = {
   p_r: ["r_kredit", 0.01], p_svind: ["svind_pct_md", 0.01], p_el: ["el_beluftning", 1],
   p_anlaeg: ["anlaeg_aar", 1], p_belaeg: ["belaegningsgrad", 1], p_leje: ["lagerleje_ekstern", 1],
@@ -2691,8 +3023,16 @@ document.addEventListener("change", e => {
   if (FELT_PARAM[el.id]) {
     const [k, f] = FELT_PARAM[el.id];
     if (f === "txt") { mutate(s => { s.parametre[k] = el.value; }, null); return; }
-    const v = num(el.value); if (v === null) return;
-    mutate(s => { s.parametre[k] = round2(v * f) === null ? v : v * f; }, null);
+    const v = num(el.value);
+    if (v === null) { visToast("Det kunne jeg ikke læse som et tal — feltet er uændret.", { type: "bad" }); return; }
+    const raa = v * f;
+    const g = PARAM_GRAENSER[k];
+    const endelig = g ? clamp(raa, g[0], g[1]) : raa;
+    if (g && endelig !== raa) {
+      visToast("Værdien skal ligge mellem " + nf(g[0], g[0] % 1 ? 2 : 0) + " og " + nf(g[1], g[1] % 1 ? 2 : 0)
+        + " — den er sat til " + nf(endelig, endelig % 1 ? 2 : 0) + ".", { type: "bad", ms: 10000 });
+    }
+    mutate(s => { s.parametre[k] = endelig; }, null);
   }
 });
 
@@ -2770,13 +3110,12 @@ document.addEventListener("click", e => {
     case "importData": importerData(); return;
     case "ics": hentICS(v); return;
 
-    case "prisafgrode": mutate(s => { s.ui.prisSidst.afgrode = v; if (v === "raps") s.ui.prisSidst.kvalitet = "raps"; else if (s.ui.prisSidst.kvalitet === "raps") s.ui.prisSidst.kvalitet = "broed"; }, null); return;
+    case "prisafgrode": mutate(s => { s.ui.prisLaastAfBruger = true; s.ui.prisSidst.afgrode = v; if (v === "raps") s.ui.prisSidst.kvalitet = "raps"; else if (s.ui.prisSidst.kvalitet === "raps") s.ui.prisSidst.kvalitet = "broed"; }, null); return;
     case "priskval": mutate(s => { s.ui.prisSidst.kvalitet = v; }, null); return;
     case "prisper": mutate(s => { s.ui.prisSidst.leveringsperiode = v; }, null); return;
     case "prisenhed": {
-      prisEnhed = v;
-      document.querySelectorAll('[data-act="prisenhed"]').forEach(x => x.setAttribute("aria-pressed", String(x.dataset.v === v)));
-      opdaterPrisHint(); return;
+      mutate(s => { s.ui.prisSidst.enhed = v; }, null);
+      return;
     }
     case "pris+": case "pris-": {
       const el = $("prisInput"); if (!el) return;
@@ -2811,7 +3150,9 @@ document.addEventListener("click", e => {
       lukDlg(); return;
     }
     case "gemParti": {
-      const afgrode = F("pa_afgrode"), aar = N("pa_aar") || new Date().getFullYear();
+      const afgrode = F("pa_afgrode");
+      const aarRaa = Math.round(N("pa_aar"));
+      const aar = Number.isFinite(aarRaa) && aarRaa >= 1900 && aarRaa <= 2200 ? aarRaa : new Date().getFullYear();
       const ha = N("pa_ha"), udb = N("pa_udb");
       const forv = N("pa_forv") !== null ? N("pa_forv") : (ha !== null && udb !== null ? round2(ha * udb) : null);
       const felter = {
@@ -2909,7 +3250,7 @@ document.addEventListener("click", e => {
       S = emptyState(); saveState(); render(); return;
 
     case "onb0": {
-      const aar = N("onb_aar") || new Date().getFullYear();
+      const aar = Math.round(N("onb_aar")) || new Date().getFullYear();
       const valg = [
         { nøgle: "broed", afgrode: "hvede", klasse: "broed" },
         { nøgle: "foder", afgrode: "hvede", klasse: "foder" },
